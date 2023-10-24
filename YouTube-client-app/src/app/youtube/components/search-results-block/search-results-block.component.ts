@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./search-results-block.component.scss']
 })
 export class SearchResultsBlockComponent {
-
+  cards = [{ name: 'a' }, { name: 'b' }, { name: 'c' }];
 }
