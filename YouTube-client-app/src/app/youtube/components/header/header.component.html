@@ -16,7 +16,8 @@
         <button class="search-form-button" color="primary" mat-raised-button>Search</button>
       </form>
     </div>
-    <div class="search-settings">
+    <div class="search-settings" (click)="toggleSort()" (keydown)="toggleSort()"
+    tabindex="0">
       <button class="search-settings-button" color="primary" mat-raised-button>
         <mat-icon class="search-settings-button-icon">tune</mat-icon>
       </button>
@@ -28,5 +29,7 @@
       </button>
     </div>
   </div>
-  <app-filtering-criteria-block></app-filtering-criteria-block>
+  <ng-template [ngIf]="isSortingOpen">
+    <app-filtering-criteria-block></app-filtering-criteria-block>
+  </ng-template>
 </div>

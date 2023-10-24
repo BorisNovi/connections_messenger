@@ -1,0 +1,21 @@
+.container {
+
+  .filtering {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+
+    &-buttons {
+      height: 24px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &-input {
+      height: 24px;
+      border: none;
+      border-radius: 3px;
+    }
+  }
+}

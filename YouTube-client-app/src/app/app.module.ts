@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
@@ -32,6 +33,7 @@ import { SearchResultsBlockComponent } from './youtube/components/search-results
     MatIconModule,
     MatButtonModule,
     MatInputModule,
+    MatButtonToggleModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

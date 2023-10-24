@@ -7,5 +7,9 @@ import { Component } from '@angular/core';
 })
 
 export class HeaderComponent {
+  isSortingOpen = false;
 
+  public toggleSort():void {
+    this.isSortingOpen = !this.isSortingOpen;
+  }
 }
