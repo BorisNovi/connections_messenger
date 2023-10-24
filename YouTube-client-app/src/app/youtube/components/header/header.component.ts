@@ -9,7 +9,13 @@ import { Component } from '@angular/core';
 export class HeaderComponent {
   isSortingOpen = false;
 
-  public toggleSort():void {
+  toggleSort():void {
     this.isSortingOpen = !this.isSortingOpen;
+  }
+
+  handleKeyPress(event?: KeyboardEvent): void {
+    if (event?.code === 'KeyS') {
+      this.toggleSort();
+    }
   }
 }

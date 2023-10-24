@@ -16,7 +16,7 @@
         <button class="search-form-button" color="primary" mat-raised-button>Search</button>
       </form>
     </div>
-    <div class="search-settings" (click)="toggleSort()" (keydown)="toggleSort()"
+    <div class="search-settings" (click)="toggleSort()" (keydown)="handleKeyPress($event)"
     tabindex="0">
       <button class="search-settings-button" color="primary" mat-raised-button>
         <mat-icon class="search-settings-button-icon">tune</mat-icon>
