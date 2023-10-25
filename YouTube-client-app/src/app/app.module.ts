@@ -8,6 +8,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './youtube/components/header/header.component';
@@ -15,6 +16,7 @@ import { MainComponent } from './youtube/pages/main/main.component';
 import { CardComponent } from './youtube/components/card/card.component';
 import { FilteringCriteriaBlockComponent } from './youtube/components/filtering-criteria-block/filtering-criteria-block.component';
 import { SearchResultsBlockComponent } from './youtube/components/search-results-block/search-results-block.component';
+import { SearchPipe } from './youtube/components/pipes/search.pipe';
 
 @NgModule({
   declarations: [
@@ -24,12 +26,14 @@ import { SearchResultsBlockComponent } from './youtube/components/search-results
     CardComponent,
     FilteringCriteriaBlockComponent,
     SearchResultsBlockComponent,
+    SearchPipe,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    FormsModule,
 
     // Material
     MatIconModule,

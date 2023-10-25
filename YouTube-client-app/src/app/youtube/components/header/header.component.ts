@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -9,6 +9,12 @@ import { Component } from '@angular/core';
 export class HeaderComponent {
   isSortingOpen = false;
 
+  @Output() searchTermTo = new EventEmitter<string>();
+
+  @Output() allowRenderTo = new EventEmitter<boolean>();
+
+  searchTerm = '';
+
   toggleSort():void {
     this.isSortingOpen = !this.isSortingOpen;
   }
@@ -17,5 +23,14 @@ export class HeaderComponent {
     if (event?.code === 'KeyS') {
       this.toggleSort();
     }
+  }
+
+  performSearch(): void {
+    this.searchTermTo.emit(this.searchTerm);
+    this.allowRenderTo.emit(true);
+
+    setTimeout(() => {
+      this.allowRenderTo.emit(false);
+    }, 1);
   }
 }

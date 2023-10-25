@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, map } from 'rxjs';
 import { ForMockedDataService } from '../../services/ForMockedData.service';
 import { SearchResponseModel } from '../../models/search/search-response.model';
+import { SearchItemModel } from '../../models/search/search-item.model';
 
 @Component({
   selector: 'app-main',
@@ -11,17 +12,32 @@ import { SearchResponseModel } from '../../models/search/search-response.model';
 export class MainComponent implements OnInit, OnDestroy {
   subscription: Subscription | undefined;
 
-  constructor(private dataSrvice: ForMockedDataService) {
+  dataForSearch: SearchItemModel[] = [];
+
+  searchTerm = '';
+
+  allowRender = false;
+
+  constructor(private dataService: ForMockedDataService) {
+  }
+
+  onSearchTermChange(term: string) {
+    this.searchTerm = term;
+  }
+
+  onAllowRenderChange(allow: boolean) {
+    this.allowRender = allow;
   }
 
   ngOnInit(): void {
-    this.showData();
+    this.showItems();
   }
 
-  showData(): void {
-    this.subscription = this.dataSrvice.getMockedData().subscribe((data: SearchResponseModel) => {
-      console.log(data);
-    });
+  showItems(): void {
+    this.subscription = this.dataService.getMockedData()
+      .subscribe((data: SearchResponseModel) => {
+        this.dataForSearch = data.items;
+      });
   }
 
   ngOnDestroy(): void {

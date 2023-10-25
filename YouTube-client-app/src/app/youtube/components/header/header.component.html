@@ -11,9 +11,9 @@
       </a>
     </div>
     <div class="search">
-      <form class="search-form">
-        <input class="search-form-input" type="search" placeholder="What are you want to find out?">
-        <button class="search-form-button" color="primary" mat-raised-button>Search</button>
+      <form class="search-form" (ngSubmit)="performSearch()">
+        <input class="search-form-input" type="search" placeholder="What are you want to find out?" [(ngModel)]="searchTerm" name="searchTerm">
+        <button class="search-form-button" color="primary" mat-raised-button type="submit">Search</button>
       </form>
     </div>
     <div class="search-settings" (click)="toggleSort()" (keydown)="handleKeyPress($event)"

@@ -1,2 +1,2 @@
-<app-header></app-header>
-<app-search-results-block></app-search-results-block>
+<app-header (searchTermTo)="onSearchTermChange($event)" (allowRenderTo)="onAllowRenderChange($event)"></app-header>
+<app-search-results-block [filteredData]="dataForSearch | search: searchTerm" [allowRender]="allowRender"></app-search-results-block>
