@@ -16,7 +16,8 @@ import { MainComponent } from './youtube/pages/main/main.component';
 import { CardComponent } from './youtube/components/card/card.component';
 import { FilteringCriteriaBlockComponent } from './youtube/components/filtering-criteria-block/filtering-criteria-block.component';
 import { SearchResultsBlockComponent } from './youtube/components/search-results-block/search-results-block.component';
-import { SearchPipe } from './youtube/components/pipes/search.pipe';
+import { SearchPipe } from './youtube/pipes/search.pipe';
+import { PublishedIndicatorDirective } from './youtube/directives/published-indicator.directive';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { SearchPipe } from './youtube/components/pipes/search.pipe';
     FilteringCriteriaBlockComponent,
     SearchResultsBlockComponent,
     SearchPipe,
+    PublishedIndicatorDirective,
   ],
   imports: [
     BrowserModule,

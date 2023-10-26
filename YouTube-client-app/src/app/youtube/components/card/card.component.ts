@@ -23,6 +23,8 @@ export class CardComponent implements OnInit {
 
   commentCount = '';
 
+  publisedDate = '';
+
   ngOnInit() {
     if (this.dataFromSearchResultsBlock) {
       const { id, snippet, statistics } = this.dataFromSearchResultsBlock;
@@ -34,6 +36,7 @@ export class CardComponent implements OnInit {
       this.likeCount = statistics.likeCount;
       this.dislikeCount = statistics.dislikeCount;
       this.commentCount = statistics.commentCount;
+      this.publisedDate = snippet.publishedAt;
     }
   }
 }
