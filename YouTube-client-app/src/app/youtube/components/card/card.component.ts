@@ -9,9 +9,31 @@ import { SearchItemModel } from '../../models/search/search-item.model';
 export class CardComponent implements OnInit {
   @Input() dataFromSearchResultsBlock: SearchItemModel | undefined;
 
+  id = '';
+
   title = '';
 
+  preview = '';
+
+  viewCount = '';
+
+  likeCount = '';
+
+  dislikeCount = '';
+
+  commentCount = '';
+
   ngOnInit() {
-    this.title = this.dataFromSearchResultsBlock?.snippet.title || '';
+    if (this.dataFromSearchResultsBlock) {
+      const { id, snippet, statistics } = this.dataFromSearchResultsBlock;
+
+      this.id = id;
+      this.title = snippet.title;
+      this.preview = snippet.thumbnails.standard.url;
+      this.viewCount = statistics.viewCount;
+      this.likeCount = statistics.likeCount;
+      this.dislikeCount = statistics.dislikeCount;
+      this.commentCount = statistics.commentCount;
+    }
   }
 }
