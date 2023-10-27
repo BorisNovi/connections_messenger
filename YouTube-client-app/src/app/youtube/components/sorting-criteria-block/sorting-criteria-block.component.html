@@ -1,12 +1,11 @@
 <div class="container">
-  <p class="filtering">
+  <p class="sorting">
     Sorting by:
-    <mat-button-toggle-group class="filtering-buttons" name="filtering" aria-label="filterinf">
+    <mat-button-toggle-group class="sorting-buttons" [(ngModel)]="filterType" (click)="onSortClick()" name="sort" aria-label="sort">
       <mat-button-toggle value="date">date</mat-button-toggle>
       <mat-button-toggle value="count">count of views</mat-button-toggle>
       <mat-button-toggle value="word">by word or sentance</mat-button-toggle>
     </mat-button-toggle-group>
-    <input class="filtering-input" type="search" placeholder="porn">
+    <input class="sorting-input" type="search" name="keyword" [(ngModel)]="keyword" (ngModelChange)="onKeywordChange()">
   </p>
-
 </div>

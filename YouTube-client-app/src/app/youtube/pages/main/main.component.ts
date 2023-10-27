@@ -16,7 +16,11 @@ export class MainComponent implements OnInit, OnDestroy {
 
   searchTerm = '';
 
-  allowRender = false;
+  allowRender: boolean | undefined;
+
+  sortParamsToResult: string[] | undefined;
+
+  keywordToResult: string | undefined;
 
   constructor(private dataService: ForMockedDataService) {
   }
@@ -27,6 +31,14 @@ export class MainComponent implements OnInit, OnDestroy {
 
   onAllowRenderChange(allow: boolean) {
     this.allowRender = allow;
+  }
+
+  onSortParamsChange(params: string[]) {
+    this.sortParamsToResult = params;
+  }
+
+  onKeywordChange(keyword: string) {
+    this.keywordToResult = keyword;
   }
 
   ngOnInit(): void {

@@ -14,7 +14,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './youtube/components/header/header.component';
 import { MainComponent } from './youtube/pages/main/main.component';
 import { CardComponent } from './youtube/components/card/card.component';
-import { FilteringCriteriaBlockComponent } from './youtube/components/filtering-criteria-block/filtering-criteria-block.component';
+import { SortingCriteriaBlockComponent } from './youtube/components/sorting-criteria-block/sorting-criteria-block.component';
 import { SearchResultsBlockComponent } from './youtube/components/search-results-block/search-results-block.component';
 import { SearchPipe } from './youtube/pipes/search.pipe';
 import { PublishedIndicatorDirective } from './youtube/directives/published-indicator.directive';
@@ -25,7 +25,7 @@ import { PublishedIndicatorDirective } from './youtube/directives/published-indi
     HeaderComponent,
     MainComponent,
     CardComponent,
-    FilteringCriteriaBlockComponent,
+    SortingCriteriaBlockComponent,
     SearchResultsBlockComponent,
     SearchPipe,
     PublishedIndicatorDirective,

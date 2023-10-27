@@ -9,9 +9,13 @@ import { Component, Output, EventEmitter } from '@angular/core';
 export class HeaderComponent {
   isSortingOpen = false;
 
-  @Output() searchTermTo = new EventEmitter<string>();
+  @Output() searchTermToMain = new EventEmitter<string>();
 
-  @Output() allowRenderTo = new EventEmitter<boolean>();
+  @Output() allowRenderToMain = new EventEmitter<boolean>();
+
+  @Output() sortParamsToMain = new EventEmitter<string[]>();
+
+  @Output() keywordToMain = new EventEmitter<string>();
 
   searchTerm = '';
 
@@ -26,11 +30,19 @@ export class HeaderComponent {
   }
 
   performSearch(): void {
-    this.searchTermTo.emit(this.searchTerm);
-    this.allowRenderTo.emit(true);
+    this.searchTermToMain.emit(this.searchTerm);
+    this.allowRenderToMain.emit(true);
 
     setTimeout(() => {
-      this.allowRenderTo.emit(false);
+      this.allowRenderToMain.emit(false);
     }, 1);
+  }
+
+  receiveSortParams(sortParams: (string)[]) {
+    this.sortParamsToMain.emit(sortParams);
+  }
+
+  receiveKeyword(keyword: string) {
+    this.keywordToMain.emit(keyword);
   }
 }
