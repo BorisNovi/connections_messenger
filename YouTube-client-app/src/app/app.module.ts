@@ -30,7 +30,6 @@ import { CustomButtonComponent } from './youtube/components/custom-button/custom
     SearchResultsBlockComponent,
     SearchPipe,
     PublishedIndicatorDirective,
-    CustomButtonComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,6 +43,7 @@ import { CustomButtonComponent } from './youtube/components/custom-button/custom
     MatButtonModule,
     MatInputModule,
     MatButtonToggleModule,
+    CustomButtonComponent
   ],
   providers: [],
   bootstrap: [AppComponent],
