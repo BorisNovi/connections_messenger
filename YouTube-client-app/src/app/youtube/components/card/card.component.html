@@ -23,15 +23,17 @@
         </div>
       </div>
       <div class="title">
-        <h2 class="title-header">{{ title | slice: 0 : 20 }}{{ title.length > 20 ? '...' : '' }}</h2>
+        <h2 class="title-header">{{ title | slice: 0 : 20 }}{{ title.length > 20 ? '…' : '' }}</h2>
       </div>
     </div>
 
     <div class="more">
       <a class="more-link" routerLink="detail/:id{{id}}">
-        <button class="more-link-button" color="primary" mat-raised-button>
+        <!-- <button class="more-link-button" color="primary" mat-raised-button>
           more...
-        </button>
+        </button> -->
+        <!-- Кнопка закоменчена, потому что custom button, возможно, убрется-->
+        <app-custom-button className="more-link-button">more...</app-custom-button>
       </a>
     </div>
 

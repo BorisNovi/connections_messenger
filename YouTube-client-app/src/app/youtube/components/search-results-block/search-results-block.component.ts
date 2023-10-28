@@ -9,7 +9,7 @@ import { SearchItemModel } from '../../models/search/search-item.model';
   styleUrls: ['./search-results-block.component.scss']
 })
 export class SearchResultsBlockComponent implements OnChanges {
-  @Input() filteredData: SearchItemModel[] = [];
+  @Input() dataFromSearch: SearchItemModel[] = [];
 
   @Input() allowRender: boolean | undefined;
 
@@ -42,20 +42,20 @@ export class SearchResultsBlockComponent implements OnChanges {
 
   sortByDate(direction: string): void {
     const dateMultiplier = direction === 'asc' ? 1 : -1;
-    this.filteredData.sort((a, b) => dateMultiplier
+    this.dataFromSearch.sort((a, b) => dateMultiplier
       * (+(new Date(a.snippet.publishedAt)) - +(new Date(b.snippet.publishedAt))));
   }
 
   sortByViewCount(direction: string): void {
     const viewCountMultiplier = direction === 'asc' ? 1 : -1;
-    this.filteredData.sort((a, b) => viewCountMultiplier
+    this.dataFromSearch.sort((a, b) => viewCountMultiplier
       * (+a.statistics.viewCount - +b.statistics.viewCount));
   }
 
   filterByKeyword(keyword: string | undefined): void {
     let key = keyword || '';
     key = key.toLowerCase();
-    const byKeywordSorted = this.filteredData.filter((item) => item.snippet.title
+    const byKeywordSorted = this.dataFromSearch.filter((item) => item.snippet.title
       .toLowerCase().includes(key));
     this.renderCards(byKeywordSorted);
   }
@@ -64,7 +64,7 @@ export class SearchResultsBlockComponent implements OnChanges {
     if (sorted) {
       this.filteredDataToCards = sorted;
     } else {
-      this.filteredDataToCards = this.filteredData;
+      this.filteredDataToCards = this.dataFromSearch;
     }
   }
 }

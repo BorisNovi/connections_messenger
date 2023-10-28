@@ -18,6 +18,7 @@ import { SortingCriteriaBlockComponent } from './youtube/components/sorting-crit
 import { SearchResultsBlockComponent } from './youtube/components/search-results-block/search-results-block.component';
 import { SearchPipe } from './youtube/pipes/search.pipe';
 import { PublishedIndicatorDirective } from './youtube/directives/published-indicator.directive';
+import { CustomButtonComponent } from './youtube/components/custom-button/custom-button.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { PublishedIndicatorDirective } from './youtube/directives/published-indi
     SearchResultsBlockComponent,
     SearchPipe,
     PublishedIndicatorDirective,
+    CustomButtonComponent,
   ],
   imports: [
     BrowserModule,

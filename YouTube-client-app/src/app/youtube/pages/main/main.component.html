@@ -1,7 +1,5 @@
 <app-header (searchTermToMain)="onSearchTermChange($event)" (allowRenderToMain)="onAllowRenderChange($event)"
   (sortParamsToMain)="onSortParamsChange($event)" (keywordToMain)="onKeywordChange($event)">
 </app-header>
-<app-search-results-block [filteredData]="dataForSearch | search: searchTerm"
-  [allowRender]="allowRender" [sortParams]="sortParamsToResult" [keyword]="keywordToResult"></app-search-results-block>
-
-  <!-- передать данные в блок результата -->
+<app-search-results-block [dataFromSearch]="dataForSearch | search: searchTerm" [allowRender]="allowRender"
+  [sortParams]="sortParamsToResult" [keyword]="keywordToResult"></app-search-results-block>
