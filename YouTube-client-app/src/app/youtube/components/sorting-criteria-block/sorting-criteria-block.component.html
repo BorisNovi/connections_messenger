@@ -4,8 +4,8 @@
     <mat-button-toggle-group class="sorting-buttons" [(ngModel)]="filterType" (click)="onSortClick()" name="sort" aria-label="sort">
       <mat-button-toggle value="date">date</mat-button-toggle>
       <mat-button-toggle value="count">count of views</mat-button-toggle>
-      <mat-button-toggle value="word">by word or sentance</mat-button-toggle>
     </mat-button-toggle-group>
+    <span>word or sentance</span>
     <input class="sorting-input" type="search" name="keyword" [(ngModel)]="keyword" (ngModelChange)="onKeywordChange()">
   </p>
 </div>

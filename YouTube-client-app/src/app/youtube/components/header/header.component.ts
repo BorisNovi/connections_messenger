@@ -1,4 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
+import { ISort } from '../../models/search/sort-params.model';
 
 @Component({
   selector: 'app-header',
@@ -13,9 +14,7 @@ export class HeaderComponent {
 
   @Output() allowRenderToMain = new EventEmitter<boolean>();
 
-  @Output() sortParamsToMain = new EventEmitter<string[]>();
-
-  @Output() keywordToMain = new EventEmitter<string>();
+  @Output() sortDataToMain = new EventEmitter<ISort>();
 
   searchTerm = '';
 
@@ -38,11 +37,7 @@ export class HeaderComponent {
     }, 1);
   }
 
-  receiveSortParams(sortParams: (string)[]) {
-    this.sortParamsToMain.emit(sortParams);
-  }
-
-  receiveKeyword(keyword: string) {
-    this.keywordToMain.emit(keyword);
+  receiveSortData(sortData: ISort) {
+    this.sortDataToMain.emit(sortData);
   }
 }

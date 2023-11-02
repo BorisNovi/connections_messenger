@@ -2,6 +2,7 @@ import {
   Component, Input, OnChanges, SimpleChanges
 } from '@angular/core';
 import { SearchItemModel } from '../../models/search/search-item.model';
+import { ISort } from '../../models/search/sort-params.model';
 
 @Component({
   selector: 'app-search-results-block',
@@ -13,9 +14,7 @@ export class SearchResultsBlockComponent implements OnChanges {
 
   @Input() allowRender: boolean | undefined;
 
-  @Input() sortParams: string[] | undefined;
-
-  @Input() keyword: string | undefined;
+  @Input() sortData: ISort | undefined;
 
   filteredDataToCards: SearchItemModel[] = [];
 
@@ -23,19 +22,19 @@ export class SearchResultsBlockComponent implements OnChanges {
     if (changes['allowRender'] && changes['allowRender'].currentValue === true) {
       this.renderCards();
     }
-    this.sortCards(this.sortParams, this.keyword);
+    this.sortCards(this.sortData);
   }
 
-  sortCards(filterParams: string[] | undefined, keyword: string | undefined): void {
-    if (filterParams) {
-      if (filterParams[0] === 'date') {
-        this.sortByDate(filterParams[1]);
+  sortCards(sortData: ISort | undefined): void {
+    if (sortData?.filterType) {
+      if (sortData.filterType === 'date') {
+        this.sortByDate(sortData.direction);
         this.renderCards();
-      } else if (filterParams[0] === 'count') {
-        this.sortByViewCount(filterParams[1]);
+        this.filterByKeyword(sortData.keyword);
+      } else if (sortData.filterType === 'count') {
+        this.sortByViewCount(sortData.direction);
         this.renderCards();
-      } else if (filterParams[0] === 'word') {
-        this.filterByKeyword(keyword);
+        this.filterByKeyword(sortData.keyword);
       }
     }
   }

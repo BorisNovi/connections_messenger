@@ -4,6 +4,7 @@ import { SEARCH_RESULTS } from 'src/assets/mock_data/search-results';
 import { ForMockedDataService } from '../../services/ForMockedData.service';
 import { SearchResponseModel } from '../../models/search/search-response.model';
 import { SearchItemModel } from '../../models/search/search-item.model';
+import { ISort } from '../../models/search/sort-params.model';
 
 @Component({
   selector: 'app-main',
@@ -19,9 +20,7 @@ export class MainComponent implements OnInit, OnDestroy {
 
   allowRender: boolean | undefined;
 
-  sortParamsToResult: string[] | undefined;
-
-  keywordToResult: string | undefined;
+  sortDataToResult: ISort | undefined;
 
   constructor(private dataService: ForMockedDataService) {
   }
@@ -34,12 +33,8 @@ export class MainComponent implements OnInit, OnDestroy {
     this.allowRender = allow;
   }
 
-  onSortParamsChange(params: string[]) {
-    this.sortParamsToResult = params;
-  }
-
-  onKeywordChange(keyword: string) {
-    this.keywordToResult = keyword;
+  onSortDataChange(sortData: ISort) {
+    this.sortDataToResult = sortData;
   }
 
   ngOnInit(): void {

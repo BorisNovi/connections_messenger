@@ -30,6 +30,6 @@
     </div>
   </div>
   <ng-template [ngIf]="isSortingOpen">
-    <app-sorting-criteria-block (sortParamsToHeader)="receiveSortParams($event)" (keywordToHeader)="receiveKeyword($event)"></app-sorting-criteria-block>
+    <app-sorting-criteria-block (sortDataToHeader)="receiveSortData($event)"></app-sorting-criteria-block>
   </ng-template>
 </div>

@@ -1,4 +1,10 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { ISort } from '../../models/search/sort-params.model';
+
+enum Direction {
+  ASC = 'asc',
+  DESC = 'desc',
+}
 
 @Component({
   selector: 'app-sorting-criteria-block',
@@ -6,9 +12,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
   styleUrls: ['./sorting-criteria-block.component.scss']
 })
 export class SortingCriteriaBlockComponent {
-  @Output() sortParamsToHeader = new EventEmitter<(string)[]>();
-
-  @Output() keywordToHeader = new EventEmitter<string>();
+  @Output() sortDataToHeader = new EventEmitter<ISort>();
 
   filterType = '';
 
@@ -18,13 +22,25 @@ export class SortingCriteriaBlockComponent {
 
   onSortClick(): void {
     this.sortDirection = !this.sortDirection;
-    const stringSortDirection = this.sortDirection ? 'desc' : 'asc';
-    const sortGroup = [this.filterType, stringSortDirection];
+    const stringSortDirection = this.sortDirection ? Direction.DESC : Direction.ASC;
 
-    this.sortParamsToHeader.emit(sortGroup);
+    this.sortDataToHeader.emit(
+      {
+        filterType: this.filterType,
+        direction: stringSortDirection,
+        keyword: this.keyword
+      }
+    );
   }
 
   onKeywordChange(): void {
-    this.keywordToHeader.emit(this.keyword);
+    const stringSortDirection = this.sortDirection ? Direction.DESC : Direction.ASC;
+    this.sortDataToHeader.emit(
+      {
+        filterType: this.filterType,
+        direction: stringSortDirection,
+        keyword: this.keyword
+      }
+    );
   }
 }
