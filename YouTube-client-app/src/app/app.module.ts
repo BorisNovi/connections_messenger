@@ -19,6 +19,15 @@ import { SearchResultsBlockComponent } from './youtube/components/search-results
 import { SearchPipe } from './youtube/pipes/search.pipe';
 import { PublishedIndicatorDirective } from './youtube/directives/published-indicator.directive';
 import { CustomButtonComponent } from './youtube/components/custom-button/custom-button.component';
+import { CoreComponent } from './core/core/core.component';
+
+const MATERIAL_IMPORTS = [
+  MatIconModule,
+  MatButtonModule,
+  MatInputModule,
+  MatButtonToggleModule,
+  CustomButtonComponent,
+];
 
 @NgModule({
   declarations: [
@@ -37,13 +46,10 @@ import { CustomButtonComponent } from './youtube/components/custom-button/custom
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
+    CoreComponent,
 
     // Material
-    MatIconModule,
-    MatButtonModule,
-    MatInputModule,
-    MatButtonToggleModule,
-    CustomButtonComponent
+    MATERIAL_IMPORTS
   ],
   providers: [],
   bootstrap: [AppComponent],
