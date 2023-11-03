@@ -17,7 +17,7 @@ import { SearchResultsBlockComponent } from './youtube/components/search-results
 import { SearchPipe } from './youtube/pipes/search.pipe';
 import { PublishedIndicatorDirective } from './youtube/directives/published-indicator.directive';
 import { CustomButtonComponent } from './shared/components/custom-button/custom-button.component';
-import { CoreModule } from './core/core/core.module';
+import { CoreModule } from './core/core.module';
 import { SortingCriteriaBlockComponent } from './youtube/components/sorting-criteria-block/sorting-criteria-block.component';
 
 const MATERIAL_IMPORTS = [
