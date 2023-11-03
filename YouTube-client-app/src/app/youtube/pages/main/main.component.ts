@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Subscription, map } from 'rxjs';
 import { SEARCH_RESULTS } from 'src/assets/mock_data/search-results';
 import { ForMockedDataService } from '../../services/ForMockedData.service';
@@ -11,14 +11,12 @@ import { ISort } from '../../models/search/sort-params.model';
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
 })
-export class MainComponent implements OnInit, OnDestroy {
+export class MainComponent implements OnDestroy {
   subscription: Subscription | undefined;
 
   dataForSearch: SearchItemModel[] = [];
 
   searchTerm = '';
-
-  allowRender: boolean | undefined;
 
   sortDataToResult: ISort | undefined;
 
@@ -27,18 +25,11 @@ export class MainComponent implements OnInit, OnDestroy {
 
   onSearchTermChange(term: string) {
     this.searchTerm = term;
-  }
-
-  onAllowRenderChange(allow: boolean) {
-    this.allowRender = allow;
+    this.showItems();
   }
 
   onSortDataChange(sortData: ISort) {
     this.sortDataToResult = sortData;
-  }
-
-  ngOnInit(): void {
-    this.showItems();
   }
 
   showItems(): void {

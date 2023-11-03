@@ -1,5 +1,5 @@
 import {
-  Component, Input, OnChanges, SimpleChanges
+  Component, Input, OnChanges
 } from '@angular/core';
 import { SearchItemModel } from '../../models/search/search-item.model';
 import { ISort } from '../../models/search/sort-params.model';
@@ -12,16 +12,12 @@ import { ISort } from '../../models/search/sort-params.model';
 export class SearchResultsBlockComponent implements OnChanges {
   @Input() dataFromSearch: SearchItemModel[] = [];
 
-  @Input() allowRender: boolean | undefined;
-
   @Input() sortData: ISort | undefined;
 
   filteredDataToCards: SearchItemModel[] = [];
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['allowRender'] && changes['allowRender'].currentValue === true) {
-      this.renderCards();
-    }
+  ngOnChanges(): void {
+    this.renderCards();
     this.sortCards(this.sortData);
   }
 

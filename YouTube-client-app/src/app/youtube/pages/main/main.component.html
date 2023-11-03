@@ -1,6 +1,6 @@
-<app-header (searchTermToMain)="onSearchTermChange($event)" (allowRenderToMain)="onAllowRenderChange($event)"
+<app-header (searchTermToMain)="onSearchTermChange($event)"
   (sortDataToMain)="onSortDataChange($event)">
 </app-header>
 
-<app-search-results-block [dataFromSearch]="dataForSearch | search: searchTerm" [allowRender]="allowRender"
+<app-search-results-block [dataFromSearch]="dataForSearch | search: searchTerm"
   [sortData]="sortDataToResult"></app-search-results-block>

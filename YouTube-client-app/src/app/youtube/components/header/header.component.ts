@@ -12,8 +12,6 @@ export class HeaderComponent {
 
   @Output() searchTermToMain = new EventEmitter<string>();
 
-  @Output() allowRenderToMain = new EventEmitter<boolean>();
-
   @Output() sortDataToMain = new EventEmitter<ISort>();
 
   searchTerm = '';
@@ -23,21 +21,16 @@ export class HeaderComponent {
   }
 
   handleKeyPress(event?: KeyboardEvent): void {
-    if (event?.code === 'KeyS') {
+    if (event?.code === 'Enter') {
       this.toggleSort();
     }
   }
 
   performSearch(): void {
     this.searchTermToMain.emit(this.searchTerm);
-    this.allowRenderToMain.emit(true);
-
-    setTimeout(() => {
-      this.allowRenderToMain.emit(false);
-    }, 1);
   }
 
-  receiveSortData(sortData: ISort) {
+  receiveSortData(sortData: ISort): void {
     this.sortDataToMain.emit(sortData);
   }
 }

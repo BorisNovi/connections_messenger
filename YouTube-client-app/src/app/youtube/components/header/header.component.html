@@ -12,12 +12,12 @@
     </div>
     <div class="search">
       <form class="search-form" (ngSubmit)="performSearch()">
-        <input class="search-form-input" type="search" placeholder="What are you want to find out?" [(ngModel)]="searchTerm" name="searchTerm">
+        <input class="search-form-input" type="search" placeholder="What are you want to find out?"
+          [(ngModel)]="searchTerm" name="searchTerm">
         <button class="search-form-button" color="primary" mat-raised-button type="submit">Search</button>
       </form>
     </div>
-    <div class="search-settings" (click)="toggleSort()" (keydown)="handleKeyPress($event)"
-    tabindex="0">
+    <div class="search-settings" (click)="toggleSort()" (keydown)="handleKeyPress($event)" tabindex="0">
       <button class="search-settings-button" color="primary" mat-raised-button>
         <mat-icon class="search-settings-button-icon">tune</mat-icon>
       </button>
@@ -29,7 +29,6 @@
       </button>
     </div>
   </div>
-  <ng-template [ngIf]="isSortingOpen">
-    <app-sorting-criteria-block (sortDataToHeader)="receiveSortData($event)"></app-sorting-criteria-block>
-  </ng-template>
+  <app-sorting-criteria-block *ngIf="isSortingOpen"
+    (sortDataToHeader)="receiveSortData($event)"></app-sorting-criteria-block>
 </div>
