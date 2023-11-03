@@ -15,28 +15,12 @@ export class CardComponent implements OnInit {
 
   preview = '';
 
-  viewCount = '';
-
-  likeCount = '';
-
-  dislikeCount = '';
-
-  commentCount = '';
-
-  publisedDate = '';
-
   ngOnInit() {
     if (this.dataFromSearchResultsBlock) {
-      const { id, snippet, statistics } = this.dataFromSearchResultsBlock;
-
-      this.id = id;
+      const { snippet, id } = this.dataFromSearchResultsBlock;
       this.title = snippet.title;
       this.preview = snippet.thumbnails.standard.url;
-      this.viewCount = statistics.viewCount;
-      this.likeCount = statistics.likeCount;
-      this.dislikeCount = statistics.dislikeCount;
-      this.commentCount = statistics.commentCount;
-      this.publisedDate = snippet.publishedAt;
+      this.id = id;
     }
   }
 }

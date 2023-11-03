@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="container-inner" appPublishedIndicator [publishDate]="publisedDate">
+  <div class="container-inner" appPublishedIndicator [publishDate]="dataFromSearchResultsBlock?.snippet?.publishedAt || ''">
     <div class="content">
       <div class="preview">
         <img class="preview-image" [src]="preview" alt="preview">
@@ -7,19 +7,19 @@
       <div class="stats">
         <div class="stats-views">
           <mat-icon class="stats-views-icon">visibility</mat-icon>
-          <span class="stats-views-counter">{{viewCount}}</span>
+          <span class="stats-views-counter">{{dataFromSearchResultsBlock?.statistics?.viewCount}}</span>
         </div>
         <div class="stats-likes">
           <mat-icon class="stats-likes-icon">thumb_up</mat-icon>
-          <span class="stats-likes-counter">{{likeCount}}</span>
+          <span class="stats-likes-counter">{{dataFromSearchResultsBlock?.statistics?.likeCount}}</span>
         </div>
         <div class="stats-dislikes">
           <mat-icon class="stats-dislikes-icon">thumb_down</mat-icon>
-          <span class="stats-dislikes-counter">{{dislikeCount}}</span>
+          <span class="stats-dislikes-counter">{{dataFromSearchResultsBlock?.statistics?.dislikeCount}}</span>
         </div>
         <div class="stats-comments">
           <mat-icon class="stats-comments-icon">comment</mat-icon>
-          <span class="stats-comments-counter">{{commentCount}}</span>
+          <span class="stats-comments-counter">{{dataFromSearchResultsBlock?.statistics?.commentCount}}</span>
         </div>
       </div>
       <div class="title">
