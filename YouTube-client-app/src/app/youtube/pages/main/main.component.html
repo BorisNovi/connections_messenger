@@ -2,5 +2,5 @@
   (sortParamsToMain)="onSortParamsChange($event)" (keywordToMain)="onKeywordChange($event)">
 </app-header>
 
-<app-search-results-block [dataFromSearch]="dataForSearch | search: searchTerm"
+<app-search-results-block [dataFromSearch]="dataForSearch | search: searchTerm | sort: sortParamsToResult"
   [sortParams]="sortParamsToResult" [keyword]="keywordToResult"></app-search-results-block>

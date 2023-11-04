@@ -20,33 +20,7 @@ export class SearchResultsBlockComponent implements OnChanges {
 
   ngOnChanges(): void {
     this.renderCards();
-    this.sortCards(this.sortParams, this.keyword);
-  }
-
-  sortCards(sortParams: ISort | undefined, keyword: string): void {
-    if (sortParams?.filterType) {
-      if (sortParams.filterType === 'date') {
-        this.sortByDate(sortParams.direction);
-        this.renderCards();
-        this.filterByKeyword(keyword);
-      } else if (sortParams.filterType === 'count') {
-        this.sortByViewCount(sortParams.direction);
-        this.renderCards();
-        this.filterByKeyword(keyword);
-      }
-    }
-  }
-
-  sortByDate(direction: string): void {
-    const dateMultiplier = direction === 'asc' ? 1 : -1;
-    this.dataFromSearch.sort((a, b) => dateMultiplier
-      * (+(new Date(a.snippet.publishedAt)) - +(new Date(b.snippet.publishedAt))));
-  }
-
-  sortByViewCount(direction: string): void {
-    const viewCountMultiplier = direction === 'asc' ? 1 : -1;
-    this.dataFromSearch.sort((a, b) => viewCountMultiplier
-      * (+a.statistics.viewCount - +b.statistics.viewCount));
+    this.filterByKeyword(this.keyword);
   }
 
   filterByKeyword(keyword: string | undefined): void {

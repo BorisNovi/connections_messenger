@@ -19,6 +19,7 @@ import { PublishedIndicatorDirective } from './youtube/directives/published-indi
 import { CustomButtonComponent } from './shared/components/custom-button/custom-button.component';
 import { CoreModule } from './core/core.module';
 import { SortingCriteriaBlockComponent } from './youtube/components/sorting-criteria-block/sorting-criteria-block.component';
+import { SortPipe } from './youtube/pipes/sort.pipe';
 
 const MATERIAL_IMPORTS = [
   MatIconModule,
@@ -35,6 +36,7 @@ const MATERIAL_IMPORTS = [
     SearchResultsBlockComponent,
     PublishedIndicatorDirective,
     SearchPipe,
+    SortPipe,
   ],
   imports: [
     BrowserModule,
