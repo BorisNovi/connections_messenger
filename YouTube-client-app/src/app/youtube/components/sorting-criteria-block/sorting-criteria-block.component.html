@@ -6,6 +6,6 @@
       <mat-button-toggle value="count">count of views</mat-button-toggle>
     </mat-button-toggle-group>
     <span>word or sentance</span>
-    <input class="sorting-input" type="search" name="keyword" [(ngModel)]="keyword" (ngModelChange)="onKeywordChange()">
+    <input #input class="sorting-input" type="search" name="keyword" (input)="onKeywordChange(input.value)">
   </p>
 </div>

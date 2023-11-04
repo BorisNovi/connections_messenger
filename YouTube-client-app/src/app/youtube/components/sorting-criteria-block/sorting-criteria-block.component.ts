@@ -18,8 +18,6 @@ export class SortingCriteriaBlockComponent {
 
   filterType = '';
 
-  keyword = '';
-
   sortDirection = false; // false - asc, true - desc
 
   onSortClick(): void {
@@ -34,7 +32,7 @@ export class SortingCriteriaBlockComponent {
     );
   }
 
-  onKeywordChange(): void {
-    this.keywordToHeader.emit(this.keyword);
+  onKeywordChange(keyword: string): void {
+    this.keywordToHeader.emit(keyword);
   }
 }
