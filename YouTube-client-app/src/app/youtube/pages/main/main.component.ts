@@ -1,54 +1,10 @@
-import { Component, OnDestroy } from '@angular/core';
-import { Subscription, map } from 'rxjs';
-import { SEARCH_RESULTS } from 'src/assets/mock_data/search-results';
-import { ForMockedDataService } from '../../services/ForMockedData.service';
-import { SearchResponseModel } from '../../models/search/search-response.model';
-import { SearchItemModel } from '../../models/search/search-item.model';
-import { ISort } from '../../models/search/sort-params.model';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
 })
-export class MainComponent implements OnDestroy {
-  subscription: Subscription | undefined;
+export class MainComponent {
 
-  dataForSearch: SearchItemModel[] = [];
-
-  searchTerm = '';
-
-  sortParamsToResult: ISort | undefined;
-
-  keywordToResult = '';
-
-  constructor(private dataService: ForMockedDataService) {
-  }
-
-  onSearchTermChange(term: string) {
-    this.searchTerm = term;
-    this.showItems();
-  }
-
-  onSortParamsChange(sortParams: ISort) {
-    this.sortParamsToResult = sortParams;
-  }
-
-  onKeywordChange(keyword: string): void {
-    this.keywordToResult = keyword;
-  }
-
-  showItems(): void {
-    // this.subscription = this.dataService.getMockedData()
-    //   .subscribe((data: SearchResponseModel) => {
-    //     this.dataForSearch = data.items;
-    //   }); // Раскомментировать, когда в сервие будет запрос на реальный url
-
-    this.dataForSearch = [...SEARCH_RESULTS.items];
-    // Это временный костыль, так как на проде не подтягивается assets
-  }
-
-  ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
-  }
 }
