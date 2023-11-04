@@ -7,11 +7,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FormsModule } from '@angular/forms';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     SortingCriteriaBlockComponent,
+    NotFoundComponent
   ],
   imports: [
     CommonModule,
