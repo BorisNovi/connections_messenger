@@ -16,26 +16,9 @@ export class SearchResultsBlockComponent implements OnChanges {
 
   @Input() keyword = '';
 
-  filteredDataToCards: SearchItemModel[] = [];
+  filteredDataToCards: SearchItemModel[] | undefined = this.dataFromSearch;
 
   ngOnChanges(): void {
-    this.renderCards();
-    this.filterByKeyword(this.keyword);
-  }
-
-  filterByKeyword(keyword: string | undefined): void {
-    let key = keyword || '';
-    key = key.toLowerCase();
-    const byKeywordSorted = this.dataFromSearch.filter((item) => item.snippet.title
-      .toLowerCase().includes(key));
-    this.renderCards(byKeywordSorted);
-  }
-
-  renderCards(sorted?: SearchItemModel[]): void {
-    if (sorted) {
-      this.filteredDataToCards = sorted;
-    } else {
-      this.filteredDataToCards = this.dataFromSearch;
-    }
+    this.filteredDataToCards = this.dataFromSearch;
   }
 }
