@@ -16,7 +16,7 @@ export class PublishedIndicatorDirective implements OnChanges {
     this.setIndicatorClass(this.publishDate);
   }
 
-  private setIndicatorClass(publishDate: string) {
+  private setIndicatorClass(publishDate: string): void {
     const now = new Date();
     const publishDateTime = new Date(publishDate);
     const timeDifference = +now - +publishDateTime;

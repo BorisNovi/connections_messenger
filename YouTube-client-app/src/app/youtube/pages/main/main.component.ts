@@ -18,7 +18,9 @@ export class MainComponent implements OnDestroy {
 
   searchTerm = '';
 
-  sortDataToResult: ISort | undefined;
+  sortParamsToResult: ISort | undefined;
+
+  keywordToResult = '';
 
   constructor(private dataService: ForMockedDataService) {
   }
@@ -28,8 +30,12 @@ export class MainComponent implements OnDestroy {
     this.showItems();
   }
 
-  onSortDataChange(sortData: ISort) {
-    this.sortDataToResult = sortData;
+  onSortParamsChange(sortParams: ISort) {
+    this.sortParamsToResult = sortParams;
+  }
+
+  onKeywordChange(keyword: string): void {
+    this.keywordToResult = keyword;
   }
 
   showItems(): void {

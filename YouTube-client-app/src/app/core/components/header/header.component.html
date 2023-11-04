@@ -17,8 +17,8 @@
         <button class="search-form-button" color="primary" mat-raised-button type="submit">Search</button>
       </form>
     </div>
-    <div class="search-settings" (click)="toggleSort()" (keydown)="handleKeyPress($event)" tabindex="0">
-      <button class="search-settings-button" color="primary" mat-raised-button>
+    <div class="search-settings">
+      <button class="search-settings-button" color="primary" (click)="toggleSort()" mat-raised-button>
         <mat-icon class="search-settings-button-icon">tune</mat-icon>
       </button>
     </div>
@@ -30,5 +30,5 @@
     </div>
   </div>
   <app-sorting-criteria-block *ngIf="isSortingOpen"
-    (sortDataToHeader)="receiveSortData($event)"></app-sorting-criteria-block>
+    (sortParamsToHeader)="receiveSortParams($event)" (keywordToHeader)="receiveKeyword($event)"></app-sorting-criteria-block>
 </div>

@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { ISort } from '../../models/search/sort-params.model';
+import { ISort } from '../../../youtube/models/search/sort-params.model';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +12,9 @@ export class HeaderComponent {
 
   @Output() searchTermToMain = new EventEmitter<string>();
 
-  @Output() sortDataToMain = new EventEmitter<ISort>();
+  @Output() sortParamsToMain = new EventEmitter<ISort>();
+
+  @Output() keywordToMain = new EventEmitter<string>();
 
   searchTerm = '';
 
@@ -20,17 +22,15 @@ export class HeaderComponent {
     this.isSortingOpen = !this.isSortingOpen;
   }
 
-  handleKeyPress(event?: KeyboardEvent): void {
-    if (event?.code === 'Enter') {
-      this.toggleSort();
-    }
-  }
-
   performSearch(): void {
     this.searchTermToMain.emit(this.searchTerm);
   }
 
-  receiveSortData(sortData: ISort): void {
-    this.sortDataToMain.emit(sortData);
+  receiveSortParams(sortData: ISort): void {
+    this.sortParamsToMain.emit(sortData);
+  }
+
+  receiveKeyword(keyword: string): void {
+    this.keywordToMain.emit(keyword);
   }
 }

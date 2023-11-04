@@ -12,7 +12,9 @@ enum Direction {
   styleUrls: ['./sorting-criteria-block.component.scss']
 })
 export class SortingCriteriaBlockComponent {
-  @Output() sortDataToHeader = new EventEmitter<ISort>();
+  @Output() sortParamsToHeader = new EventEmitter<ISort>();
+
+  @Output() keywordToHeader = new EventEmitter<string>();
 
   filterType = '';
 
@@ -24,23 +26,15 @@ export class SortingCriteriaBlockComponent {
     this.sortDirection = !this.sortDirection;
     const stringSortDirection = this.sortDirection ? Direction.DESC : Direction.ASC;
 
-    this.sortDataToHeader.emit(
+    this.sortParamsToHeader.emit(
       {
         filterType: this.filterType,
         direction: stringSortDirection,
-        keyword: this.keyword
       }
     );
   }
 
   onKeywordChange(): void {
-    const stringSortDirection = this.sortDirection ? Direction.DESC : Direction.ASC;
-    this.sortDataToHeader.emit(
-      {
-        filterType: this.filterType,
-        direction: stringSortDirection,
-        keyword: this.keyword
-      }
-    );
+    this.keywordToHeader.emit(this.keyword);
   }
 }

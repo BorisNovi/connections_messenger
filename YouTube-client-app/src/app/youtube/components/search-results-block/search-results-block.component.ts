@@ -12,25 +12,27 @@ import { ISort } from '../../models/search/sort-params.model';
 export class SearchResultsBlockComponent implements OnChanges {
   @Input() dataFromSearch: SearchItemModel[] = [];
 
-  @Input() sortData: ISort | undefined;
+  @Input() sortParams: ISort | undefined;
+
+  @Input() keyword = '';
 
   filteredDataToCards: SearchItemModel[] = [];
 
   ngOnChanges(): void {
     this.renderCards();
-    this.sortCards(this.sortData);
+    this.sortCards(this.sortParams, this.keyword);
   }
 
-  sortCards(sortData: ISort | undefined): void {
-    if (sortData?.filterType) {
-      if (sortData.filterType === 'date') {
-        this.sortByDate(sortData.direction);
+  sortCards(sortParams: ISort | undefined, keyword: string): void {
+    if (sortParams?.filterType) {
+      if (sortParams.filterType === 'date') {
+        this.sortByDate(sortParams.direction);
         this.renderCards();
-        this.filterByKeyword(sortData.keyword);
-      } else if (sortData.filterType === 'count') {
-        this.sortByViewCount(sortData.direction);
+        this.filterByKeyword(keyword);
+      } else if (sortParams.filterType === 'count') {
+        this.sortByViewCount(sortParams.direction);
         this.renderCards();
-        this.filterByKeyword(sortData.keyword);
+        this.filterByKeyword(keyword);
       }
     }
   }
