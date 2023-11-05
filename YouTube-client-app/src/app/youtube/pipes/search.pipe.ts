@@ -6,12 +6,10 @@ import { SearchItemModel } from '../models/search/search-item.model';
 })
 export class SearchPipe implements PipeTransform {
   // eslint-disable-next-line class-methods-use-this
-  transform(array: SearchItemModel[], ...args: string[]): SearchItemModel[] {
-    if (!args[0]) {
-      return array;
+  transform(array: SearchItemModel[], searchTerm: string): SearchItemModel[] {
+    if (!searchTerm) {
+      return [];
     }
-
-    const searchTerm = args.join(' ').toLowerCase();
 
     const sorted = array.filter((item) => item.snippet.title.toLowerCase().includes(searchTerm));
     return sorted;
