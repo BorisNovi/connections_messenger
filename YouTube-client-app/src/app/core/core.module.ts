@@ -7,13 +7,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ShellComponent } from './shell/shell.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     SortingCriteriaBlockComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    ShellComponent,
   ],
   imports: [
     CommonModule,
@@ -22,9 +25,12 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
     MatInputModule,
     MatButtonToggleModule,
     FormsModule,
+    RouterModule
   ],
   exports: [
     HeaderComponent,
+    ShellComponent,
+    SortingCriteriaBlockComponent,
   ]
 })
 export class CoreModule { }

@@ -18,9 +18,9 @@ import { SearchPipe } from './youtube/pipes/search.pipe';
 import { PublishedIndicatorDirective } from './youtube/directives/published-indicator.directive';
 import { CustomButtonComponent } from './shared/components/custom-button/custom-button.component';
 import { CoreModule } from './core/core.module';
-import { SortingCriteriaBlockComponent } from './youtube/components/sorting-criteria-block/sorting-criteria-block.component';
 import { SortPipe } from './youtube/pipes/sort.pipe';
 import { FilterPipe } from './youtube/pipes/filter.pipe';
+import { YoutubeModule } from './youtube/youtube.module';
 
 const MATERIAL_IMPORTS = [
   MatIconModule,
@@ -48,6 +48,7 @@ const MATERIAL_IMPORTS = [
     FormsModule,
     CustomButtonComponent,
     CoreModule,
+    YoutubeModule,
 
     // Material
     MATERIAL_IMPORTS
