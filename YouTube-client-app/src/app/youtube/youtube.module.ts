@@ -10,6 +10,7 @@ import { SearchPipe } from './pipes/search.pipe';
 import { SortPipe } from './pipes/sort.pipe';
 import { FilterPipe } from './pipes/filter.pipe';
 import { CustomButtonComponent } from '../shared/components/custom-button/custom-button.component';
+import { DetailComponent } from './components/detail/detail.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { CustomButtonComponent } from '../shared/components/custom-button/custom
     SearchPipe,
     SortPipe,
     FilterPipe,
+    DetailComponent,
   ],
   imports: [
     CommonModule,

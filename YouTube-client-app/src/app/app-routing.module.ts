@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MainComponent } from './youtube/pages/main/main.component';
 import { NotFoundComponent } from './core/components/not-found/not-found.component';
 import { ShellComponent } from './core/shell/shell.component';
+import { DetailComponent } from './youtube/components/detail/detail.component';
 
 const routes: Routes = [
   {
@@ -10,6 +11,7 @@ const routes: Routes = [
     component: ShellComponent,
     children: [
       { path: '', component: MainComponent },
+      { path: 'detail/:id', component: DetailComponent },
       { path: '404', component: NotFoundComponent },
       { path: '**', redirectTo: '404' }
     ]

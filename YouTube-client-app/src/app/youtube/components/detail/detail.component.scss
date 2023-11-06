@@ -1,0 +1,70 @@
+.container {
+  display: flex;
+  justify-content: center;
+
+  .card {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    margin-top: 44px;
+    max-width: 1165px;
+    height: 430px;
+    overflow: hidden;
+    filter: drop-shadow(5px 10px 10px rgba(47, 128, 237, 0.25));
+
+    .back-button-container {
+      button {}
+    }
+
+    .video-container {
+      iframe {
+        width: 700px;
+        height: 400px;
+      }
+    }
+
+    .content-container {
+      .header-container {
+        .header {}
+
+        .header-date {}
+      }
+
+      .description-container {
+        overflow: scroll;
+        height: 280px;
+
+        .description-header {}
+
+        p {
+          white-space: pre-wrap;
+        }
+      }
+
+      .stats {
+        font-size: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        gap: 10px;
+
+        &-views,
+        &-likes,
+        &-dislikes,
+        &-comments {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          &-icon {
+            font-size: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+        }
+      }
+    }
+  }
+}
