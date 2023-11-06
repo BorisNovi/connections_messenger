@@ -15,21 +15,12 @@ export class MainComponent {
 
   searchTerm: Signal<string> = this.dataSharingService.currentSearchTerm;
 
-  sortParamsToResult: ISort | undefined;
+  sortParams: Signal<ISort> = this.dataSharingService.currentSortParams;
 
-  keywordToResult = '';
+  keyword: Signal<string> = this.dataSharingService.currentKeyword;
 
   constructor(
     private dataService: ForMockedDataService,
     private dataSharingService: YoutubeHeaderDataSharingService
-  ) {
-  }
-
-  onSortParamsChange(sortParams: ISort) {
-    this.sortParamsToResult = sortParams;
-  }
-
-  onKeywordChange(keyword: string): void {
-    this.keywordToResult = keyword;
-  }
+  ) {}
 }

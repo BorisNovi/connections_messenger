@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { ISort } from '../../models/search/sort-params.model';
+import { YoutubeHeaderDataSharingService } from '../../services/youtube-header-data-sharing.service';
 
 enum Direction {
   ASC = 'asc',
@@ -12,19 +12,21 @@ enum Direction {
   styleUrls: ['./sorting-criteria-block.component.scss']
 })
 export class SortingCriteriaBlockComponent {
-  @Output() sortParamsToHeader = new EventEmitter<ISort>();
-
   @Output() keywordToHeader = new EventEmitter<string>();
 
   filterType = '';
 
   sortDirection = false; // false - asc, true - desc
 
+  constructor(
+    private dataSharingService: YoutubeHeaderDataSharingService
+  ) {}
+
   onSortClick(): void {
     this.sortDirection = !this.sortDirection;
     const stringSortDirection = this.sortDirection ? Direction.DESC : Direction.ASC;
 
-    this.sortParamsToHeader.emit(
+    this.dataSharingService.updSortParams(
       {
         filterType: this.filterType,
         direction: stringSortDirection,
@@ -33,6 +35,6 @@ export class SortingCriteriaBlockComponent {
   }
 
   onKeywordChange(keyword: string): void {
-    this.keywordToHeader.emit(keyword);
+    this.dataSharingService.updKeyword(keyword);
   }
 }
