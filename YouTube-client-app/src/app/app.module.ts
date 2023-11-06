@@ -32,13 +32,6 @@ const MATERIAL_IMPORTS = [
 @NgModule({
   declarations: [
     AppComponent,
-    MainComponent,
-    CardComponent,
-    SearchResultsBlockComponent,
-    PublishedIndicatorDirective,
-    SearchPipe,
-    SortPipe,
-    FilterPipe,
   ],
   imports: [
     BrowserModule,
@@ -46,7 +39,6 @@ const MATERIAL_IMPORTS = [
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
-    CustomButtonComponent,
     CoreModule,
     YoutubeModule,
 
