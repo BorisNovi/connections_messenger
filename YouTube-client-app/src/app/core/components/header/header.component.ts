@@ -1,4 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
+import { YoutubeHeaderDataSharingService } from 'src/app/youtube/services/youtube-header-data-sharing.service';
 import { ISort } from '../../../youtube/models/search/sort-params.model';
 
 @Component({
@@ -8,6 +9,10 @@ import { ISort } from '../../../youtube/models/search/sort-params.model';
 })
 
 export class HeaderComponent {
+  constructor(
+    private dataSharingService: YoutubeHeaderDataSharingService
+  ) {}
+
   isSortingOpen = false;
 
   @Output() searchTermToMain = new EventEmitter<string>();
@@ -24,6 +29,7 @@ export class HeaderComponent {
 
   performSearch(): void {
     this.searchTermToMain.emit(this.searchTerm);
+    this.dataSharingService.updSearchTerm(this.searchTerm);
   }
 
   receiveSortParams(sortData: ISort): void {

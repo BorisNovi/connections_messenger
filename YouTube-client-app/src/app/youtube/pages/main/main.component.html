@@ -1,5 +1,7 @@
-<app-header (searchTermToMain)="onSearchTermChange($event)" (sortParamsToMain)="onSortParamsChange($event)"
+<app-header (sortParamsToMain)="onSortParamsChange($event)"
   (keywordToMain)="onKeywordChange($event)">
 </app-header>
+
+<div>{{searchTerm()}}</div>
 <app-search-results-block
-  [dataFromSearch]="dataForSearch | search: searchTerm | filter: keywordToResult | sort: sortParamsToResult"></app-search-results-block>
+  [dataFromSearch]="dataForSearch | search: searchTerm() | filter: keywordToResult | sort: sortParamsToResult"></app-search-results-block>
