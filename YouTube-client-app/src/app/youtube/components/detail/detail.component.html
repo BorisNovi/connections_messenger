@@ -1,7 +1,7 @@
 <div class="container" *ngIf="data">
   <div class="card">
     <div class="back-button-container">
-      <button routerLink="/">&lt;</button>
+      <button routerLink="/" mat-raised-button color="primary">&lt;</button>
     </div>
     <div class="video-container" >
       <iframe
@@ -14,9 +14,9 @@
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowfullscreen></iframe>
     </div>
-    <div class="content-container">
+    <div class="content-container older6m" appPublishedIndicator [publishDate]="data.snippet.publishedAt || ''">
       <div class="header-container">
-        <h1 class="header">{{data.snippet.title}}</h1> <p class="header-date">{{data.snippet.publishedAt | date: 'EEEE, MMMM dd, YYYY'}}</p>
+        <h1 class="header">{{data.snippet.title | slice: 0 : 20}}{{ data.snippet.title.length > 20 ? '…' : '' }}</h1> <p class="header-date">{{data.snippet.publishedAt | date: 'EEEE, MMMM dd, YYYY'}}</p>
       </div>
       <div class="description-container">
         <h4 class="description-header">Description:</h4>

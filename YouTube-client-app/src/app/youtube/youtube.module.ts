@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 import { CardComponent } from './components/card/card.component';
 import { MainComponent } from './pages/main/main.component';
 import { SearchResultsBlockComponent } from './components/search-results-block/search-results-block.component';
@@ -28,6 +29,7 @@ import { DetailComponent } from './components/detail/detail.component';
     CustomButtonComponent,
     RouterLink,
     MatIconModule,
+    MatButtonModule,
   ],
   exports: [
   ]
