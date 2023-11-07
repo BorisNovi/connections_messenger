@@ -2,7 +2,7 @@
   <div class="header">
     <h2>Login</h2>
   </div>
-  <form>
+  <div class="login-form">
     <div class="login">
       <mat-form-field appearance="outline">
         <mat-label>Login</mat-label>
@@ -13,7 +13,7 @@
     </div>
     <div class="password">
       <mat-form-field appearance="outline">
-        <mat-label>Enter your password</mat-label>
+        <mat-label>Password</mat-label>
         <input matInput [type]="hide ? 'password' : 'text'" [formControl]="password" required>
         <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
@@ -22,7 +22,7 @@
       </mat-form-field>
     </div>
     <div class="button-login">
-      <button mat-raised-button color="primary">Login</button>
+      <button mat-raised-button type="submit" color="primary" (click)="onSubmit()">Login</button>
     </div>
-  </form>
+  </div>
 </div>

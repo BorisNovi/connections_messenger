@@ -26,4 +26,11 @@ export class LoginFormComponent {
 
     return this.password.hasError('minlength') ? 'Min length 6 chars' : '';
   }
+
+  onSubmit() {
+    if (this.login.valid && this.password.valid) {
+      console.log('Login:', this.login.value);
+      console.log('Password:', this.password.value);
+    }
+  }
 }
