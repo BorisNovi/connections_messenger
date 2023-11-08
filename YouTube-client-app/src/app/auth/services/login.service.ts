@@ -24,13 +24,14 @@ export class LoginService {
 
   logIn(credentials: ILoginCredentials): void {
     if (credentials.login && credentials.password) {
-      this.saveFakeToken(credentials, true);
+      this.saveFakeToken('token', true);
+      this.router.navigate(['']);
     }
   }
 
-  saveFakeToken(credentials: ILoginCredentials, loggedIn: boolean): void {
+  saveFakeToken(token: string, loggedIn: boolean): void {
     if (loggedIn) {
-      localStorage.setItem('fakeToken', JSON.stringify(credentials));
+      localStorage.setItem('fakeToken', token);
     }
   }
 

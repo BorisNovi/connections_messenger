@@ -18,8 +18,7 @@ const MATERIAL_IMPORTS = [
 ];
 
 const routes: Routes = [
-  { path: '', component: LoginPageComponent },
-  { path: 'main', component: MainComponent }
+  { path: '', component: LoginPageComponent }
 ];
 
 @NgModule({
