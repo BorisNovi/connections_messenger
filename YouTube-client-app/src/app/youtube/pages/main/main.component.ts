@@ -1,7 +1,6 @@
 import {
   Component, OnDestroy, OnInit, Signal
 } from '@angular/core';
-import { SEARCH_RESULTS } from 'src/assets/mock_data/search-results';
 import { Subscription } from 'rxjs';
 import { YoutubeMockDataService } from '../../services/youtube-mock-data.service';
 import { SearchItemModel } from '../../models/search/search-item.model';
@@ -17,7 +16,7 @@ import { SearchResponseModel } from '../../models/search/search-response.model';
 export class MainComponent implements OnInit, OnDestroy {
   subscription!: Subscription;
 
-  dataForSearch: SearchItemModel[] = SEARCH_RESULTS.items;
+  dataForSearch!: SearchItemModel[];
 
   searchTerm: Signal<string> = this.dataSharingService.currentSearchTerm;
 
@@ -33,7 +32,7 @@ export class MainComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription = this.dataService.getMockedData()
       .subscribe((data: SearchResponseModel) => {
-        // this.dataForSearch = data.items;
+        this.dataForSearch = data.items;
         console.log(data.items);
       });
   }

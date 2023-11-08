@@ -11,14 +11,15 @@ export class YoutubeMockDataService {
   constructor(private http: HttpClient) {
   }
 
+  private dataUrl = '../../../assets/mock_data/search-results.json';
+  private dataUrlGhpages = 'assets/mock_data/search-results.json';
+
   getMockedData(): Observable<SearchResponseModel> {
-    const dataUrl = '../../../assets/mock_data/search-results.json';
-    return this.http.get<SearchResponseModel>(dataUrl);
+    return this.http.get<SearchResponseModel>(this.dataUrlGhpages || this.dataUrl);
   }
 
   getMockedDataById(id: string): Observable<SearchItemModel[]> {
-    const dataUrl = '../../../assets/mock_data/search-results.json';
-    return this.http.get<SearchResponseModel>(dataUrl).pipe(
+    return this.http.get<SearchResponseModel>(this.dataUrlGhpages || this.dataUrl).pipe(
       map((response) => response.items.filter((item) => item.id === id))
     );
   }
