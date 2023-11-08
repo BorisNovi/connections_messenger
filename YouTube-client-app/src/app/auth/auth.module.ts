@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
+import { MainComponent } from '../youtube/pages/main/main.component';
 
 const MATERIAL_IMPORTS = [
   MatIconModule,
@@ -18,6 +19,7 @@ const MATERIAL_IMPORTS = [
 
 const routes: Routes = [
   { path: '', component: LoginPageComponent },
+  { path: 'main', component: MainComponent }
 ];
 
 @NgModule({

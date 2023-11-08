@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-login-form',
@@ -10,6 +11,10 @@ export class LoginFormComponent {
   login = new FormControl('', [Validators.required, Validators.minLength(3)]);
   password = new FormControl('', [Validators.required, Validators.minLength(6)]);
   hide = true;
+
+  constructor(
+    private loginService: LoginService
+  ) {}
 
   getLoginErrorMessage() {
     if (this.login.hasError('required')) {
@@ -28,9 +33,12 @@ export class LoginFormComponent {
   }
 
   onSubmit() {
-    if (this.login.valid && this.password.valid) {
-      console.log('Login:', this.login.value);
-      console.log('Password:', this.password.value);
+    if ((this.login.valid && this.password.valid)
+     && (this.login.value !== null && this.password.value !== null)) {
+      this.loginService.updLoginCredentials({
+        login: this.login.value,
+        password: this.password.value
+      });
     }
   }
 }

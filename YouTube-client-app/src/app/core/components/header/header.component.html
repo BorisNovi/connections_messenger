@@ -27,7 +27,14 @@
       <button routerLink="login" class="sign-in-button" color="primary" mat-raised-button>
         <mat-icon class="sign-in-button-icon">account_circle</mat-icon>
       </button>
+
+      <!-- эту кнопу удалить на следующем задании -->
+      <button (click)="logOut()" class="sign-in-button" mat-raised-button>
+        <mat-icon class="sign-in-button-icon">logout</mat-icon>
+      </button>
+
     </div>
+
   </div>
   <app-sorting-criteria-block *ngIf="isSortingOpen"></app-sorting-criteria-block>
 </div>

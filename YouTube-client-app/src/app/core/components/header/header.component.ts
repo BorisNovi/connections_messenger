@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LoginService } from 'src/app/auth/services/login.service';
 import { YoutubeHeaderDataSharingService } from 'src/app/youtube/services/youtube-header-data-sharing.service';
 
 @Component({
@@ -13,7 +14,8 @@ export class HeaderComponent {
   searchTerm = '';
 
   constructor(
-    private dataSharingService: YoutubeHeaderDataSharingService
+    private dataSharingService: YoutubeHeaderDataSharingService,
+    private loginService: LoginService
   ) {}
 
   toggleSort():void {
@@ -22,5 +24,9 @@ export class HeaderComponent {
 
   performSearch(): void {
     this.dataSharingService.updSearchTerm(this.searchTerm);
+  }
+
+  logOut(): void {
+    this.loginService.logOut();
   }
 }
