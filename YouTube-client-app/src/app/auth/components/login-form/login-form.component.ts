@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from '../../services/login.service';
 
 @Component({
@@ -8,8 +8,11 @@ import { LoginService } from '../../services/login.service';
   styleUrls: ['./login-form.component.scss']
 })
 export class LoginFormComponent {
-  login = new FormControl('', [Validators.required, Validators.minLength(3)]);
-  password = new FormControl('', [Validators.required, Validators.minLength(6)]);
+  credentials = new FormGroup({
+    login: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    password: new FormControl('', [Validators.required, Validators.minLength(6)])
+  });
+
   hide = true;
 
   constructor(
@@ -17,27 +20,26 @@ export class LoginFormComponent {
   ) {}
 
   getLoginErrorMessage() {
-    if (this.login.hasError('required')) {
+    if (this.credentials.get('login')?.hasError('required')) {
       return 'You must enter a login';
     }
 
-    return this.login.hasError('minlength') ? 'Min length 3 chars' : '';
+    return this.credentials.get('login')?.hasError('minlength') ? 'Min length 3 chars' : '';
   }
 
   getPasswordErrorMessage() {
-    if (this.password.hasError('required')) {
+    if (this.credentials.get('password')?.hasError('required')) {
       return 'You must enter a password';
     }
 
-    return this.password.hasError('minlength') ? 'Min length 6 chars' : '';
+    return this.credentials.get('password')?.hasError('minlength') ? 'Min length 6 chars' : '';
   }
 
   onSubmit() {
-    if ((this.login.valid && this.password.valid)
-     && (this.login.value !== null && this.password.value !== null)) {
+    if (this.credentials.valid) {
       this.loginService.updLoginCredentials({
-        login: this.login.value,
-        password: this.password.value
+        login: this.credentials.value.login || null,
+        password: this.credentials.value.password || null
       });
     }
   }

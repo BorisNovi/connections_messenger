@@ -2,27 +2,27 @@
   <div class="header">
     <h2>Login</h2>
   </div>
-  <div class="login-form">
+  <form class="login-form" [formGroup]="credentials">
     <div class="login">
       <mat-form-field appearance="outline">
         <mat-label>Login</mat-label>
-        <input matInput placeholder="nagibator1998" [formControl]="login" required>
+        <input matInput placeholder="nagibator1998" formControlName="login" required>
         <mat-icon matSuffix>login</mat-icon>
-        <mat-error *ngIf="login.invalid">{{getLoginErrorMessage()}}</mat-error>
+        <mat-error *ngIf="credentials.get('login')?.invalid">{{getLoginErrorMessage()}}</mat-error>
       </mat-form-field>
     </div>
     <div class="password">
       <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
-        <input matInput [type]="hide ? 'password' : 'text'" [formControl]="password" required>
+        <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
         <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
-        <mat-error *ngIf="password.invalid">{{getPasswordErrorMessage()}}</mat-error>
+        <mat-error *ngIf="credentials.get('password')?.invalid">{{getPasswordErrorMessage()}}</mat-error>
       </mat-form-field>
     </div>
     <div class="button-login">
       <button mat-raised-button type="submit" color="primary" (click)="onSubmit()">Login</button>
     </div>
-  </div>
+  </form>
 </div>
