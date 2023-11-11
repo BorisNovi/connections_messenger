@@ -16,6 +16,9 @@ export class YoutubeHeaderDataSharingService {
   private keyword: WritableSignal<string> = signal('');
   currentKeyword: Signal<string> = computed(this.keyword);
 
+  private isSortingOpen: WritableSignal<boolean> = signal(false);
+  currentSortingOpenState: Signal<boolean> = computed(this.isSortingOpen);
+
   updSearchTerm(newSearchTerm: string): void {
     this.searchTerm.set(newSearchTerm);
   }
@@ -28,7 +31,7 @@ export class YoutubeHeaderDataSharingService {
     this.keyword.set(newKeyword);
   }
 
-  // eslint-disable-next-line max-len
-  // eslint-disable-next-line @typescript-eslint/no-useless-constructor, @typescript-eslint/no-empty-function
-  constructor() { }
+  updSortingOpenState(isOpen: boolean): void {
+    this.isSortingOpen.set(isOpen);
+  }
 }

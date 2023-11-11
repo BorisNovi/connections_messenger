@@ -15,11 +15,12 @@
         allowfullscreen></iframe>
     </div>
     <div class="content-container older6m" appPublishedIndicator [publishDate]="data.snippet.publishedAt || ''">
-      <div class="header-container">
-        <h1 class="header">{{data.snippet.title | slice: 0 : 20}}{{ data.snippet.title.length > 20 ? '…' : '' }}</h1> <p class="header-date">{{data.snippet.publishedAt | date: 'EEEE, MMMM dd, YYYY'}}</p>
+      <div class="header">
+        <h1 class="header-heading">{{data.snippet.title | slice: 0 : 20}}{{ data.snippet.title.length > 20 ? '…' : '' }}</h1>
+        <p class="header-date">{{data.snippet.publishedAt | date: 'EEEE, MMMM dd, YYYY'}}</p>
       </div>
-      <div class="description-container">
-        <h4 class="description-header">Description:</h4>
+      <div class="description">
+        <h4 class="description-heading">Description:</h4>
         <p class="description-text">{{data.snippet.description}}</p>
       </div>
       <div class="stats">

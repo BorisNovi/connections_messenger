@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule, Routes, RouterLink } from '@angular/router';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { CardComponent } from './components/card/card.component';
 import { MainComponent } from './pages/main/main.component';
@@ -12,6 +14,7 @@ import { SortPipe } from './pipes/sort.pipe';
 import { FilterPipe } from './pipes/filter.pipe';
 import { CustomButtonComponent } from '../shared/components/custom-button/custom-button.component';
 import { DetailComponent } from './pages/detail/detail.component';
+import { SortingCriteriaBlockComponent } from './components/sorting-criteria-block/sorting-criteria-block.component';
 
 const routes: Routes = [
   { path: '', component: MainComponent },
@@ -21,6 +24,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     MainComponent,
+    SortingCriteriaBlockComponent,
     SearchResultsBlockComponent,
     CardComponent,
     PublishedIndicatorDirective,
@@ -34,11 +38,10 @@ const routes: Routes = [
     CustomButtonComponent,
     RouterLink,
     MatIconModule,
+    MatButtonToggleModule,
     MatButtonModule,
+    FormsModule,
     RouterModule.forChild(routes),
-  ],
-  exports: [
   ]
-
 })
 export class YoutubeModule { }

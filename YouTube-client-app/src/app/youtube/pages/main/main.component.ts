@@ -24,6 +24,8 @@ export class MainComponent implements OnInit, OnDestroy {
 
   keyword: Signal<string> = this.dataSharingService.currentKeyword;
 
+  isSortingOpen: Signal<boolean> = this.dataSharingService.currentSortingOpenState;
+
   constructor(
     private dataService: YoutubeMockDataService,
     private dataSharingService: YoutubeHeaderDataSharingService
@@ -33,7 +35,6 @@ export class MainComponent implements OnInit, OnDestroy {
     this.subscription = this.dataService.getMockedData()
       .subscribe((data: SearchResponseModel) => {
         this.dataForSearch = data.items;
-        console.log(data.items);
       });
   }
 

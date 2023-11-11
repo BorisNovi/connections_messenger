@@ -13,29 +13,13 @@ export class LoginFormComponent {
     password: new FormControl('', [Validators.required, Validators.minLength(6)])
   });
 
-  hide = true;
+  isHidden = true;
 
   constructor(
     private loginService: LoginService
   ) {}
 
-  getLoginErrorMessage() {
-    if (this.credentials.get('login')?.hasError('required')) {
-      return 'You must enter a login';
-    }
-
-    return this.credentials.get('login')?.hasError('minlength') ? 'Min length 3 chars' : '';
-  }
-
-  getPasswordErrorMessage() {
-    if (this.credentials.get('password')?.hasError('required')) {
-      return 'You must enter a password';
-    }
-
-    return this.credentials.get('password')?.hasError('minlength') ? 'Min length 6 chars' : '';
-  }
-
-  onSubmit() {
+  onSubmit(): void {
     if (this.credentials.valid) {
       this.loginService.updLoginCredentials({
         login: this.credentials.value.login || null,

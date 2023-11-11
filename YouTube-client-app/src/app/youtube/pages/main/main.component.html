@@ -1,2 +1,3 @@
+<app-sorting-criteria-block *ngIf="isSortingOpen()"></app-sorting-criteria-block>
 <app-search-results-block
   [dataFromSearch]="dataForSearch | search: searchTerm() | filter: keyword() | sort: sortParams()"></app-search-results-block>

@@ -20,6 +20,7 @@ export class HeaderComponent {
 
   toggleSort():void {
     this.isSortingOpen = !this.isSortingOpen;
+    this.dataSharingService.updSortingOpenState(this.isSortingOpen);
   }
 
   performSearch(): void {

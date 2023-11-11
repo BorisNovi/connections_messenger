@@ -32,7 +32,6 @@ export class DetailComponent implements OnInit, OnDestroy {
     this.dataSubscription = this.dataService.getMockedDataById(this.id)
       .subscribe((data: SearchItemModel[]) => {
         [this.data] = data;
-        console.log(this.data);
       });
 
     const embedVideo = `https://www.youtube.com/embed/${this.id}`;

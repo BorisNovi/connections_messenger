@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { YoutubeHeaderDataSharingService } from '../../../youtube/services/youtube-header-data-sharing.service';
+import { YoutubeHeaderDataSharingService } from '../../services/youtube-header-data-sharing.service';
 
 enum Direction {
   ASC = 'asc',
