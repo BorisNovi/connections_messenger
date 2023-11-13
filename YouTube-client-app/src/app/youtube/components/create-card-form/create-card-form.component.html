@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="header">
+    <h2>Create new card</h2>
+  </div>
+  <form class="card-form" [formGroup]="card">
+    <div class="title">
+      <mat-form-field appearance="outline">
+        <mat-label>Title</mat-label>
+        <input matInput placeholder="video name" formControlName="title" required>
+        <mat-icon matSuffix>title</mat-icon>
+        <mat-error *ngIf="card.controls['title'].errors?.['required']">Please enter a title</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="description">
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <input matInput formControlName="description" required>
+        <mat-icon matSuffix>description</mat-icon>
+        <mat-error *ngIf="card.controls['description'].errors?.['required']">Please enter a description</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="img">
+      <mat-form-field appearance="outline">
+        <mat-label>Img</mat-label>
+        <input matInput formControlName="img" required>
+        <mat-icon matSuffix>image</mat-icon>
+        <mat-error *ngIf="card.controls['img'].errors?.['required']">Please enter a image link</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="link">
+      <mat-form-field appearance="outline">
+        <mat-label>Link</mat-label>
+        <input matInput formControlName="link" required>
+        <mat-icon matSuffix>link</mat-icon>
+        <mat-error *ngIf="card.controls['link'].errors?.['required']">Please enter a video embed link</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="button-create">
+      <button mat-raised-button type="submit" color="primary" (click)="onSubmit()">Create card</button>
+    </div>
+  </form>
+</div>

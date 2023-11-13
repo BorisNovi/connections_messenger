@@ -18,14 +18,14 @@ const MATERIAL_IMPORTS = [
 ];
 
 const routes: Routes = [
-  { path: '', component: LoginPageComponent }
+  { path: '', component: LoginPageComponent },
 ];
 
 @NgModule({
   declarations: [
     LoginPageComponent,
     LoginFormComponent,
-    PasswordValidatorDirective
+    PasswordValidatorDirective,
   ],
   imports: [
     CommonModule,
