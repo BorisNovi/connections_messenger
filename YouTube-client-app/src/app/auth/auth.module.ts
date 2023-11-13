@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
+import { PasswordValidatorDirective } from './directives/password-validator.directive';
 
 const MATERIAL_IMPORTS = [
   MatIconModule,
@@ -23,7 +24,8 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     LoginPageComponent,
-    LoginFormComponent
+    LoginFormComponent,
+    PasswordValidatorDirective
   ],
   imports: [
     CommonModule,

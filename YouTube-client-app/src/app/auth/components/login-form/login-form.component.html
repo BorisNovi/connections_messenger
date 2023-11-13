@@ -6,10 +6,10 @@
     <div class="login">
       <mat-form-field appearance="outline">
         <mat-label>Login</mat-label>
-        <input matInput placeholder="nagibator1998" formControlName="login" required>
+        <input matInput placeholder="example@gmail.com" formControlName="login" required>
         <mat-icon matSuffix>login</mat-icon>
-        <mat-error *ngIf="credentials.controls['login'].errors?.['minlength']">Min length 3 chars</mat-error>
-        <mat-error *ngIf="credentials.controls['login'].errors?.['required']">You must enter a login</mat-error>
+        <mat-error *ngIf="credentials.controls['login'].errors?.['required']">Please enter a login email</mat-error>
+        <mat-error *ngIf="credentials.controls['login'].errors?.['pattern']">The login email is invalid!</mat-error>
       </mat-form-field>
     </div>
     <div class="password">
@@ -19,8 +19,11 @@
         <button mat-icon-button matSuffix (click)="isHidden = !isHidden" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="isHidden">
           <mat-icon>{{isHidden ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
-        <mat-error *ngIf="credentials.controls['password'].errors?.['minlength']">Min length 6 chars</mat-error>
-        <mat-error *ngIf="credentials.controls['password'].errors?.['required']">You must enter a password</mat-error>
+        <mat-error *ngIf="credentials.controls['password'].errors?.['required']">Please enter a password</mat-error>
+        <mat-error *ngIf="credentials.controls['password'].errors?.['atLeastEightCharacters']">Min length 8 chars</mat-error>
+        <mat-error *ngIf="credentials.controls['password'].errors?.['mixedCase']">Use upper and lower case</mat-error>
+        <mat-error *ngIf="credentials.controls['password'].errors?.['lettersAndNumbers']">Use letters and numbers</mat-error>
+        <mat-error *ngIf="credentials.controls['password'].errors?.['specialCharacter']">Use special symbols %$&#9778;!#</mat-error>
       </mat-form-field>
     </div>
     <div class="button-login">

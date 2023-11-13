@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from '../../services/login.service';
+import { PasswordValidatorDirective } from '../../directives/password-validator.directive';
 
 @Component({
   selector: 'app-login-form',
@@ -9,14 +10,14 @@ import { LoginService } from '../../services/login.service';
 })
 export class LoginFormComponent {
   credentials = new FormGroup({
-    login: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    password: new FormControl('', [Validators.required, Validators.minLength(6)])
+    login: new FormControl('', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]),
+    password: new FormControl('', [Validators.required, new PasswordValidatorDirective().validate])
   });
 
   isHidden = true;
 
   constructor(
-    private loginService: LoginService
+    private loginService: LoginService,
   ) {}
 
   onSubmit(): void {
