@@ -30,14 +30,17 @@
     .title,
     .description,
     .img,
-    .link {
+    .link,
+    .tags {
       mat-form-field {
         width: 304px;
       }
     }
 
-    .button-create {
-      align-self: flex-end;
+    .buttons {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
 
       button {
         width: 124px;

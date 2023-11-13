@@ -1,31 +1,61 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import {
+  FormControl, FormGroup, FormBuilder, Validators, FormArray
+} from '@angular/forms';
 
 @Component({
   selector: 'app-create-card-form',
   templateUrl: './create-card-form.component.html',
   styleUrls: ['./create-card-form.component.scss']
 })
-export class CreateCardFormComponent {
-  card = new FormGroup({
-    title: new FormControl('', [Validators.required]),
-    description: new FormControl('', [Validators.required]),
-    img: new FormControl('', [Validators.required]),
-    link: new FormControl('', [Validators.required]),
-  });
-
-  isHidden = true;
+export class CreateCardFormComponent implements OnInit {
+  public cardForm!: FormGroup;
 
   constructor(
-    // private loginService: LoginService,
-  ) {}
+    private formBuilder: FormBuilder
+  ) { }
+
+  ngOnInit(): void {
+    this.cardForm = this.formBuilder.group({
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      img: ['', Validators.required],
+      link: ['', Validators.required],
+      tags: this.formBuilder.array([
+        this.createTag(),
+      ])
+    });
+  }
+
+  createTag() {
+    return new FormGroup({
+      tag: new FormControl(),
+    });
+  }
+
+  addTag(): void {
+    const arr = (this.cardForm.get('tags') as FormArray);
+
+    if (arr.length >= 5) return;
+
+    arr.push(this.createTag());
+  }
+
+  get tags(): FormArray {
+    return this.cardForm.get('tags') as FormArray;
+  }
+
+  onReset(): void {
+    const arr = (this.cardForm.get('tags') as FormArray);
+
+    while (arr.length > 1) {
+      arr.removeAt(1);
+    }
+  }
 
   onSubmit(): void {
-    if (this.card.valid) {
-      // this.loginService.updLoginCredentials({
-      //   login: this.credentials.value.login || null,
-      //   password: this.credentials.value.password || null
-      // });
+    if (this.cardForm.valid) {
+      console.log(this.cardForm);
     }
   }
 }
