@@ -10,6 +10,7 @@ const routes: Routes = [
     component: ShellComponent,
     children: [
       { path: '', loadChildren: () => import('./youtube/youtube.module').then((m) => m.YoutubeModule), canActivate: [authGuard] },
+      { path: 'admin', loadChildren: () => import('./admin/admin.module').then((m) => m.AdminModule), canActivate: [authGuard] },
       { path: 'login', loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule) },
       { path: '404', component: NotFoundComponent },
       { path: '**', redirectTo: '404' }
