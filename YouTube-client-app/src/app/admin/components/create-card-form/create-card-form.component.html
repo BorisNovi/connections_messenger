@@ -9,14 +9,16 @@
         <input matInput placeholder="video name" formControlName="title" required>
         <mat-icon matIconPrefix>title</mat-icon>
         <mat-error *ngIf="cardForm.controls['title'].errors?.['required']">Please enter a title</mat-error>
+        <mat-error *ngIf="cardForm.controls['title'].errors?.['minlength']">The title is too short</mat-error>
+        <mat-error *ngIf="cardForm.controls['title'].errors?.['maxlength']">The title is too long</mat-error>
       </mat-form-field>
     </div>
     <div class="description">
       <mat-form-field appearance="outline">
         <mat-label>Description</mat-label>
-        <input matInput formControlName="description" required>
+        <input matInput formControlName="description">
         <mat-icon matIconPrefix>description</mat-icon>
-        <mat-error *ngIf="cardForm.controls['description'].errors?.['required']">Please enter a description</mat-error>
+        <mat-error *ngIf="cardForm.controls['description'].errors?.['maxlength']">The description is too long</mat-error>
       </mat-form-field>
     </div>
     <div class="img">
@@ -24,7 +26,7 @@
         <mat-label>Img</mat-label>
         <input matInput formControlName="img" required>
         <mat-icon matIconPrefix>image</mat-icon>
-        <mat-error *ngIf="cardForm.controls['img'].errors?.['required']">Please enter a image link</mat-error>
+        <mat-error *ngIf="cardForm.controls['img'].errors?.['required']">Please enter a link to the image</mat-error>
       </mat-form-field>
     </div>
     <div class="link">
@@ -32,11 +34,24 @@
         <mat-label>Link</mat-label>
         <input matInput formControlName="link" required>
         <mat-icon matIconPrefix>link</mat-icon>
-        <mat-error *ngIf="cardForm.controls['link'].errors?.['required']">Please enter a video embed link</mat-error>
+        <mat-error *ngIf="cardForm.controls['link'].errors?.['required']">Please enter a link to the video</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="date">
+      <mat-form-field appearance="outline">
+        <mat-label>Date</mat-label>
+        <input matInput formControlName="date" [matDatepicker]="picker" required>
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-icon matIconPrefix>calendar_today</mat-icon>
+        <mat-error *ngIf="cardForm.controls['date'].errors?.['required']">Please enter a valid creation date</mat-error>
+        <mat-error *ngIf="cardForm.controls['date'].errors?.['futureDate']">Сreation date must not be in the future</mat-error>
+        <mat-error *ngIf="cardForm.controls['date'].errors?.['launchedDate']">Сreation date should not be older than YouTube</mat-error>
       </mat-form-field>
     </div>
     <div class="tags">
-      <div formArrayName="tags" *ngFor="let tags of tags.controls; let i = index">
+      <div formArrayName="tags" *ngFor="let tag of tags.controls; let i = index">
         <mat-form-field [formGroupName]="i" appearance="outline">
           <mat-label>Tag</mat-label>
           <input matInput formControlName="tag">
@@ -44,6 +59,7 @@
           <button mat-icon-button matSuffix (click)="addTag()">
             <mat-icon>add</mat-icon>
           </button>
+          <mat-error *ngIf="tags.at(i).get('tag')?.hasError('required')">Please enter a tag</mat-error>
         </mat-form-field>
       </div>
     </div>

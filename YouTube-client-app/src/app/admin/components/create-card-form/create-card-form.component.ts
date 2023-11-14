@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  FormControl, FormGroup, FormBuilder, Validators, FormArray
+  FormControl, FormGroup, FormBuilder, Validators, FormArray, AbstractControl, ValidationErrors
 } from '@angular/forms';
+import { DateValidatorDirective } from '../../directives/date-validator.directive';
 
 @Component({
   selector: 'app-create-card-form',
@@ -17,19 +18,24 @@ export class CreateCardFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.cardForm = this.formBuilder.group({
-      title: ['', Validators.required],
-      description: ['', Validators.required],
+      title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+      description: ['', Validators.maxLength(255)],
       img: ['', Validators.required],
       link: ['', Validators.required],
+      date: ['', [Validators.required, this.dateValidator]],
       tags: this.formBuilder.array([
-        this.createTag(),
+        this.createTag()
       ])
     });
   }
 
-  createTag() {
+  dateValidator(control: AbstractControl): ValidationErrors | null {
+    return new DateValidatorDirective().validate(control);
+  }
+
+  createTag(): FormGroup {
     return new FormGroup({
-      tag: new FormControl(),
+      tag: new FormControl('', [Validators.required]),
     });
   }
 
@@ -55,7 +61,8 @@ export class CreateCardFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.cardForm.valid) {
-      console.log(this.cardForm);
+      // eslint-disable-next-line no-console
+      console.log(this.cardForm); // Important console log!
     }
   }
 }
