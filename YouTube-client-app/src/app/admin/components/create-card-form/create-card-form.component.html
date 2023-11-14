@@ -40,7 +40,7 @@
     <div class="date">
       <mat-form-field appearance="outline">
         <mat-label>Date</mat-label>
-        <input matInput formControlName="date" [matDatepicker]="picker" required>
+        <input matInput formControlName="date" [matDatepicker]="picker" appDateValidator required>
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
@@ -50,18 +50,19 @@
         <mat-error *ngIf="cardForm.controls['date'].errors?.['launchedDate']">Сreation date should not be older than YouTube</mat-error>
       </mat-form-field>
     </div>
-    <div class="tags">
-      <div formArrayName="tags" *ngFor="let tag of tags.controls; let i = index">
-        <mat-form-field [formGroupName]="i" appearance="outline">
+    <div class="tags" formArrayName="tags">
+      <div *ngFor="let tag of tags.controls; let i = index">
+        <mat-form-field appearance="outline">
           <mat-label>Tag</mat-label>
-          <input matInput formControlName="tag">
+          <input matInput [formControl]="tag">
           <mat-icon matIconPrefix>tag</mat-icon>
-          <button mat-icon-button matSuffix (click)="addTag()">
-            <mat-icon>add</mat-icon>
+          <button *ngIf="(tags.length > 1)" mat-icon-button matSuffix (click)="removeTag(i)">
+            <mat-icon>remove</mat-icon>
           </button>
-          <mat-error *ngIf="tags.at(i).get('tag')?.hasError('required')">Please enter a tag</mat-error>
+          <mat-error *ngIf="tag.errors?.['required']">Please enter a tag</mat-error>
         </mat-form-field>
       </div>
+      <button mat-raised-button (click)="addTag()">Add tag</button>
     </div>
     <div class="buttons">
       <button mat-raised-button type="reset" (click)="onReset()">Reset</button>

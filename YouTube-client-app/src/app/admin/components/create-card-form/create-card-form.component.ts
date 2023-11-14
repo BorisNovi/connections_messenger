@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  FormControl, FormGroup, FormBuilder, Validators, FormArray, AbstractControl, ValidationErrors
+  FormControl, FormGroup, FormBuilder, Validators, FormArray
 } from '@angular/forms';
-import { DateValidatorDirective } from '../../directives/date-validator.directive';
 
 @Component({
   selector: 'app-create-card-form',
@@ -22,32 +21,34 @@ export class CreateCardFormComponent implements OnInit {
       description: ['', Validators.maxLength(255)],
       img: ['', Validators.required],
       link: ['', Validators.required],
-      date: ['', [Validators.required, this.dateValidator]],
+      date: ['', [Validators.required]],
       tags: this.formBuilder.array([
         this.createTag()
       ])
     });
   }
 
-  dateValidator(control: AbstractControl): ValidationErrors | null {
-    return new DateValidatorDirective().validate(control);
-  }
-
-  createTag(): FormGroup {
-    return new FormGroup({
-      tag: new FormControl('', [Validators.required]),
-    });
+  createTag(): FormControl {
+    return new FormControl('', [Validators.required]);
   }
 
   addTag(): void {
-    const arr = (this.cardForm.get('tags') as FormArray);
+    const arr = this.cardForm.get('tags') as FormArray;
 
     if (arr.length >= 5) return;
 
     arr.push(this.createTag());
   }
 
-  get tags(): FormArray {
+  removeTag(i: number): void {
+    const arr = (this.cardForm.get('tags') as FormArray);
+
+    if (arr.length <= 1) return;
+
+    arr.removeAt(i);
+  }
+
+  get tags(): FormArray<FormControl> {
     return this.cardForm.get('tags') as FormArray;
   }
 

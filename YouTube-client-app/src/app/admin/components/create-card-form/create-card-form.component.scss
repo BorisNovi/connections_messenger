@@ -38,6 +38,16 @@
       }
     }
 
+    .tags {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+    .tags > button {
+      align-self: flex-end;
+    }
+
     .buttons {
       width: 100%;
       display: flex;
