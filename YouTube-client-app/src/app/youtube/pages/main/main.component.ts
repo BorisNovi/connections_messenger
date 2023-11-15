@@ -19,10 +19,12 @@ import { ISearch, SearchOrder } from '../../models/search/search-params.model';
 })
 export class MainComponent implements OnInit, OnDestroy {
   subscription!: Subscription;
+
   dataForSearch!: SearchItemModel[];
   searchTerm: Observable<string> = toObservable(this.dataSharingService.currentSearchTerm);
   sortParams: Signal<ISort> = this.dataSharingService.currentSortParams;
   keyword: Signal<string> = this.dataSharingService.currentKeyword;
+
   isSortingOpen: Signal<boolean> = this.dataSharingService.currentSortingOpenState;
   responseError = '';
 
