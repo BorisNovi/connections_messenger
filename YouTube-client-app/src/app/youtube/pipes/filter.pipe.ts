@@ -7,6 +7,8 @@ import { SearchItemModel } from '../models/search/search-item.model';
 export class FilterPipe implements PipeTransform {
   // eslint-disable-next-line class-methods-use-this
   transform(array: SearchItemModel[], keyword: string): SearchItemModel[] {
+    if (!array) return [];
+
     return array.filter((item) => item.snippet.title
       .toLowerCase().includes(keyword));
   }

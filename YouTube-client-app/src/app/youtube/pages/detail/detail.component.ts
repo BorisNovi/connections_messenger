@@ -2,8 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { YoutubeMockDataService } from '../../services/youtube-mock-data.service';
 import { SearchItemModel } from '../../models/search/search-item.model';
+import { ApiService } from '../../services/api.service';
+import { SearchResponseModel } from '../../models/search/search-response.model';
 
 @Component({
   selector: 'app-detail',
@@ -18,7 +19,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   video!: SafeResourceUrl;
 
   constructor(
-    private dataService: YoutubeMockDataService,
+    private apiService: ApiService,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer
   ) {
@@ -29,9 +30,9 @@ export class DetailComponent implements OnInit, OnDestroy {
       this.id = params['id'];
     });
 
-    this.dataSubscription = this.dataService.getMockedDataById(this.id)
-      .subscribe((data: SearchItemModel[]) => {
-        [this.data] = data;
+    this.dataSubscription = this.apiService.getVideos({ id: [this.id], maxResults: 1 })
+      .subscribe((data: SearchResponseModel) => {
+        [this.data] = data.items;
       });
 
     const embedVideo = `https://www.youtube.com/embed/${this.id}`;
