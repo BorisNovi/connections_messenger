@@ -30,7 +30,7 @@ export class DetailComponent implements OnInit, OnDestroy {
       this.id = params['id'];
     });
 
-    this.dataSubscription = this.apiService.getVideos({ id: [this.id], maxResults: 1 })
+    this.dataSubscription = this.apiService.getVideos([this.id])
       .subscribe((data: SearchResponseModel) => {
         [this.data] = data.items;
       });

@@ -11,8 +11,6 @@ import { YoutubeHeaderDataSharingService } from 'src/app/youtube/services/youtub
 export class HeaderComponent {
   isSortingOpen = false;
 
-  searchTerm = '';
-
   constructor(
     private dataSharingService: YoutubeHeaderDataSharingService,
     private loginService: LoginService
@@ -23,8 +21,8 @@ export class HeaderComponent {
     this.dataSharingService.updSortingOpenState(this.isSortingOpen);
   }
 
-  performSearch(): void {
-    this.dataSharingService.updSearchTerm(this.searchTerm);
+  onSearchTermChange(searchTerm: string): void {
+    this.dataSharingService.updSearchTerm(searchTerm);
   }
 
   logOut(): void {

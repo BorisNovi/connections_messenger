@@ -9,10 +9,6 @@ export enum SearchOrder {
 
 export interface ISearch {
   q?: string;
-  maxResults: number;
+  maxResults?: number;
   order?: SearchOrder;
-}
-
-export interface IGet extends ISearch {
-  id: string[];
 }
