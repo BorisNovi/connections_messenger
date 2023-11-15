@@ -21,14 +21,12 @@
         <mat-icon class="search-settings-button-icon">tune</mat-icon>
       </button>
     </div>
-    <div class="sign-in">
-      <span>Your Name</span>
-      <button routerLink="login" class="sign-in-button" color="primary" mat-raised-button>
-        <mat-icon class="sign-in-button-icon">account_circle</mat-icon>
+    <div class="login">
+      <span>{{username | async}}</span>
+      <button [routerLink]="(isAuthorised | async) ? 'admin' : 'login'" class="login-button" color="primary" mat-raised-button>
+        <mat-icon class="login-button-icon">account_circle</mat-icon>
       </button>
-
-      <!-- эту кнопу удалить на следующем задании -->
-      <button (click)="logOut()" class="sign-in-button" mat-raised-button>
-        <mat-icon class="sign-in-button-icon">logout</mat-icon>
+      <button *ngIf="isAuthorised | async" (click)="logOut()" class="login-button" mat-raised-button>
+        <mat-icon class="login-button-icon">logout</mat-icon>
       </button>
     </div>

@@ -58,12 +58,13 @@
     }
   }
 
-  .sign-in {
+  .login {
     display: flex;
     align-items: center;
     text-wrap: nowrap;
     position: absolute;
     left: calc(100% - 200px);
+    gap: 10px;
     span {
       padding: 0 5px;
     }

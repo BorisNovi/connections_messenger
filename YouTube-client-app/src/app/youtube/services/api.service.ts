@@ -10,15 +10,13 @@ import { ISearch } from '../models/search/search-params.model';
 })
 export class ApiService {
   private baseUrl = 'https://www.googleapis.com/youtube/v3/';
-  private token = ''; // Можно добавить потом, если вязать вход в гугл-аккаунт с авторизацией.
   private API_KEY = 'AIzaSyD5ttr2lY939Ay2pavuSYygFZ_1dFVbfHg';
 
   private headers = new HttpHeaders({
-    // Authorization: `Bearer ${this.token}`,
     Accept: 'application/json'
   });
 
-  private params = new HttpParams({})
+  private params = new HttpParams()
     .set('key', this.API_KEY)
     .set('type', 'video');
 

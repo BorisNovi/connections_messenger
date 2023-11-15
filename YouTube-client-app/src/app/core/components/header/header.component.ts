@@ -16,6 +16,10 @@ export class HeaderComponent {
     private loginService: LoginService
   ) {}
 
+  isAuthorised = this.loginService.isAuthorised;
+
+  username = this.loginService.username;
+
   toggleSort():void {
     this.isSortingOpen = !this.isSortingOpen;
     this.dataSharingService.updSortingOpenState(this.isSortingOpen);

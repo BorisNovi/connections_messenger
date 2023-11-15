@@ -1,3 +1,4 @@
 <app-sorting-criteria-block *ngIf="isSortingOpen()"></app-sorting-criteria-block>
+<div *ngIf="responseError" [innerHTML]="responseError"></div>
 <app-search-results-block
   [dataFromSearch]="dataForSearch | filter: keyword() | sort: sortParams()"></app-search-results-block>

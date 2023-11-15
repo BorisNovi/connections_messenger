@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import {
-  Observable, Subscription, debounceTime,
+  Observable, Subscription, catchError, debounceTime, of, tap,
 } from 'rxjs';
 import { ApiService } from '../../services/api.service';
 import { SearchItemModel } from '../../models/search/search-item.model';
@@ -24,6 +24,7 @@ export class MainComponent implements OnInit, OnDestroy {
   sortParams: Signal<ISort> = this.dataSharingService.currentSortParams;
   keyword: Signal<string> = this.dataSharingService.currentKeyword;
   isSortingOpen: Signal<boolean> = this.dataSharingService.currentSortingOpenState;
+  responseError = '';
 
   constructor(
     private apiService: ApiService,
@@ -46,19 +47,22 @@ export class MainComponent implements OnInit, OnDestroy {
 
   private search(q: string): void {
     const searchParams: ISearch = { q, maxResults: 5, order: SearchOrder.relevance };
-    this.subscription = this.apiService.searchVideos(searchParams)
-      .subscribe((data: SearchResponseModel) => {
-        const videoIdArr = data.items.map((item) => item.id.videoId);
-        this.getVideosByTags(videoIdArr);
-      });
+    this.subscription = this.apiService.searchVideos(searchParams).pipe(
+      tap((response) => console.log(response)),
+      catchError((error) => { this.responseError = (error.error.error.message); return of(); })
+    ).subscribe((data: SearchResponseModel) => {
+      const videoIdArr = data.items.map((item) => item.id.videoId);
+      this.getVideosByTags(videoIdArr);
+    });
   }
 
   public getVideosByTags(idArr: string[]): void {
-    this.subscription = this.apiService.getVideos(idArr)
-      .subscribe((data: SearchResponseModel) => {
-        this.dataForSearch = data.items;
-        console.log(data.items);
-      });
+    this.subscription = this.apiService.getVideos(idArr).pipe(
+      tap((response) => console.log(response)),
+      catchError((error) => { this.responseError = (error.error.error.message); return of(); })
+    ).subscribe((data: SearchResponseModel) => {
+      this.dataForSearch = data.items;
+    });
   }
 
   ngOnDestroy(): void {
