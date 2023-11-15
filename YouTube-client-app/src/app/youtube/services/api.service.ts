@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { SearchResponseModel } from '../models/search/search-response.model';
-import { SearchItemModel } from '../models/search/search-item.model';
 import { ISearch } from '../models/search/search-params.model';
 
 @Injectable({
@@ -10,28 +9,23 @@ import { ISearch } from '../models/search/search-params.model';
 })
 export class ApiService {
   private baseUrl = 'https://www.googleapis.com/youtube/v3/';
-  private API_KEY = 'AIzaSyD5ttr2lY939Ay2pavuSYygFZ_1dFVbfHg';
 
   private headers = new HttpHeaders({
     Accept: 'application/json'
   });
 
-  private params = new HttpParams()
-    .set('key', this.API_KEY)
-    .set('type', 'video');
-
   constructor(private http: HttpClient) { }
 
   searchVideos(searchParams: ISearch): Observable<SearchResponseModel> {
     const { q, maxResults, order } = searchParams;
-    const dataUrl = `${this.baseUrl}search?&part=snippet&maxResults=${maxResults || ''}&order=${order || 'relevance'}&q=${q || ''}`;
+    const dataUrl = `${this.baseUrl}search?&part=snippet&type=video&maxResults=${maxResults || ''}&order=${order || 'relevance'}&q=${q || ''}`;
     return this.http
-      .get<SearchResponseModel>(dataUrl, { headers: this.headers, params: this.params });
+      .get<SearchResponseModel>(dataUrl, { headers: this.headers });
   }
 
   getVideos(id: string[]) {
-    const dataUrl = `${this.baseUrl}videos?&part=snippet,statistics&id=${id.join(',') || ''}`;
+    const dataUrl = `${this.baseUrl}videos?&part=snippet,statistics&type=video&id=${id.join(',') || ''}`;
     return this.http
-      .get<SearchResponseModel>(dataUrl, { headers: this.headers, params: this.params });
+      .get<SearchResponseModel>(dataUrl, { headers: this.headers });
   }
 }
