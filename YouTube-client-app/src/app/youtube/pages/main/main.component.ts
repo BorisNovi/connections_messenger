@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import {
-  Observable, Subscription, catchError, debounceTime, of, tap,
+  Observable, Subscription, catchError, debounceTime, filter, of, tap,
 } from 'rxjs';
 import { ApiService } from '../../services/api.service';
 import { SearchItemModel } from '../../models/search/search-item.model';
@@ -39,16 +39,16 @@ export class MainComponent implements OnInit, OnDestroy {
 
   private useSearch(): void {
     this.subscription = this.searchTerm
-      .pipe(debounceTime(1000))
-      .subscribe((term) => {
-        if (term.length >= 3) {
-          this.search(term);
-        }
+      .pipe(
+        debounceTime(1000),
+        filter((term) => term.length >= 3)
+      ).subscribe((term) => {
+        this.search(term);
       });
   }
 
   private search(q: string): void {
-    const searchParams: ISearch = { q, maxResults: 5, order: SearchOrder.relevance };
+    const searchParams: ISearch = { q, maxResults: 12, order: SearchOrder.relevance };
     this.subscription = this.apiService.searchVideos(searchParams).pipe(
       tap((response) => console.log(response)),
       catchError((error) => { this.responseError = (error.error.error.message); return of(); })
