@@ -1,57 +1,53 @@
 export interface SearchItemModel {
   kind: string;
   etag: string;
-  id: {
-    kind: string;
-    videoId: string;
-  };
-  snippet: {
-    publishedAt: string;
-    channelId: string;
-    title: string;
-    description: string;
-    thumbnails: {
-      default: {
-        url: string;
-        width: number;
-        height: number;
-      };
-      medium: {
-        url: string;
-        width: number;
-        height: number;
-      };
-      high: {
-        url: string;
-        width: number;
-        height: number;
-      };
-      standard: {
-        url: string;
-        width: number;
-        height: number;
-      };
-      maxres: {
-        url: string;
-        width: number;
-        height: number;
-      };
-    };
-    channelTitle: string;
-    tags: string[];
-    categoryId: string;
-    liveBroadcastContent: string;
-    localized: {
-      title: string;
-      description: string;
-    };
-    defaultAudioLanguage: string;
-  };
-  statistics: {
-    viewCount: string;
-    likeCount: string;
-    dislikeCount: string;
-    favoriteCount: string;
-    commentCount: string;
-  };
+  id: Iid;
+  snippet: Isnippet;
+  statistics: Istatistics;
+}
+
+interface Iid {
+  kind: string;
+  videoId: string;
+}
+
+interface Isnippet {
+  publishedAt: string;
+  channelId: string;
+  title: string;
+  description: string;
+  thumbnails: Ithumbnails;
+  channelTitle: string;
+  tags: string[];
+  categoryId: string;
+  liveBroadcastContent: string;
+  localized: Ilocalized;
+  defaultAudioLanguage: string;
+}
+
+interface Ilocalized {
+  title: string;
+  description: string;
+}
+
+interface Ithumbnails {
+  default: Iimages;
+  medium: Iimages;
+  high: Iimages;
+  standard: Iimages;
+  maxres: Iimages;
+}
+
+interface Iimages {
+  url: string;
+  width: number;
+  height: number;
+}
+
+interface Istatistics {
+  viewCount: string;
+  likeCount: string;
+  dislikeCount: string;
+  favoriteCount: string;
+  commentCount: string;
 }

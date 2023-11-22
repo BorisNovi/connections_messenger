@@ -4,6 +4,11 @@ export interface SearchResponseModel {
   TODO: string;
   kind: string;
   etag: string;
-  pageInfo: { totalResults: number, resultsPerPage: number };
+  pageInfo: IpageInfo;
   items: SearchItemModel[];
+}
+
+interface IpageInfo {
+  totalResults: number;
+  resultsPerPage: number;
 }
