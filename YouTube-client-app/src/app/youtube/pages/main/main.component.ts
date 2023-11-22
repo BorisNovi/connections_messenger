@@ -3,8 +3,9 @@ import {
 } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import {
-  Observable, Subscription, catchError, debounceTime, filter, of
+  Observable, catchError, debounceTime, filter, of
 } from 'rxjs';
+import { ManualSubscriptions } from 'src/app/shared/manualSubscriptions';
 import { ApiService } from '../../services/api.service';
 import { SearchItemModel } from '../../models/search/search-item.model';
 import { ISort } from '../../models/search/sort-params.model';
@@ -18,7 +19,7 @@ import { ISearch, SearchOrder } from '../../models/search/search-params.model';
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit, OnDestroy {
-  subscription!: Subscription;
+  private subscriptions = new ManualSubscriptions();
 
   dataForSearch!: SearchItemModel[];
   searchTerm: Observable<string> = toObservable(this.dataSharingService.currentSearchTerm);
@@ -42,7 +43,7 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   private useSearch(): void {
-    this.subscription = this.searchTerm
+    this.subscriptions.add = this.searchTerm
       .pipe(
         debounceTime(this.inputDelay),
         filter((term) => term.length >= this.termLengthThreshold)
@@ -58,7 +59,7 @@ export class MainComponent implements OnInit, OnDestroy {
       order: SearchOrder.relevance
     };
 
-    this.subscription = this.apiService.searchVideos(searchParams).pipe(
+    this.subscriptions.add = this.apiService.searchVideos(searchParams).pipe(
       catchError((error) => { this.responseError = (error.error.error.message); return of(); })
     ).subscribe((data: SearchResponseModel) => {
       const videoIdArr = data.items.map((item) => item.id.videoId);
@@ -67,7 +68,7 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   public getVideosByIds(idArr: string[]): void {
-    this.subscription = this.apiService.getVideos(idArr).pipe(
+    this.subscriptions.add = this.apiService.getVideos(idArr).pipe(
       catchError((error) => { this.responseError = (error.error.error.message); return of(); })
     ).subscribe((data: SearchResponseModel) => {
       this.dataForSearch = data.items;
@@ -75,6 +76,6 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 }
