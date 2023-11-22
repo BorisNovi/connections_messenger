@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import {
-  Observable, Subscription, catchError, debounceTime, filter, of, tap,
+  Observable, Subscription, catchError, debounceTime, filter, of
 } from 'rxjs';
 import { ApiService } from '../../services/api.service';
 import { SearchItemModel } from '../../models/search/search-item.model';
@@ -62,11 +62,11 @@ export class MainComponent implements OnInit, OnDestroy {
       catchError((error) => { this.responseError = (error.error.error.message); return of(); })
     ).subscribe((data: SearchResponseModel) => {
       const videoIdArr = data.items.map((item) => item.id.videoId);
-      this.getVideosByTags(videoIdArr);
+      this.getVideosByIds(videoIdArr);
     });
   }
 
-  public getVideosByTags(idArr: string[]): void {
+  public getVideosByIds(idArr: string[]): void {
     this.subscription = this.apiService.getVideos(idArr).pipe(
       catchError((error) => { this.responseError = (error.error.error.message); return of(); })
     ).subscribe((data: SearchResponseModel) => {

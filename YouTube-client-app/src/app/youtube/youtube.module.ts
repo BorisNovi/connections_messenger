@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule, Routes, RouterLink } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CardComponent } from './components/card/card.component';
 import { MainComponent } from './pages/main/main.component';
 import { SearchResultsBlockComponent } from './components/search-results-block/search-results-block.component';
@@ -44,9 +44,7 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
-    HttpClientModule,
     CustomButtonComponent,
-    RouterLink,
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
