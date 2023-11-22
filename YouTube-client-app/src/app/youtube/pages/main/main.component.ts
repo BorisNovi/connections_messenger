@@ -59,7 +59,6 @@ export class MainComponent implements OnInit, OnDestroy {
     };
 
     this.subscription = this.apiService.searchVideos(searchParams).pipe(
-      tap((response) => console.log(response)),
       catchError((error) => { this.responseError = (error.error.error.message); return of(); })
     ).subscribe((data: SearchResponseModel) => {
       const videoIdArr = data.items.map((item) => item.id.videoId);
@@ -69,7 +68,6 @@ export class MainComponent implements OnInit, OnDestroy {
 
   public getVideosByTags(idArr: string[]): void {
     this.subscription = this.apiService.getVideos(idArr).pipe(
-      tap((response) => console.log(response)),
       catchError((error) => { this.responseError = (error.error.error.message); return of(); })
     ).subscribe((data: SearchResponseModel) => {
       this.dataForSearch = data.items;
