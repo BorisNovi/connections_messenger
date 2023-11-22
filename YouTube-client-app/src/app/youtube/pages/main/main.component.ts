@@ -28,6 +28,10 @@ export class MainComponent implements OnInit, OnDestroy {
   isSortingOpen: Signal<boolean> = this.dataSharingService.currentSortingOpenState;
   responseError = '';
 
+  termLengthThreshold = 3;
+  inputDelay = 1000;
+  maxResultsOnPage = 12;
+
   constructor(
     private apiService: ApiService,
     private dataSharingService: YoutubeHeaderDataSharingService
@@ -40,15 +44,20 @@ export class MainComponent implements OnInit, OnDestroy {
   private useSearch(): void {
     this.subscription = this.searchTerm
       .pipe(
-        debounceTime(1000),
-        filter((term) => term.length >= 3)
+        debounceTime(this.inputDelay),
+        filter((term) => term.length >= this.termLengthThreshold)
       ).subscribe((term) => {
         this.search(term);
       });
   }
 
   private search(q: string): void {
-    const searchParams: ISearch = { q, maxResults: 12, order: SearchOrder.relevance };
+    const searchParams: ISearch = {
+      q,
+      maxResults: this.maxResultsOnPage,
+      order: SearchOrder.relevance
+    };
+
     this.subscription = this.apiService.searchVideos(searchParams).pipe(
       tap((response) => console.log(response)),
       catchError((error) => { this.responseError = (error.error.error.message); return of(); })
