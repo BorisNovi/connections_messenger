@@ -1,11 +1,10 @@
 import {
-  Component, OnDestroy, OnInit, Signal,
+  Component, OnInit, Signal,
 } from '@angular/core';
-import { toObservable } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import {
-  Observable, catchError, debounceTime, filter, of
+  Observable, Subscription, catchError, debounceTime, filter, of
 } from 'rxjs';
-import { ManualSubscriptions } from 'src/app/shared/manualSubscriptions';
 import { ApiService } from '../../services/api.service';
 import { SearchItemModel } from '../../models/search/search-item.model';
 import { ISort } from '../../models/search/sort-params.model';
@@ -18,11 +17,11 @@ import { ISearch, SearchOrder } from '../../models/search/search-params.model';
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
 })
-export class MainComponent implements OnInit, OnDestroy {
-  private subscriptions = new ManualSubscriptions();
+export class MainComponent implements OnInit {
+  subscription$!: Subscription;
 
   dataForSearch!: SearchItemModel[];
-  searchTerm: Observable<string> = toObservable(this.dataSharingService.currentSearchTerm);
+  searchTerm$: Observable<string> = toObservable(this.dataSharingService.currentSearchTerm);
   sortParams: Signal<ISort> = this.dataSharingService.currentSortParams;
   keyword: Signal<string> = this.dataSharingService.currentKeyword;
 
@@ -43,10 +42,11 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   private useSearch(): void {
-    this.subscriptions.add = this.searchTerm
+    this.subscription$ = this.searchTerm$
       .pipe(
         debounceTime(this.inputDelay),
-        filter((term) => term.length >= this.termLengthThreshold)
+        filter((term) => term.length >= this.termLengthThreshold),
+        takeUntilDestroyed()
       ).subscribe((term) => {
         this.search(term);
       });
@@ -59,8 +59,9 @@ export class MainComponent implements OnInit, OnDestroy {
       order: SearchOrder.relevance
     };
 
-    this.subscriptions.add = this.apiService.searchVideos(searchParams).pipe(
-      catchError((error) => { this.responseError = (error.error.error.message); return of(); })
+    this.subscription$ = this.apiService.searchVideos(searchParams).pipe(
+      catchError((error) => { this.responseError = (error.error.error.message); return of(); }),
+      takeUntilDestroyed()
     ).subscribe((data: SearchResponseModel) => {
       const videoIdArr = data.items.map((item) => item.id.videoId);
       this.getVideosByIds(videoIdArr);
@@ -68,14 +69,11 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   public getVideosByIds(idArr: string[]): void {
-    this.subscriptions.add = this.apiService.getVideos(idArr).pipe(
-      catchError((error) => { this.responseError = (error.error.error.message); return of(); })
+    this.subscription$ = this.apiService.getVideos(idArr).pipe(
+      catchError((error) => { this.responseError = (error.error.error.message); return of(); }),
+      takeUntilDestroyed()
     ).subscribe((data: SearchResponseModel) => {
       this.dataForSearch = data.items;
     });
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
   }
 }
