@@ -6,6 +6,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegistrationFormComponent } from './components/registration-form/registration-form.component';
 
@@ -19,6 +20,7 @@ const MATERIAL_IMPORTS = [
   MatButtonModule,
   MatFormFieldModule,
   MatInputModule,
+  MatSnackBarModule
 ];
 
 @NgModule({

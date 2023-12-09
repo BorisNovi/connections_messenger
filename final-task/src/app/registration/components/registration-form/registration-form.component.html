@@ -36,8 +36,7 @@
       </mat-form-field>
     </div>
     <div class="button-register">
-      <button mat-raised-button type="submit" color="primary" (click)="onSubmit()" [disabled]="isButtonDisabled">Register</button>
+      <button mat-raised-button type="submit" color="primary" (click)="onSubmit()" [disabled]="!registerForm.valid || isButtonDisabled">Register</button>
     </div>
   </form>
-  <p class="error-hint">{{errorHint}}</p>
 </div>

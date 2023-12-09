@@ -1,7 +1,9 @@
 import { Component, DestroyRef, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { catchError, of } from 'rxjs';
+import { catchError, of, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { ApiRegistrationService } from '../../services/api-registration.service';
 
 @Component({
@@ -13,12 +15,15 @@ export class RegistrationFormComponent implements OnInit {
   public registerForm!: FormGroup;
   isHidden = true;
   isButtonDisabled = false;
-  errorHint = ''; // Это должно идти в снэкбар
+  delay = 2000;
+  lastErrorEmail = '';
 
   constructor(
     private formBuilder: FormBuilder,
     private registrationService: ApiRegistrationService,
     private destroyRef: DestroyRef,
+    private snackBar: MatSnackBar,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -27,6 +32,16 @@ export class RegistrationFormComponent implements OnInit {
       name: ['', [Validators.required, Validators.maxLength(40), Validators.pattern('^[a-zA-Z\\s]+$')]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$')]]
     });
+
+    this.registerForm.get('email')?.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe((email) => {
+      if (this.lastErrorEmail !== email) {
+        this.isButtonDisabled = false;
+      } else {
+        this.isButtonDisabled = true;
+      }
+    });
   }
 
   onSubmit(): void {
@@ -34,17 +49,24 @@ export class RegistrationFormComponent implements OnInit {
       this.isButtonDisabled = true;
       this.registrationService.registerUser(this.registerForm.value)
         .pipe(
+          tap(() => {
+            this.openSnackBar('Registration successful!');
+            setTimeout(() => this.router.navigate(['/']), this.delay); // Потом переделать маршрут на логин
+          }),
           catchError((err) => {
-            this.errorHint = err.error.message; // Эти ошибки
+            this.openSnackBar(err.error.message);
+            if (err.error.type === 'PrimaryDuplicationException') {
+              this.lastErrorEmail = this.registerForm.get('email')?.value;
+            }
             return of(null);
           }),
           takeUntilDestroyed(this.destroyRef)
         )
-        .subscribe(() => {
-          this.isButtonDisabled = false;
-        });
-
-      // TODO: добавить ошибки в снэкбар. Добавить редирек на успешную регистрацию
+        .subscribe();
     }
+  }
+
+  openSnackBar(message: string): void {
+    this.snackBar.open(message, 'Ok', { duration: this.delay });
   }
 }
