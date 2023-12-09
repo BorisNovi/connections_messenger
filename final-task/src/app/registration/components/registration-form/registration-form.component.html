@@ -1,1 +1,42 @@
-<p>registration-form works!</p>
+
+<div class="container">
+  <div class="header">
+    <h2>Registration</h2>
+  </div>
+  <form class="login-form" [formGroup]="registerForm">
+    <div class="email">
+      <mat-form-field appearance="outline">
+        <mat-label>E-Mail</mat-label>
+        <input matInput placeholder="example@gmail.com" formControlName="email" required>
+        <mat-icon matSuffix>email</mat-icon>
+        <mat-error *ngIf="registerForm.controls['email'].errors?.['required']">Please enter a email</mat-error>
+        <mat-error *ngIf="registerForm.controls['email'].errors?.['email']">The email is invalid!</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="login">
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Leeeroy Jenkins" formControlName="name" required>
+        <mat-icon matSuffix>login</mat-icon>
+        <mat-error *ngIf="registerForm.controls['name'].errors?.['required']">Please enter your name</mat-error>
+        <mat-error *ngIf="registerForm.controls['name'].errors?.['maxlength']">Max length 40 characters</mat-error>
+        <mat-error *ngIf="registerForm.controls['name'].errors?.['pattern']">Only latin letters and spaces</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="password">
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput [type]="isHidden ? 'password' : 'text'" formControlName="password" appPasswordValidator required>
+        <button mat-icon-button matSuffix (click)="isHidden = !isHidden" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="isHidden">
+          <mat-icon>{{isHidden ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="registerForm.controls['password'].errors?.['required']">Please enter a password</mat-error>
+        <mat-error *ngIf="registerForm.controls['password'].errors?.['minlength']">Min length 8 chars</mat-error>
+        <mat-error *ngIf="registerForm.controls['password'].errors?.['pattern']">Use: mixed case, special chars, nums</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="button-register">
+      <button mat-raised-button type="submit" color="primary" (click)="onSubmit()">Register</button>
+    </div>
+  </form>
+</div>
