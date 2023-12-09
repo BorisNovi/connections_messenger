@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, Signal,
+  Component, DestroyRef, OnInit, Signal,
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import {
@@ -34,7 +34,8 @@ export class MainComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private dataSharingService: YoutubeHeaderDataSharingService
+    private dataSharingService: YoutubeHeaderDataSharingService,
+    private destroyRef: DestroyRef,
   ) { }
 
   ngOnInit(): void {
@@ -71,7 +72,7 @@ export class MainComponent implements OnInit {
   public getVideosByIds(idArr: string[]): void {
     this.subscription$ = this.apiService.getVideos(idArr).pipe(
       catchError((error) => { this.responseError = (error.error.error.message); return of(); }),
-      takeUntilDestroyed()
+      takeUntilDestroyed(this.destroyRef)
     ).subscribe((data: SearchResponseModel) => {
       this.dataForSearch = data.items;
     });

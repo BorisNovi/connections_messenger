@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { catchError, of } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ApiRegistrationService } from '../../services/api-registration.service';
 
 @Component({
@@ -9,10 +11,14 @@ import { ApiRegistrationService } from '../../services/api-registration.service'
 })
 export class RegistrationFormComponent implements OnInit {
   public registerForm!: FormGroup;
+  isHidden = true;
+  isButtonDisabled = false;
+  errorHint = ''; // Это должно идти в снэкбар
 
   constructor(
     private formBuilder: FormBuilder,
     private registrationService: ApiRegistrationService,
+    private destroyRef: DestroyRef,
   ) { }
 
   ngOnInit(): void {
@@ -23,17 +29,22 @@ export class RegistrationFormComponent implements OnInit {
     });
   }
 
-  isHidden = true;
-
   onSubmit(): void {
     if (this.registerForm.valid) {
-      console.log(this.registerForm.value);
-      this.registerForm.reset();
-      // register
-      // this.loginService.updLoginCredentials({
-      //   login: this.credentials.value.login || null,
-      //   password: this.credentials.value.password || null
-      // });
+      this.isButtonDisabled = true;
+      this.registrationService.registerUser(this.registerForm.value)
+        .pipe(
+          catchError((err) => {
+            this.errorHint = err.error.message; // Эти ошибки
+            return of(null);
+          }),
+          takeUntilDestroyed(this.destroyRef)
+        )
+        .subscribe(() => {
+          this.isButtonDisabled = false;
+        });
+
+      // TODO: добавить ошибки в снэкбар. Добавить редирек на успешную регистрацию
     }
   }
 }
