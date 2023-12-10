@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import {
   catchError, combineLatest, of, tap
 } from 'rxjs';
+import { LocalService } from 'src/app/core/services/local.service';
 import { ApiSignInService } from '../../services/api-signin.service';
 
 @Component({
@@ -22,6 +23,7 @@ export class SigninFormComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private signInService: ApiSignInService,
+    private localService: LocalService,
     private destroyRef: DestroyRef,
     private snackBar: MatSnackBar,
     private router: Router,
@@ -58,8 +60,13 @@ export class SigninFormComponent implements OnInit {
           }),
           takeUntilDestroyed(this.destroyRef)
         )
-        .subscribe((data) => console.log(data));
-      // TODO: Добавиь сервис для хранения токена, id и пошты в локалке и получения оттуда
+        .subscribe((data) => {
+          if (data) {
+            this.localService.saveData('email', this.signInForm.value.email);
+            this.localService.saveData('token', data?.token);
+            this.localService.saveData('uid', data?.uid);
+          }
+        });
     }
   }
 
