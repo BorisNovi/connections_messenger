@@ -15,15 +15,22 @@
     <div class="password">
       <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
-        <input matInput [type]="isHidden ? 'password' : 'text'" formControlName="password" appPasswordValidator required>
-        <button mat-icon-button matSuffix (click)="isHidden = !isHidden" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="isHidden">
+        <input matInput [type]="isHidden ? 'password' : 'text'" formControlName="password" appPasswordValidator
+          required>
+        <button mat-icon-button matSuffix (click)="isHidden = !isHidden" [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="isHidden">
           <mat-icon>{{isHidden ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
         <mat-error *ngIf="signInForm.controls['password'].errors?.['required']">Please enter a password</mat-error>
       </mat-form-field>
     </div>
     <div class="button-signin">
-      <button mat-raised-button type="submit" color="primary" (click)="onSubmit()" [disabled]="!signInForm.valid || isButtonDisabled">Sign in</button>
+      <button mat-raised-button type="submit" color="primary" (click)="onSubmit()"
+        [disabled]="!signInForm.valid || isButtonDisabled">Sign in</button>
     </div>
   </form>
+  <div class="button-signup">
+    <span>Still not signed up?</span>
+    <button mat-raised-button routerLink="/signup">Register</button>
+  </div>
 </div>
