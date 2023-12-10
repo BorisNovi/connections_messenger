@@ -11,8 +11,7 @@ const routes: Routes = [
       { path: '', loadChildren: () => import('./main/main.module').then((m) => m.MainModule) }, // Add auth guard
       { path: 'signup', loadChildren: () => import('./registration/registration.module').then((m) => m.RegistrationModule) },
       { path: 'signin', loadChildren: () => import('./signin/signin.module').then((m) => m.SigninModule) },
-      { path: '404', component: NotFoundComponent },
-      { path: '**', redirectTo: '404' }
+      { path: '**', component: NotFoundComponent }
     ]
   }
 ];
