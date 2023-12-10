@@ -51,7 +51,7 @@ export class RegistrationFormComponent implements OnInit {
         .pipe(
           tap(() => {
             this.openSnackBar('Registration successful!');
-            setTimeout(() => this.router.navigate(['/']), this.delay); // Потом переделать маршрут на логин
+            setTimeout(() => this.router.navigate(['signin']), this.delay);
           }),
           catchError((err) => {
             this.openSnackBar(err.error.message);

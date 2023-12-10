@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { MainModule } from './main/main.module';
 import { RegistrationModule } from './registration/registration.module';
+import { SigninModule } from './signin/signin.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { RegistrationModule } from './registration/registration.module';
     HttpClientModule,
     CoreModule,
     MainModule,
-    RegistrationModule
+    RegistrationModule,
+    SigninModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
