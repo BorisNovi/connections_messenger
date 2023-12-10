@@ -1,1 +1,29 @@
-<p>signin-form works!</p>
+<div class="container">
+  <div class="header">
+    <h2>Sign in</h2>
+  </div>
+  <form class="login-form" [formGroup]="signInForm">
+    <div class="email">
+      <mat-form-field appearance="outline">
+        <mat-label>E-Mail</mat-label>
+        <input matInput placeholder="example@gmail.com" formControlName="email" required>
+        <mat-icon matSuffix>email</mat-icon>
+        <mat-error *ngIf="signInForm.controls['email'].errors?.['required']">Please enter a email</mat-error>
+        <mat-error *ngIf="signInForm.controls['email'].errors?.['email']">The email is invalid!</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="password">
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput [type]="isHidden ? 'password' : 'text'" formControlName="password" appPasswordValidator required>
+        <button mat-icon-button matSuffix (click)="isHidden = !isHidden" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="isHidden">
+          <mat-icon>{{isHidden ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="signInForm.controls['password'].errors?.['required']">Please enter a password</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="button-signin">
+      <button mat-raised-button type="submit" color="primary" (click)="onSubmit()" [disabled]="!signInForm.valid || isButtonDisabled">Sign in</button>
+    </div>
+  </form>
+</div>
