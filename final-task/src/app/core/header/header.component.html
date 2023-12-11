@@ -1,6 +1,7 @@
 <div class="container">
   <div class="buttons-wrapper">
-    <button mat-raised-button routerLink="/signup">Register</button>
-    <button mat-raised-button color="primary" routerLink="/signin">Sign in</button>
+    <button *ngIf="(isAuthenticated | async) === false" mat-raised-button routerLink="/signup">Register</button>
+    <button *ngIf="(isAuthenticated | async) === false" mat-raised-button color="primary" routerLink="/signin">Sign in</button>
+    <button *ngIf="isAuthenticated | async" mat-raised-button color="primary" (click)="signOut()">Sign out</button>
   </div>
 </div>
