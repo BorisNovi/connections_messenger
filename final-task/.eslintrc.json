@@ -1,7 +1,8 @@
 {
   "root": true,
   "ignorePatterns": [
-    "projects/**/*", "**.config.**"
+    "projects/**/*",
+    "**.config.**"
   ],
   "parserOptions": {
     "project": "./**/tsconfig.json"
@@ -22,7 +23,7 @@
         "import/prefer-default-export": "off",
         "class-methods-use-this": "off",
         "@typescript-eslint/no-useless-constructor": "off",
-        "@typescript-eslint/no-empty-function":"off",
+        "@typescript-eslint/no-empty-function": "off",
         "@typescript-eslint/comma-dangle": "off",
         "@typescript-eslint/no-explicit-any": 2,
         "@typescript-eslint/lines-between-class-members": "off",
@@ -53,6 +54,14 @@
         "plugin:@angular-eslint/template/accessibility"
       ],
       "rules": {}
+    },
+    {
+      "files": [
+        "*.ts"
+      ],
+      "extends": [
+        "plugin:@ngrx/recommended"
+      ]
     }
   ]
 }

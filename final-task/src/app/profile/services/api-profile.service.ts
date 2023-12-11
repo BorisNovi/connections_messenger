@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { LocalService } from 'src/app/core/services/local.service';
-import { IProfileResponse } from '../models/prifile-response.model';
+import { IProfileResponse } from '../models/profile-response.model';
 
 @Injectable({
   providedIn: 'root'

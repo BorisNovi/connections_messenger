@@ -2,7 +2,7 @@
   <div class="header">
     <h2>Profile</h2>
   </div>
-  <mat-list class="user-data">
+  <mat-list *ngIf="userData" class="user-data">
       <mat-list-item class="user-data-item">
         <div class="uid">
           <span>User ID:&nbsp;</span><span>{{userData.uid.S}}</span>
