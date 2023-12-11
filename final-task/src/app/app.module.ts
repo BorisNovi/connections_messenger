@@ -9,6 +9,7 @@ import { CoreModule } from './core/core.module';
 import { MainModule } from './main/main.module';
 import { RegistrationModule } from './registration/registration.module';
 import { SigninModule } from './signin/signin.module';
+import { ProfileModule } from './profile/profile.module';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { SigninModule } from './signin/signin.module';
     MainModule,
     RegistrationModule,
     SigninModule,
+    ProfileModule
   ],
   providers: [],
   bootstrap: [AppComponent]
