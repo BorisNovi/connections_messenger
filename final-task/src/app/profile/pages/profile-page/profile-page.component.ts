@@ -4,7 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { setProfileItems } from 'src/app/NgRx/actions/profile.action';
 import { selectProfileItems } from 'src/app/NgRx/selectors/profile.selector';
-import { of, switchMap } from 'rxjs';
+import { catchError, of, switchMap } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiProfileService } from '../../services/api-profile.service';
 import { IProfileResponse } from '../../models/profile-response.model';
 
@@ -15,6 +16,7 @@ import { IProfileResponse } from '../../models/profile-response.model';
 })
 export class ProfilePageComponent implements OnInit {
   public nameForm!: FormGroup;
+  delay = 2000;
   userData!: IProfileResponse;
   isUpdatable = false;
 
@@ -22,7 +24,8 @@ export class ProfilePageComponent implements OnInit {
     private apiProfileService: ApiProfileService,
     private destroyRef: DestroyRef,
     private formBuilder: FormBuilder,
-    private store: Store
+    private store: Store,
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
@@ -35,6 +38,10 @@ export class ProfilePageComponent implements OnInit {
         switchMap((profileData) => (profileData?.createdAt
           ? of(profileData)
           : this.apiProfileService.getProfileData())),
+        catchError((err) => {
+          this.openSnackBar(err.error.message || 'No Internet connection!');
+          return of();
+        }),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((data) => {
@@ -51,5 +58,9 @@ export class ProfilePageComponent implements OnInit {
     if (this.nameForm.valid) {
       console.log(this.nameForm.value);
     }
+  }
+
+  openSnackBar(message: string): void {
+    this.snackBar.open(message, 'Ok', { duration: this.delay });
   }
 }

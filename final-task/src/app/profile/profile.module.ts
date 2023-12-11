@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 
 const routes: Routes = [
@@ -20,7 +21,8 @@ const MATERIAL_IMPORTS = [
   MatFormFieldModule,
   MatButtonModule,
   MatListModule,
-  MatDividerModule
+  MatDividerModule,
+  MatSnackBarModule
 ];
 
 @NgModule({

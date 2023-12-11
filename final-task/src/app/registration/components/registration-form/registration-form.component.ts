@@ -54,7 +54,7 @@ export class RegistrationFormComponent implements OnInit {
             setTimeout(() => this.router.navigate(['signin']), this.delay);
           }),
           catchError((err) => {
-            this.openSnackBar(err.error.message);
+            this.openSnackBar(err.error.message || 'No Internet connection!');
             if (err.error.type === 'PrimaryDuplicationException') {
               this.lastErrorEmail = this.registerForm.get('email')?.value;
             }

@@ -10,7 +10,10 @@ import { IProfileResponse } from '../models/profile-response.model';
 export class ApiProfileService {
   private baseUrl = 'https://tasks.app.rs.school/';
 
-  constructor(private http: HttpClient, private localService: LocalService) { }
+  constructor(
+    private http: HttpClient,
+    private localService: LocalService,
+  ) { }
 
   getProfileData(): Observable<IProfileResponse> {
     const rsUid = this.localService.getData('uid');
@@ -28,5 +31,9 @@ export class ApiProfileService {
     });
     const dataUrl = `${this.baseUrl}angular/profile`;
     return this.http.get<IProfileResponse>(dataUrl, { headers });
+  }
+
+  changeProfileData(): void {
+
   }
 }

@@ -55,7 +55,7 @@ export class SigninFormComponent implements OnInit {
             setTimeout(() => this.router.navigate(['/']), this.delay);
           }),
           catchError((err) => {
-            this.openSnackBar(err.error.message);
+            this.openSnackBar(err.error.message || 'No Internet connection!');
             return of(null);
           }),
           takeUntilDestroyed(this.destroyRef)
