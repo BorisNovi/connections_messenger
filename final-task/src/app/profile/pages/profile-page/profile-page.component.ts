@@ -19,6 +19,7 @@ export class ProfilePageComponent implements OnInit {
   delay = 2000;
   userData!: IProfileResponse;
   isUpdatable = false;
+  isButtonDisabled = false;
 
   constructor(
     private apiProfileService: ApiProfileService,
@@ -30,9 +31,13 @@ export class ProfilePageComponent implements OnInit {
 
   ngOnInit(): void {
     this.nameForm = this.formBuilder.group({
-      name: ['', [Validators.required]],
+      name: ['', [Validators.required, Validators.maxLength(40), Validators.pattern('^[a-zA-Z\\s]+$')]],
     });
 
+    this.getProfileData();
+  }
+
+  getProfileData(): void {
     this.store.select(selectProfileItems)
       .pipe(
         switchMap((profileData) => (profileData?.createdAt
@@ -52,12 +57,28 @@ export class ProfilePageComponent implements OnInit {
 
   updateName(): void {
     this.isUpdatable = !this.isUpdatable;
+    const formData = this.nameForm.value;
+
+    if (!this.isUpdatable && this.nameForm.valid) {
+      this.isButtonDisabled = true;
+      this.apiProfileService.changeProfileData(formData.name)
+        .pipe(
+          catchError((err) => {
+            this.openSnackBar(err.error.message || 'No Internet connection!');
+            return of();
+          }),
+          takeUntilDestroyed(this.destroyRef)
+        )
+        .subscribe(() => {
+          this.isButtonDisabled = false;
+          const updatedProfileItems = { ...this.userData, name: { S: formData.name } };
+          this.store.dispatch(setProfileItems({ profileItems: updatedProfileItems }));
+        });
+    }
   }
 
-  onSubmit(): void {
-    if (this.nameForm.valid) {
-      console.log(this.nameForm.value);
-    }
+  cancelUpdateName(): void {
+    this.isUpdatable = false;
   }
 
   openSnackBar(message: string): void {

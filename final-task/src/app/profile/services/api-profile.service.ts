@@ -33,7 +33,22 @@ export class ApiProfileService {
     return this.http.get<IProfileResponse>(dataUrl, { headers });
   }
 
-  changeProfileData(): void {
+  changeProfileData(name: string): Observable<void> {
+    const rsUid = this.localService.getData('uid');
+    const rsEmail = this.localService.getData('email');
+    const token = this.localService.getData('token');
 
+    if (!rsUid || !rsEmail || !token) {
+      return throwError(() => new Error('Not all required data is available!'));
+    }
+
+    const headers = new HttpHeaders({
+      'rs-uid': rsUid,
+      'rs-email': rsEmail,
+      Authorization: `Bearer ${token}`
+    });
+    const dataUrl = `${this.baseUrl}angular/profile`;
+    const body = { name };
+    return this.http.put<void>(dataUrl, body, { headers });
   }
 }
