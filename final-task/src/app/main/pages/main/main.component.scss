@@ -1,0 +1,13 @@
+.container {
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin: 0 auto;
+
+  .group-chats,
+  .people-chats {
+    width: 50%;
+    padding: 0 20px;
+  }
+}
