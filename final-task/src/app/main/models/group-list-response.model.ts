@@ -3,7 +3,7 @@ export interface IGroupListResponse {
   Items: IGroupItem[]
 }
 
-interface IGroupItem {
+export interface IGroupItem {
   id: IS,
   name: IS,
   createdAt: IS,

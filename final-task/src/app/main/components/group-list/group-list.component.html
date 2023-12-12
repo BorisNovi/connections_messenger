@@ -7,13 +7,16 @@
       <mat-icon>add</mat-icon>
     </button>
   </div>
-  <mat-list *ngIf="1" class="">
-    <mat-list-item class="">
-      <div class="">
-        <span>Chat: &nbsp;</span><span></span>
-      </div>
-    </mat-list-item>
-    <mat-divider></mat-divider>
+  <mat-list *ngIf="1" class="group-list">
+    <mat-list-item *ngFor="let item of groupList">
 
+      <div class="group-content">
+        <a routerLink="/group/{{item.id.S}}" class="link">
+          <span>Chat:&nbsp;</span><span>{{item.name.S}}</span>
+        </a>
+        <mat-divider></mat-divider>
+      </div>
+
+    </mat-list-item>
   </mat-list>
 </div>
