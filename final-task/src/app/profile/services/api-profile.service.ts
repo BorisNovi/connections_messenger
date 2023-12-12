@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { LocalService } from 'src/app/core/services/local.service';
 import { IProfileResponse } from '../models/profile-response.model';
 
@@ -15,40 +15,38 @@ export class ApiProfileService {
     private localService: LocalService,
   ) { }
 
-  getProfileData(): Observable<IProfileResponse> {
+  private createHeaders(): HttpHeaders {
     const rsUid = this.localService.getData('uid');
     const rsEmail = this.localService.getData('email');
     const token = this.localService.getData('token');
 
     if (!rsUid || !rsEmail || !token) {
-      return throwError(() => new Error('Not all required data is available!'));
+      throw new Error('Not all required data is available!');
     }
 
-    const headers = new HttpHeaders({
+    return new HttpHeaders({
       'rs-uid': rsUid,
       'rs-email': rsEmail,
       Authorization: `Bearer ${token}`
     });
+  }
+
+  getProfileData(): Observable<IProfileResponse> {
+    const headers = this.createHeaders();
     const dataUrl = `${this.baseUrl}angular/profile`;
     return this.http.get<IProfileResponse>(dataUrl, { headers });
   }
 
   changeProfileData(name: string): Observable<void> {
-    const rsUid = this.localService.getData('uid');
-    const rsEmail = this.localService.getData('email');
-    const token = this.localService.getData('token');
-
-    if (!rsUid || !rsEmail || !token) {
-      return throwError(() => new Error('Not all required data is available!'));
-    }
-
-    const headers = new HttpHeaders({
-      'rs-uid': rsUid,
-      'rs-email': rsEmail,
-      Authorization: `Bearer ${token}`
-    });
+    const headers = this.createHeaders();
     const dataUrl = `${this.baseUrl}angular/profile`;
     const body = { name };
     return this.http.put<void>(dataUrl, body, { headers });
+  }
+
+  signoutUser(): Observable<void> {
+    const headers = this.createHeaders();
+    const dataUrl = `${this.baseUrl}angular/logout`;
+    return this.http.delete<void>(dataUrl, { headers });
   }
 }

@@ -1,47 +1,53 @@
 <div class="container">
-  <div class="header">
-    <h2>Profile</h2>
-  </div>
-  <mat-list *ngIf="userData" class="user-data">
-    <mat-list-item class="user-data-item">
-      <div class="uid">
-        <span>User ID:&nbsp;</span><span>{{userData.uid.S}}</span>
-      </div>
-    </mat-list-item>
-    <mat-divider></mat-divider>
-    <mat-list-item class="user-data-item">
-      <div class="email">
-        <span>E-Mail:&nbsp;</span><span>{{userData.email.S}}</span>
-      </div>
-    </mat-list-item>
-    <mat-divider></mat-divider>
-    <mat-list-item class="user-data-item">
-      <div class="date">
-        <span>Registration date:&nbsp;</span><span>{{userData.createdAt.S | date}}</span>
-      </div>
-    </mat-list-item>
-    <mat-divider></mat-divider>
-    <mat-list-item [style]="isUpdatable ? 'padding: 0;' : '' " class="user-data-item">
-      <div class="name">
-        <div *ngIf="isUpdatable === false" class="name-static">
-          <span>Name:&nbsp;</span><span>{{userData.name.S}}</span>
+  <button class="logout-button" mat-icon-button color="primary" (click)="signOut()" [disabled]="isSignoutButtonDisabled">
+    <mat-icon>logout</mat-icon>
+  </button>
+  <div class="form-wrapper">
+    <div class="header">
+      <h2>Profile</h2>
+    </div>
+    <mat-list *ngIf="userData" class="user-data">
+      <mat-list-item class="user-data-item">
+        <div class="uid">
+          <span>User ID:&nbsp;</span><span>{{userData.uid.S}}</span>
         </div>
-        <form *ngIf="isUpdatable" class="name-form" [formGroup]="nameForm">
-          <mat-form-field>
-            <mat-label>Name</mat-label>
-            <input matInput [placeholder]="userData.name.S" formControlName="name" required>
-            <mat-error *ngIf="nameForm.controls['name'].errors?.['required']">Name is required</mat-error>
-            <mat-error *ngIf="nameForm.controls['name'].errors?.['maxlength']">Max length 40 characters</mat-error>
-            <mat-error *ngIf="nameForm.controls['name'].errors?.['pattern']">Only latin letters and spaces</mat-error>
-          </mat-form-field>
-        </form>
-        <button mat-icon-button (click)="updateName()" [disabled]="isUpdatable && (!nameForm.valid || isButtonDisabled)">
-          <mat-icon>{{isUpdatable? 'save' : 'create'}}</mat-icon>
-        </button>
-        <button *ngIf="isUpdatable" mat-icon-button (click)="cancelUpdateName()" [disabled]="isButtonDisabled">
-          <mat-icon>cancel</mat-icon>
-        </button>
-      </div>
-    </mat-list-item>
-  </mat-list>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item class="user-data-item">
+        <div class="email">
+          <span>E-Mail:&nbsp;</span><span>{{userData.email.S}}</span>
+        </div>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item class="user-data-item">
+        <div class="date">
+          <span>Registration date:&nbsp;</span><span>{{userData.createdAt.S | date}}</span>
+        </div>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item [style]="isUpdatable ? 'padding: 0;' : '' " class="user-data-item">
+        <div class="name">
+          <div *ngIf="isUpdatable === false" class="name-static">
+            <span>Name:&nbsp;</span><span>{{userData.name.S}}</span>
+          </div>
+          <form *ngIf="isUpdatable" class="name-form" [formGroup]="nameForm">
+            <mat-form-field>
+              <mat-label>Name</mat-label>
+              <input matInput [placeholder]="userData.name.S" formControlName="name" required>
+              <mat-error *ngIf="nameForm.controls['name'].errors?.['required']">Name is required</mat-error>
+              <mat-error *ngIf="nameForm.controls['name'].errors?.['maxlength']">Max length 40 characters</mat-error>
+              <mat-error *ngIf="nameForm.controls['name'].errors?.['pattern']">Only latin letters and spaces</mat-error>
+            </mat-form-field>
+          </form>
+          <button mat-icon-button (click)="updateName()"
+            [disabled]="isUpdatable && (!nameForm.valid || isUpdButtonDisabled)">
+            <mat-icon>{{isUpdatable? 'save' : 'create'}}</mat-icon>
+          </button>
+          <button *ngIf="isUpdatable" mat-icon-button (click)="cancelUpdateName()" [disabled]="isUpdButtonDisabled">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </div>
 </div>

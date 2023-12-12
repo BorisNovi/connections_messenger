@@ -52,7 +52,7 @@ export class SigninFormComponent implements OnInit {
         .pipe(
           tap(() => {
             this.openSnackBar('Sign in successful!');
-            setTimeout(() => this.router.navigate(['/']), this.delay);
+            this.router.navigate(['/']);
           }),
           catchError((err) => {
             this.openSnackBar(err.error.message || 'No Internet connection!');

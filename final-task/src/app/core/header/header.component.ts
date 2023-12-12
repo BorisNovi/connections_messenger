@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { LocalService } from '../services/local.service';
 
 @Component({
@@ -9,14 +8,9 @@ import { LocalService } from '../services/local.service';
 })
 export class HeaderComponent implements OnInit {
   isAuthenticated = this.localService.isAuthenticated;
-  constructor(private localService: LocalService, private router: Router) {}
+  constructor(private localService: LocalService) {}
 
   ngOnInit(): void {
     this.localService.updateAuthenticationStatus();
-  }
-
-  signOut(): void {
-    this.localService.clearData();
-    this.router.navigate(['/signin']);
   }
 }

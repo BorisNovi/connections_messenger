@@ -6,6 +6,9 @@ import { setProfileItems } from 'src/app/NgRx/actions/profile.action';
 import { selectProfileItems } from 'src/app/NgRx/selectors/profile.selector';
 import { catchError, of, switchMap } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { LocalService } from 'src/app/core/services/local.service';
+import { CookieService } from 'src/app/core/services/cookie.service';
 import { ApiProfileService } from '../../services/api-profile.service';
 import { IProfileResponse } from '../../models/profile-response.model';
 
@@ -19,7 +22,8 @@ export class ProfilePageComponent implements OnInit {
   delay = 2000;
   userData!: IProfileResponse;
   isUpdatable = false;
-  isButtonDisabled = false;
+  isUpdButtonDisabled = false;
+  isSignoutButtonDisabled = false;
 
   constructor(
     private apiProfileService: ApiProfileService,
@@ -27,6 +31,9 @@ export class ProfilePageComponent implements OnInit {
     private formBuilder: FormBuilder,
     private store: Store,
     private snackBar: MatSnackBar,
+    private router: Router,
+    private localService: LocalService,
+    private cookieService: CookieService
   ) {}
 
   ngOnInit(): void {
@@ -60,7 +67,7 @@ export class ProfilePageComponent implements OnInit {
     const formData = this.nameForm.value;
 
     if (!this.isUpdatable && this.nameForm.valid) {
-      this.isButtonDisabled = true;
+      this.isUpdButtonDisabled = true;
       this.apiProfileService.changeProfileData(formData.name)
         .pipe(
           catchError((err) => {
@@ -70,9 +77,10 @@ export class ProfilePageComponent implements OnInit {
           takeUntilDestroyed(this.destroyRef)
         )
         .subscribe(() => {
-          this.isButtonDisabled = false;
+          this.isUpdButtonDisabled = false;
           const updatedProfileItems = { ...this.userData, name: { S: formData.name } };
           this.store.dispatch(setProfileItems({ profileItems: updatedProfileItems }));
+          this.openSnackBar('Name updated successfully!');
         });
     }
   }
@@ -83,5 +91,23 @@ export class ProfilePageComponent implements OnInit {
 
   openSnackBar(message: string): void {
     this.snackBar.open(message, 'Ok', { duration: this.delay });
+  }
+
+  signOut(): void {
+    this.isSignoutButtonDisabled = true;
+    this.apiProfileService.signoutUser()
+      .pipe(
+        catchError((err) => {
+          this.openSnackBar(err.error.message || 'No Internet connection!');
+          return of();
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe(() => {
+        this.localService.clearData();
+        this.cookieService.clearData();
+        this.openSnackBar('Sign out successful!');
+        this.isSignoutButtonDisabled = false;
+        this.router.navigate(['/signin']);
+      });
   }
 }

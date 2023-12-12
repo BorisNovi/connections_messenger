@@ -51,7 +51,7 @@ export class RegistrationFormComponent implements OnInit {
         .pipe(
           tap(() => {
             this.openSnackBar('Registration successful!');
-            setTimeout(() => this.router.navigate(['signin']), this.delay);
+            this.router.navigate(['signin']);
           }),
           catchError((err) => {
             this.openSnackBar(err.error.message || 'No Internet connection!');
