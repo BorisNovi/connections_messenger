@@ -8,5 +8,15 @@
     height: 80%;
     overflow: scroll;
     position: fixed;
+
+    .group-content-wrapper{
+      .group-content {
+        height: 45px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: row;
+      }
+    }
   }
 }

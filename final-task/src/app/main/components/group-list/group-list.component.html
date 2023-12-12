@@ -1,22 +1,25 @@
 <div class="container">
   <div class="buttons-container">
-    <button mat-icon-button (click)="testDelete()" color="primary">
+    <button mat-icon-button color="primary">
       <mat-icon>refresh</mat-icon>
     </button>
-    <button mat-icon-button color="primary">
+    <button mat-icon-button (click)="testCreate()" color="primary">
       <mat-icon>add</mat-icon>
     </button>
   </div>
   <mat-list *ngIf="1" class="group-list">
     <mat-list-item *ngFor="let item of groupList">
-
-      <div class="group-content">
-        <a routerLink="/group/{{item.id.S}}" class="link">
-          <span>Chat:&nbsp;</span><span>{{item.name.S}}</span>
-        </a>
+      <div class="group-content-wrapper">
+        <div class="group-content">
+          <a routerLink="/group/{{item.id.S}}" class="link">
+            <span>Chat:&nbsp;</span><span>{{item.name.S}}</span>
+          </a>
+          <button *ngIf="myUid === item.createdBy.S" mat-icon-button (click)="deleteGroup(item.id.S)" color="warn" [disabled]="isDeleteDisabled">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
         <mat-divider></mat-divider>
       </div>
-
     </mat-list-item>
   </mat-list>
 </div>
