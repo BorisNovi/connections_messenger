@@ -4,14 +4,15 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import {
-  Observable, catchError, map, of, switchMap, take, tap,
+  Observable, catchError, forkJoin, map, of, switchMap,
 } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalService } from 'src/app/core/services/local.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CountdownService } from 'src/app/core/services/countdown.service';
-import { setPeopleListItems } from 'src/app/NgRx/actions/people-list.actions';
+import { setPeopleListItems, setConversationListItems, setFullPeopleItems } from 'src/app/NgRx/actions/people-list.actions';
 import { selectPeopleListItems } from 'src/app/NgRx/selectors/people-list.selector';
+import { selectConversationListItems } from 'src/app/NgRx/selectors/conversation-list.selector';
 import { CreateFormDialogComponent } from '../create-form-dialog/create-form-dialog.component';
 import { ApiPeopleListService } from '../../services/api-people-list.service';
 import { IConversationItem, IPeopleItem } from '../../models/people-list-response.model';
@@ -46,6 +47,7 @@ export class PeopleListComponent implements OnInit {
     this.countdown$ = this.countdown.getTimer();
     this.countdown$.subscribe((countdownValue) => {
       this.isRefreshDisabled = countdownValue !== 0;
+      this.cdr.markForCheck();
     });
   }
 
@@ -55,19 +57,27 @@ export class PeopleListComponent implements OnInit {
 
     if (!this.isRefreshDisabled) return;
     this.isRefreshDisabled = true;
-    // this.apiGroupListService.getGroupList()
-    //   .pipe(
-    //     catchError((err) => {
-    //       this.openSnackBar(err.error.message || 'No Internet connection!');
-    //       this.isRefreshDisabled = false;
-    //       return of();
-    //     }),
-    //     takeUntilDestroyed(this.destroyRef)
-    //   ).subscribe((data) => {
-    //     this.groupList = data.Items;
-    //     this.openSnackBar('Groups refreshed successfully!');
-    //     this.store.dispatch(setGroupListItems({ groupItems: data.Items }));
-    //   });
+    forkJoin([
+      this.apiPeopleListService.getUsersList(),
+      this.apiPeopleListService.getConversationList()
+    ])
+      .pipe(
+        catchError((err) => {
+          this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.isRefreshDisabled = false;
+          return of();
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe((data) => {
+        this.peopleList$ = of(data[0].Items);
+        this.conversationsList = data[1].Items;
+        this.store.dispatch(setFullPeopleItems({
+          peopleItems: data[0].Items,
+          conversationItems: data[1].Items
+        }));
+        this.cdr.markForCheck();
+      });
   }
 
   public isHighlighted(uid: string): Observable<boolean> {
@@ -77,7 +87,7 @@ export class PeopleListComponent implements OnInit {
     );
   }
 
-  getUsersList(): void {
+  getUsersList(): void { // также переписать на forkJoin
     this.store.select(selectPeopleListItems)
       .pipe(
         switchMap((peopleListItems) => (peopleListItems[0]
@@ -96,12 +106,22 @@ export class PeopleListComponent implements OnInit {
         this.cdr.markForCheck();
       });
 
-    this.apiPeopleListService.getConversationList()
+    this.store.select(selectConversationListItems)
       .pipe(
-        map((data) => data.Items)
+        switchMap((conversationListItems) => (conversationListItems[0]
+          ? of({ Items: conversationListItems })
+          : this.apiPeopleListService.getConversationList())),
+        catchError((err) => {
+          this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.isRefreshDisabled = false;
+          return of();
+        }),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((data) => {
-        this.conversationsList = data;
+        this.conversationsList = data.Items;
+        this.store.dispatch(setConversationListItems({ conversationItems: data.Items }));
+        this.isRefreshDisabled = false;
       });
   }
 
