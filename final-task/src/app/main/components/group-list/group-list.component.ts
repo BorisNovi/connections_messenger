@@ -1,13 +1,17 @@
 import { Component, DestroyRef, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { setGroupListItems } from 'src/app/NgRx/actions/group-list.action';
+import { setGroupListItems, deleteGroupListItem } from 'src/app/NgRx/actions/group-list.action';
 import { selectGroupListItems } from 'src/app/NgRx/selectors/group-list.selector';
-import { catchError, of, switchMap } from 'rxjs';
+import {
+  Observable, catchError, of, switchMap
+} from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalService } from 'src/app/core/services/local.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ApiGroupListService } from '../../services/api-group-list.service';
 import { IGroupItem, IGroupListResponse } from '../../models/group-list-response.model';
+import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
 
 @Component({
   selector: 'app-group-list',
@@ -25,7 +29,8 @@ export class GroupListComponent implements OnInit {
     private destroyRef: DestroyRef,
     private store: Store,
     private snackBar: MatSnackBar,
-    private localService: LocalService
+    private localService: LocalService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -50,29 +55,39 @@ export class GroupListComponent implements OnInit {
   }
 
   testCreate() {
-    this.apiGroupListService.createGroup('Bob test group')
+    this.apiGroupListService.createGroup('GAY LORD\'S GROUP')
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(((data) => console.log(data)));
   }
 
   deleteGroup(groupID: string): void {
-    this.isDeleteDisabled = true;
-    this.openDeleteSnackBar(); // Добавть экшн снекбара
-    this.apiGroupListService.deleteGroup(groupID)
-      .pipe(catchError((err) => {
-        this.isDeleteDisabled = false;
-        this.openSnackBar(err.error.message || 'No Internet connection!');
-        return of();
-      }), takeUntilDestroyed(this.destroyRef))
-      .subscribe((() => {
-        this.isDeleteDisabled = false;
-        this.openSnackBar('Group deleted successfuly!');
-        // this.store.dispatch(deleteGroupListItem({ groupItem: groupID })); Написать
-      }));
+    this.openConfirmationDialog()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        if (result) {
+          this.isDeleteDisabled = true;
+          this.apiGroupListService.deleteGroup(groupID)
+            .pipe(
+              catchError((err) => {
+                this.isDeleteDisabled = false;
+                this.openSnackBar(err.error.message || 'No Internet connection!');
+                return of();
+              }),
+              takeUntilDestroyed(this.destroyRef)
+            )
+            .subscribe(() => {
+              this.isDeleteDisabled = false;
+              this.openSnackBar('Group deleted successfully!');
+              this.store.dispatch(deleteGroupListItem({ groupID }));
+            });
+        }
+      });
   }
 
-  openDeleteSnackBar(): void {
-    this.snackBar.open('Delete group?', 'Yes', { verticalPosition: 'top', horizontalPosition: 'left' });
+  openConfirmationDialog(): Observable<boolean | undefined> {
+    const dialogRef: MatDialogRef<DeleteConfirmationDialogComponent, boolean> = this.dialog
+      .open(DeleteConfirmationDialogComponent);
+    return dialogRef.afterClosed();
   }
 
   openSnackBar(message: string): void {

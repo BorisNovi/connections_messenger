@@ -8,9 +8,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
+import { MatDialogModule } from '@angular/material/dialog';
 import { PeopleListComponent } from './components/people-list/people-list.component';
 import { GroupListComponent } from './components/group-list/group-list.component';
 import { MainComponent } from './pages/main/main.component';
+import { DeleteConfirmationDialogComponent } from './components/delete-confirmation-dialog/delete-confirmation-dialog.component';
 
 const routes: Routes = [
   { path: '', component: MainComponent },
@@ -23,14 +25,16 @@ const MATERIAL_IMPORTS = [
   MatButtonModule,
   MatListModule,
   MatDividerModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatDialogModule
 ];
 
 @NgModule({
   declarations: [
     MainComponent,
     GroupListComponent,
-    PeopleListComponent
+    PeopleListComponent,
+    DeleteConfirmationDialogComponent
   ],
   imports: [
     CommonModule,
