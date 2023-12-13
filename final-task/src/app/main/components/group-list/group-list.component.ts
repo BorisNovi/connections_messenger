@@ -62,6 +62,7 @@ export class GroupListComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef)
       ).subscribe((data) => {
         this.groupList = data.Items;
+        this.openSnackBar('Groups refreshed successfully!');
         this.store.dispatch(setGroupListItems({ groupItems: data.Items }));
       });
   }

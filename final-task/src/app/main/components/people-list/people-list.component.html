@@ -1,19 +1,21 @@
 <div class="container">
   <div class="buttons-container">
-    <button mat-icon-button color="primary">
-      <mat-icon>refresh</mat-icon>
+    <button mat-icon-button (click)="refreshPeopleList()" color="primary" [disabled]="isRefreshDisabled">
+      <mat-icon *ngIf="!isRefreshDisabled">refresh</mat-icon>
+      <span *ngIf="isRefreshDisabled">{{countdown$ | async}}</span>
     </button>
-    <button mat-icon-button color="primary">
-      <mat-icon>add</mat-icon>
-    </button>
+
   </div>
-  <mat-list *ngIf="1" class="">
-    <mat-list-item class="">
-      <div class="">
-        <span>Chat: &nbsp;</span><span></span>
+  <mat-list *ngIf="1" class="people-list">
+    <mat-list-item *ngFor="let item of peopleList$ | async">
+      <div class="people-content-wrapper" [ngClass]="{ 'highlighted': isHighlighted(item.uid.S) | async}">
+        <div class="people-content">
+          <a routerLink="/conversations/idhere" class="link">
+            <span>Chat:&nbsp;</span><span>{{item.name.S}}</span>
+          </a>
+        </div>
+        <mat-divider></mat-divider>
       </div>
     </mat-list-item>
-    <mat-divider></mat-divider>
-
   </mat-list>
 </div>
