@@ -1,7 +1,7 @@
 import { Component, DestroyRef, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { setGroupListItems, deleteGroupListItem } from 'src/app/NgRx/actions/group-list.action';
+import { setGroupListItems, deleteGroupListItem, setGroupListItem } from 'src/app/NgRx/actions/group-list.action';
 import { selectGroupListItems } from 'src/app/NgRx/selectors/group-list.selector';
 import {
   Observable, catchError, of, switchMap
@@ -10,7 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalService } from 'src/app/core/services/local.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ApiGroupListService } from '../../services/api-group-list.service';
-import { IGroupItem, IGroupListResponse } from '../../models/group-list-response.model';
+import { IGroupItem } from '../../models/group-list-response.model';
 import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { CreateFormDialogComponent } from '../create-form-dialog/create-form-dialog.component';
 
@@ -56,16 +56,19 @@ export class GroupListComponent implements OnInit {
   }
 
   createGroup() {
+    let groupNameFromDialog: string;
     this.openCreationDialog()
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         switchMap((groupName) => {
+          groupNameFromDialog = groupName || '';
           if (groupName) {
             return this.apiGroupListService.createGroup(groupName)
               .pipe(
                 catchError((err) => {
                   this.isDeleteDisabled = false;
                   this.openSnackBar(err.error.message || 'No Internet connection!');
+                  this.createGroup(); // Если запрос не успешен, откроем диалоговое окно снова
                   return of();
                 })
               );
@@ -74,9 +77,13 @@ export class GroupListComponent implements OnInit {
         })
       )
       .subscribe((data) => {
-        console.log(data);
-        // Добавить работу со стором (кдругие параметры кроме имени)
-        // Сделать так, чтобы окно закрывалось, только если запрос успешен
+        const stateData: IGroupItem = {
+          createdAt: { S: new Date().getTime().toString() },
+          id: { S: data.groupID },
+          createdBy: { S: this.localService.getData('uid') || '' },
+          name: { S: groupNameFromDialog },
+        };
+        this.store.dispatch(setGroupListItem({ groupItem: stateData }));
       });
   }
 
@@ -109,7 +116,7 @@ export class GroupListComponent implements OnInit {
   openCreationDialog(): Observable<string | undefined> {
     const dialogRef: MatDialogRef<CreateFormDialogComponent, string> = this.dialog
       .open(CreateFormDialogComponent);
-    return dialogRef.afterClosed();
+    return dialogRef.beforeClosed();
   }
 
   openConfirmationDialog(): Observable<boolean | undefined> {

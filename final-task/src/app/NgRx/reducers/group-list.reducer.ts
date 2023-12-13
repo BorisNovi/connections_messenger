@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { GroupListState, initialGroupListState } from './group-list.state';
-import { deleteGroupListItem, setGroupListItems } from '../actions/group-list.action';
+import { deleteGroupListItem, setGroupListItem, setGroupListItems } from '../actions/group-list.action';
 
 export const GroupListReducer = createReducer(
   initialGroupListState,
@@ -15,5 +15,12 @@ export const GroupListReducer = createReducer(
       ...state,
       groupItems: [...updatedGroupItems]
     };
-  })
+  }),
+  on(setGroupListItem, (state, { groupItem }): GroupListState => {
+    const updatedGroupItems = [...state.groupItems, groupItem];
+    return {
+      ...state,
+      groupItems: updatedGroupItems
+    };
+  }),
 );
