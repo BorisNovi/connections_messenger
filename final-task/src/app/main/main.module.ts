@@ -9,10 +9,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PeopleListComponent } from './components/people-list/people-list.component';
 import { GroupListComponent } from './components/group-list/group-list.component';
 import { MainComponent } from './pages/main/main.component';
 import { DeleteConfirmationDialogComponent } from './components/delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { CreateFormDialogComponent } from './components/create-form-dialog/create-form-dialog.component';
 
 const routes: Routes = [
   { path: '', component: MainComponent },
@@ -34,11 +36,14 @@ const MATERIAL_IMPORTS = [
     MainComponent,
     GroupListComponent,
     PeopleListComponent,
-    DeleteConfirmationDialogComponent
+    DeleteConfirmationDialogComponent,
+    CreateFormDialogComponent
   ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    // FormsModule,
+    ReactiveFormsModule,
     MATERIAL_IMPORTS
   ]
 })

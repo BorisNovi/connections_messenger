@@ -12,6 +12,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ApiGroupListService } from '../../services/api-group-list.service';
 import { IGroupItem, IGroupListResponse } from '../../models/group-list-response.model';
 import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { CreateFormDialogComponent } from '../create-form-dialog/create-form-dialog.component';
 
 @Component({
   selector: 'app-group-list',
@@ -54,34 +55,61 @@ export class GroupListComponent implements OnInit {
       });
   }
 
-  testCreate() {
-    this.apiGroupListService.createGroup('GAY LORD\'S GROUP')
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(((data) => console.log(data)));
+  createGroup() {
+    this.openCreationDialog()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        switchMap((groupName) => {
+          if (groupName) {
+            return this.apiGroupListService.createGroup(groupName)
+              .pipe(
+                catchError((err) => {
+                  this.isDeleteDisabled = false;
+                  this.openSnackBar(err.error.message || 'No Internet connection!');
+                  return of();
+                })
+              );
+          }
+          return of();
+        })
+      )
+      .subscribe((data) => {
+        console.log(data);
+        // Добавить работу со стором (кдругие параметры кроме имени)
+        // Сделать так, чтобы окно закрывалось, только если запрос успешен
+      });
   }
 
   deleteGroup(groupID: string): void {
     this.openConfirmationDialog()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((result) => {
-        if (result) {
-          this.isDeleteDisabled = true;
-          this.apiGroupListService.deleteGroup(groupID)
-            .pipe(
-              catchError((err) => {
-                this.isDeleteDisabled = false;
-                this.openSnackBar(err.error.message || 'No Internet connection!');
-                return of();
-              }),
-              takeUntilDestroyed(this.destroyRef)
-            )
-            .subscribe(() => {
-              this.isDeleteDisabled = false;
-              this.openSnackBar('Group deleted successfully!');
-              this.store.dispatch(deleteGroupListItem({ groupID }));
-            });
-        }
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        switchMap((result) => {
+          if (result) {
+            this.isDeleteDisabled = true;
+            return this.apiGroupListService.deleteGroup(groupID)
+              .pipe(
+                catchError((err) => {
+                  this.isDeleteDisabled = false;
+                  this.openSnackBar(err.error.message || 'No Internet connection!');
+                  return of();
+                })
+              );
+          }
+          return of();
+        })
+      )
+      .subscribe(() => {
+        this.isDeleteDisabled = false;
+        this.openSnackBar('Group deleted successfully!');
+        this.store.dispatch(deleteGroupListItem({ groupID }));
       });
+  }
+
+  openCreationDialog(): Observable<string | undefined> {
+    const dialogRef: MatDialogRef<CreateFormDialogComponent, string> = this.dialog
+      .open(CreateFormDialogComponent);
+    return dialogRef.afterClosed();
   }
 
   openConfirmationDialog(): Observable<boolean | undefined> {
