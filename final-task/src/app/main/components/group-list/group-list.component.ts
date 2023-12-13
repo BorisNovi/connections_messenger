@@ -9,6 +9,7 @@ import {
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalService } from 'src/app/core/services/local.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { CountdownService } from 'src/app/core/services/countdown.service';
 import { ApiGroupListService } from '../../services/api-group-list.service';
 import { IGroupItem } from '../../models/group-list-response.model';
 import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
@@ -22,8 +23,10 @@ import { CreateFormDialogComponent } from '../create-form-dialog/create-form-dia
 export class GroupListComponent implements OnInit {
   delay = 2000;
   isDeleteDisabled = false;
+  isRefreshDisabled = false;
   groupList!: IGroupItem[];
   myUid = this.localService.getData('uid');
+  countdown$!: Observable<number>;
 
   constructor(
     private apiGroupListService: ApiGroupListService,
@@ -31,14 +34,40 @@ export class GroupListComponent implements OnInit {
     private store: Store,
     private snackBar: MatSnackBar,
     private localService: LocalService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public countdown: CountdownService
   ) {}
 
   ngOnInit(): void {
     this.getGroupList();
+    this.countdown$ = this.countdown.getTimer();
+    this.countdown$.subscribe((countdownValue) => {
+      this.isRefreshDisabled = countdownValue !== 0;
+    });
+  }
+
+  refreshGroupList(): void {
+    this.countdown.reset();
+    this.countdown.start();
+
+    if (!this.isRefreshDisabled) return;
+    this.isRefreshDisabled = true;
+    this.apiGroupListService.getGroupList()
+      .pipe(
+        catchError((err) => {
+          this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.isRefreshDisabled = false;
+          return of();
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe((data) => {
+        this.groupList = data.Items;
+        this.store.dispatch(setGroupListItems({ groupItems: data.Items }));
+      });
   }
 
   getGroupList(): void {
+    this.isRefreshDisabled = true;
     this.store.select(selectGroupListItems)
       .pipe(
         switchMap((groupListItems) => (groupListItems[0]
@@ -46,11 +75,13 @@ export class GroupListComponent implements OnInit {
           : this.apiGroupListService.getGroupList())),
         catchError((err) => {
           this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.isRefreshDisabled = false;
           return of();
         }),
         takeUntilDestroyed(this.destroyRef)
       ).subscribe((data) => {
         this.groupList = data.Items;
+        this.isRefreshDisabled = false;
         this.store.dispatch(setGroupListItems({ groupItems: data.Items }));
       });
   }
@@ -83,6 +114,7 @@ export class GroupListComponent implements OnInit {
           createdBy: { S: this.localService.getData('uid') || '' },
           name: { S: groupNameFromDialog },
         };
+        this.openSnackBar('Group created successfully!');
         this.store.dispatch(setGroupListItem({ groupItem: stateData }));
       });
   }

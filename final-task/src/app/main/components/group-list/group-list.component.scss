@@ -1,6 +1,10 @@
 .container {
-  .buttouns-container {
-
+  .buttons-container {
+    height: 50px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
   }
 
   .group-list {
