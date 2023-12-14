@@ -1,6 +1,6 @@
 <div class="container">
   <div class="buttons-container">
-    <button mat-icon-button (click)="refreshGroupList()" color="primary" [disabled]="isRefreshDisabled">
+    <button mat-icon-button (click)="refreshGroupListTrigger()" color="primary" [disabled]="isRefreshDisabled">
       <mat-icon *ngIf="!isRefreshDisabled">refresh</mat-icon>
       <span *ngIf="isRefreshDisabled">{{countdown.getTimer() | async }}</span>
     </button>

@@ -80,7 +80,7 @@ export class PeopleListComponent implements OnInit {
       });
   }
 
-  public isHighlighted(uid: string): Observable<boolean> {
+  public isHighlighted(uid: string): Observable<boolean> { // Переделать в директиву params conversation list и uid
     return of(this.conversationsList).pipe(
       map((conversations) => conversations
         .some((conversation) => conversation.companionID.S === uid))

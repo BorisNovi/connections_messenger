@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { setGroupListItems, deleteGroupListItem, setGroupListItem } from 'src/app/NgRx/actions/group-list.action';
 import { selectGroupListItems } from 'src/app/NgRx/selectors/group-list.selector';
 import {
-  Observable, catchError, of, switchMap
+  Observable, Subject, catchError, debounceTime, of, switchMap
 } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalService } from 'src/app/core/services/local.service';
@@ -27,6 +27,7 @@ export class GroupListComponent implements OnInit {
   groupList!: IGroupItem[];
   myUid = this.localService.getData('uid');
   countdown$!: Observable<number>;
+  subject: Subject<void> = new Subject();
 
   constructor(
     private apiGroupListService: ApiGroupListService,
@@ -40,20 +41,25 @@ export class GroupListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getGroupList();
+    this.refreshGroupList();
     this.countdown$ = this.countdown.getTimer();
     this.countdown$.subscribe((countdownValue) => {
-      this.isRefreshDisabled = countdownValue !== 0;
+      this.isRefreshDisabled = countdownValue !== 0 && countdownValue !== 60;
     });
   }
 
-  refreshGroupList(): void {
+  refreshGroupListTrigger(): void {
     this.countdown.reset();
     this.countdown.start();
 
-    if (!this.isRefreshDisabled) return;
-    this.isRefreshDisabled = true;
-    this.apiGroupListService.getGroupList()
+    this.subject.next();
+  }
+
+  refreshGroupList(): void {
+    this.subject
       .pipe(
+        debounceTime(500),
+        switchMap(() => this.apiGroupListService.getGroupList()),
         catchError((err) => {
           this.openSnackBar(err.error.message || 'No Internet connection!');
           this.isRefreshDisabled = false;
