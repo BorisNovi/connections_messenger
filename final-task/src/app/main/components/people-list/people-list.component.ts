@@ -4,13 +4,13 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import {
-  Observable, catchError, forkJoin, map, of, switchMap,
+  Observable, catchError, forkJoin, map, of, switchMap, take, tap, zip,
 } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalService } from 'src/app/core/services/local.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CountdownService } from 'src/app/core/services/countdown.service';
-import { setPeopleListItems, setConversationListItems, setFullPeopleItems } from 'src/app/NgRx/actions/people-list.actions';
+import { setConversationListItems, setFullPeopleItems, setPeopleListItems } from 'src/app/NgRx/actions/people-list.actions';
 import { selectPeopleListItems } from 'src/app/NgRx/selectors/people-list.selector';
 import { selectConversationListItems } from 'src/app/NgRx/selectors/conversation-list.selector';
 import { CreateFormDialogComponent } from '../create-form-dialog/create-form-dialog.component';
@@ -44,18 +44,18 @@ export class PeopleListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUsersList();
-    this.countdown$ = this.countdown.getTimer();
+    this.countdown$ = this.countdown.getTimerT2();
     this.countdown$.subscribe((countdownValue) => {
       this.isRefreshDisabled = countdownValue !== 0;
       this.cdr.markForCheck();
     });
+    this.isRefreshDisabled = false;
   }
 
   refreshPeopleList(): void {
-    this.countdown.reset();
-    this.countdown.start();
+    this.countdown.resetT2();
+    this.countdown.startT2();
 
-    if (!this.isRefreshDisabled) return;
     this.isRefreshDisabled = true;
     forkJoin([
       this.apiPeopleListService.getUsersList(),
@@ -69,25 +69,27 @@ export class PeopleListComponent implements OnInit {
         }),
         takeUntilDestroyed(this.destroyRef)
       )
-      .subscribe((data) => {
-        this.peopleList$ = of(data[0].Items);
-        this.conversationsList = data[1].Items;
+      .subscribe(([peopleData, conversationData]) => {
+        this.peopleList$ = of(peopleData.Items);
+        this.conversationsList = conversationData.Items;
+        this.openSnackBar('Users refreshed successfully!');
         this.store.dispatch(setFullPeopleItems({
-          peopleItems: data[0].Items,
-          conversationItems: data[1].Items
+          peopleItems: peopleData.Items,
+          conversationItems: conversationData.Items
         }));
         this.cdr.markForCheck();
       });
   }
 
-  public isHighlighted(uid: string): Observable<boolean> { // Переделать в директиву params conversation list и uid
+  public isHighlighted(uid: string): Observable<boolean> {
+    // Переделать в директиву params conversation list и uid
     return of(this.conversationsList).pipe(
       map((conversations) => conversations
         .some((conversation) => conversation.companionID.S === uid))
     );
   }
 
-  getUsersList(): void { // также переписать на forkJoin
+  getUsersList(): void { // возможно, придется переделать обратно в две подписки.
     this.store.select(selectPeopleListItems)
       .pipe(
         switchMap((peopleListItems) => (peopleListItems[0]
@@ -99,12 +101,14 @@ export class PeopleListComponent implements OnInit {
           return of();
         }),
         takeUntilDestroyed(this.destroyRef)
-      ).subscribe((data) => {
-        this.peopleList$ = of(data.Items);
-        this.store.dispatch(setPeopleListItems({ peopleItems: data.Items }));
-        this.isRefreshDisabled = false;
-        this.cdr.markForCheck();
-      });
+      )
+      .subscribe(
+        (peopleData) => {
+          this.peopleList$ = of(peopleData.Items);
+          this.store.dispatch(setPeopleListItems({ peopleItems: peopleData.Items }));
+          this.cdr.markForCheck();
+        }
+      );
 
     this.store.select(selectConversationListItems)
       .pipe(
@@ -118,11 +122,14 @@ export class PeopleListComponent implements OnInit {
         }),
         takeUntilDestroyed(this.destroyRef)
       )
-      .subscribe((data) => {
-        this.conversationsList = data.Items;
-        this.store.dispatch(setConversationListItems({ conversationItems: data.Items }));
-        this.isRefreshDisabled = false;
-      });
+      .subscribe(
+        (conversationData) => {
+          this.conversationsList = conversationData.Items;
+          this.store.dispatch(setConversationListItems({
+            conversationItems: conversationData.Items
+          }));
+        }
+      );
   }
 
   openCreationDialog(): Observable<string | undefined> {

@@ -4,9 +4,9 @@ import { deleteGroupListItem, setGroupListItem, setGroupListItems } from '../act
 
 export const GroupListReducer = createReducer(
   initialGroupListState,
-  on(setGroupListItems, (state, { ...groupItems }): GroupListState => ({
+  on(setGroupListItems, (state, { groupItems }): GroupListState => ({
     ...state,
-    ...groupItems
+    groupItems
   })),
   on(deleteGroupListItem, (state, { groupID }): GroupListState => {
     const updatedGroupItems = state.groupItems.filter((item) => item.id.S !== groupID);

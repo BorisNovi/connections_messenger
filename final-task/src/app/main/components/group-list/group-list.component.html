@@ -2,7 +2,7 @@
   <div class="buttons-container">
     <button mat-icon-button (click)="refreshGroupListTrigger()" color="primary" [disabled]="isRefreshDisabled">
       <mat-icon *ngIf="!isRefreshDisabled">refresh</mat-icon>
-      <span *ngIf="isRefreshDisabled">{{countdown.getTimer() | async }}</span>
+      <span *ngIf="isRefreshDisabled">{{countdown$ | async }}</span>
     </button>
     <button mat-icon-button (click)="createGroup()" color="primary">
       <mat-icon>add</mat-icon>

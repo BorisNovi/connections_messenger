@@ -9,9 +9,3 @@ export const setFullPeopleItems = createAction(
   '[FULL PEOPLE LIST] set',
   props<{ peopleItems: IPeopleItem[], conversationItems: IConversationItem[] }>()
 );
-
-export const refreshData = union({
-  setPeopleListItems,
-  setConversationListItems,
-  setFullPeopleItems
-});

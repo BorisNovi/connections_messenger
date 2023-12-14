@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { setGroupListItems, deleteGroupListItem, setGroupListItem } from 'src/app/NgRx/actions/group-list.action';
 import { selectGroupListItems } from 'src/app/NgRx/selectors/group-list.selector';
 import {
-  Observable, Subject, catchError, debounceTime, of, switchMap
+  Observable, Subject, catchError, debounceTime, of, switchMap, take
 } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalService } from 'src/app/core/services/local.service';
@@ -42,15 +42,16 @@ export class GroupListComponent implements OnInit {
   ngOnInit(): void {
     this.getGroupList();
     this.refreshGroupList();
-    this.countdown$ = this.countdown.getTimer();
+    this.countdown$ = this.countdown.getTimerT1();
     this.countdown$.subscribe((countdownValue) => {
-      this.isRefreshDisabled = countdownValue !== 0 && countdownValue !== 60;
+      this.isRefreshDisabled = countdownValue !== 0;
     });
+    this.isRefreshDisabled = false;
   }
 
   refreshGroupListTrigger(): void {
-    this.countdown.reset();
-    this.countdown.start();
+    this.countdown.resetT1();
+    this.countdown.startT1();
 
     this.subject.next();
   }
@@ -88,12 +89,11 @@ export class GroupListComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef)
       ).subscribe((data) => {
         this.groupList = data.Items;
-        this.isRefreshDisabled = false;
         this.store.dispatch(setGroupListItems({ groupItems: data.Items }));
       });
   }
 
-  createGroup() {
+  createGroup(): void {
     let groupNameFromDialog: string;
     this.openCreationDialog()
       .pipe(
