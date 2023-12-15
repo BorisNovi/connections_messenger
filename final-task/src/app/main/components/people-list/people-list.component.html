@@ -10,9 +10,9 @@
     <mat-list-item *ngFor="let item of peopleList$ | async">
       <div class="people-content-wrapper" [ngClass]="{ 'highlighted': isHighlighted(item.uid.S) | async}">
         <div class="people-content">
-          <a routerLink="/conversations/idhere" class="link">
+          <button (click)="goToConversation(item.uid.S)" class="go-to">
             <span>User:&nbsp;</span><span>{{item.name.S}}</span>
-          </a>
+          </button>
         </div>
         <mat-divider></mat-divider>
       </div>

@@ -13,9 +13,9 @@
     <mat-list-item *ngFor="let item of groupList">
       <div class="group-content-wrapper">
         <div class="group-content">
-          <a routerLink="/group/{{item.id.S}}" class="link">
+          <button routerLink="/group/{{item.id.S}}" class="go-to">
             <span>Chat:&nbsp;</span><span>{{item.name.S}}</span>
-          </a>
+          </button>
           <button *ngIf="myUid === item.createdBy.S" mat-icon-button (click)="deleteGroup(item.id.S)" color="warn" [disabled]="isDeleteDisabled">
             <mat-icon>close</mat-icon>
           </button>

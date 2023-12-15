@@ -13,6 +13,7 @@ import { CountdownService } from 'src/app/core/services/countdown.service';
 import { setConversationListItems, setFullPeopleItems, setPeopleListItems } from 'src/app/NgRx/actions/people-list.actions';
 import { selectPeopleListItems } from 'src/app/NgRx/selectors/people-list.selector';
 import { selectConversationListItems } from 'src/app/NgRx/selectors/conversation-list.selector';
+import { Router } from '@angular/router';
 import { CreateFormDialogComponent } from '../create-form-dialog/create-form-dialog.component';
 import { ApiPeopleListService } from '../../services/api-people-list.service';
 import { IConversationItem, IPeopleItem } from '../../models/people-list-response.model';
@@ -39,7 +40,8 @@ export class PeopleListComponent implements OnInit {
     private localService: LocalService,
     private dialog: MatDialog,
     public countdown: CountdownService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -81,6 +83,32 @@ export class PeopleListComponent implements OnInit {
       });
   }
 
+  public goToConversation(uid: string): void {
+    const foundConversation = this.conversationsList
+      .find((conversation) => conversation.companionID.S === uid);
+
+    if (foundConversation) {
+      this.router.navigate([`/conversation/${foundConversation.id.S}`]);
+    } else {
+      this.createConversation(uid).subscribe((conversationData) => {
+        this.openSnackBar('UConversation created successfully!');
+        this.router.navigate([`/conversation/${conversationData.conversationID}`]);
+      });
+    }
+  }
+
+  createConversation(companion: string): Observable<{ conversationID: string }> {
+    return this.apiPeopleListService.createConversation(companion)
+      .pipe(
+        catchError((err) => {
+          this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.isRefreshDisabled = false;
+          return of();
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      );
+  }
+
   public isHighlighted(uid: string): Observable<boolean> {
     // Переделать в директиву params conversation list и uid
     return of(this.conversationsList).pipe(
@@ -89,7 +117,7 @@ export class PeopleListComponent implements OnInit {
     );
   }
 
-  getUsersList(): void { // возможно, придется переделать обратно в две подписки.
+  getUsersList(): void {
     this.store.select(selectPeopleListItems)
       .pipe(
         switchMap((peopleListItems) => (peopleListItems[0]

@@ -45,7 +45,7 @@ export class ApiPeopleListService {
 
   createConversation(companion: string): Observable<{ conversationID: string }> {
     const headers = this.createHeaders();
-    const dataUrl = `${this.baseUrl}angular/groups/create`;
+    const dataUrl = `${this.baseUrl}angular/conversations/create`;
     const body = { companion };
     return this.http.post<{ conversationID: string }>(dataUrl, body, { headers });
   }
