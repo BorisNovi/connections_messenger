@@ -13,6 +13,7 @@ const routes: Routes = [
       { path: 'signup', loadChildren: () => import('./registration/registration.module').then((m) => m.RegistrationModule) },
       { path: 'signin', loadChildren: () => import('./signin/signin.module').then((m) => m.SigninModule) },
       { path: 'profile', loadChildren: () => import('./profile/profile.module').then((m) => m.ProfileModule), canActivate: [signinGuard] },
+      { path: 'group/:groupID', loadChildren: () => import('./group-chat/group-chat.module').then((m) => m.GroupChatModule), canActivate: [signinGuard]},
       { path: '**', component: NotFoundComponent }
     ]
   }

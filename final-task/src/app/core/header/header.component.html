@@ -1,4 +1,7 @@
 <div class="container">
+  <div class="heading">
+    <button *ngIf="isAuthenticated | async" mat-raised-button color="primary" routerLink="/">Connections</button>
+  </div>
   <div class="buttons-wrapper">
     <button *ngIf="isAuthenticated | async" mat-icon-button color="primary" routerLink="/profile">
       <mat-icon>account_circle</mat-icon>

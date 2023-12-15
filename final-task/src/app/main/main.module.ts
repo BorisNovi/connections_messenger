@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { PeopleListComponent } from './components/people-list/people-list.component';
 import { GroupListComponent } from './components/group-list/group-list.component';
 import { MainComponent } from './pages/main/main.component';
