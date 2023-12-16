@@ -8,9 +8,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
 import { ChatComponent } from './components/chat/chat.component';
 import { AddNamePipe } from './pipes/add-name.pipe';
 import { IsMineMessageDirective } from './directives/is-mine-message.directive';
+import { DeleteConfirmationDialogComponent } from './components/delete-confirmation-dialog/delete-confirmation-dialog.component';
 
 const routes: Routes = [
   { path: '', component: ChatComponent },
@@ -23,6 +25,7 @@ const MATERIAL_IMPORTS = [
   MatButtonModule,
   MatListModule,
   MatSnackBarModule,
+  MatDialogModule
 ];
 
 @NgModule({
@@ -30,6 +33,7 @@ const MATERIAL_IMPORTS = [
     ChatComponent,
     AddNamePipe,
     IsMineMessageDirective,
+    DeleteConfirmationDialogComponent,
   ],
   imports: [
     CommonModule,

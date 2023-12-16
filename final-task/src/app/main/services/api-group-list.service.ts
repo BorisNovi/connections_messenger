@@ -2,13 +2,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LocalService } from 'src/app/core/services/local.service';
+import { environment } from 'src/environments/environment.development';
 import { IGroupListResponse } from '../models/group-list-response.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiGroupListService {
-  private baseUrl = 'https://tasks.app.rs.school/';
+  private baseUrl = environment.baseUrl;
 
   constructor(
     private http: HttpClient,

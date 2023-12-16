@@ -5,6 +5,9 @@
       <mat-icon *ngIf="!isRefreshDisabled">refresh</mat-icon>
       <span *ngIf="isRefreshDisabled">Countdown-digits</span>
     </button>
+    <button *ngIf="myUid" mat-icon-button (click)="deleteGroup()" color="warn" [disabled]="isDeleteDisabled">
+      <mat-icon>close</mat-icon>
+    </button>
   </div>
 
   <div class="list-container">

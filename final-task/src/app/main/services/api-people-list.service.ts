@@ -2,13 +2,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LocalService } from 'src/app/core/services/local.service';
+import { environment } from 'src/environments/environment.development';
 import { IConversationResponse, IPeopleListResponse } from '../models/people-list-response.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiPeopleListService {
-  private baseUrl = 'https://tasks.app.rs.school/';
+  private baseUrl = environment.baseUrl;
 
   constructor(
     private http: HttpClient,

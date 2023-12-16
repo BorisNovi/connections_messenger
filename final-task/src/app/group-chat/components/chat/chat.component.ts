@@ -4,7 +4,7 @@ import {
 import { Store } from '@ngrx/store';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalService } from 'src/app/core/services/local.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   Observable, Subscription, catchError, map, of, switchMap, take
 } from 'rxjs';
@@ -14,8 +14,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PeopleLoaderService } from 'src/app/core/services/people-loader.service';
 import { addGroupChatMessage, addGroupChatMessages, getGroupChatMessages } from 'src/app/NgRx/actions/group-chat.action';
 import { selectMessagesByGroupID } from 'src/app/NgRx/selectors/group-chat.selector';
-import { ApiGroupChatService } from '../../services/api-group-chat.service';
+import { ApiCommonService } from 'src/app/core/services/api-common.service';
+import { deleteGroupListItem } from 'src/app/NgRx/actions/group-list.action';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { IGroupMessageItem, IGroupMessagesResponse } from '../../models/group-chat-messages-response.model';
+import { ApiGroupChatService } from '../../services/api-group-chat.service';
+import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
 
 @Component({
   selector: 'app-chat',
@@ -31,9 +35,11 @@ export class ChatComponent implements OnInit {
   messages$!: Observable<IGroupMessageItem[]>;
   messageForm: FormGroup;
   lastMessageTime = 0;
+  isDeleteDisabled = false;
 
   constructor(
     private apiGroupChatService: ApiGroupChatService,
+    private apiCommon: ApiCommonService,
     private peopleLoader: PeopleLoaderService,
     private destroyRef: DestroyRef,
     private store: Store,
@@ -41,7 +47,9 @@ export class ChatComponent implements OnInit {
     private localService: LocalService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private dialog: MatDialog,
+    private router: Router
   ) {
     this.messageForm = this.formBuilder.group({
       message: ['', [Validators.required]]
@@ -151,6 +159,39 @@ export class ChatComponent implements OnInit {
         this.messageForm.reset();
         this.openSnackBar('Message sent!');
       });
+  }
+
+  deleteGroup(): void {
+    this.openConfirmationDialog()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        switchMap((result) => {
+          if (result) {
+            this.isDeleteDisabled = true;
+            return this.apiCommon.deleteGroup(this.currentGroupId)
+              .pipe(
+                catchError((err) => {
+                  this.isDeleteDisabled = false;
+                  this.openSnackBar(err.error.message || 'No Internet connection!');
+                  return of();
+                })
+              );
+          }
+          return of();
+        })
+      )
+      .subscribe(() => {
+        this.isDeleteDisabled = false;
+        this.router.navigate(['/']);
+        this.openSnackBar('Group deleted successfully!');
+        this.store.dispatch(deleteGroupListItem({ groupID: this.currentGroupId }));
+      });
+  }
+
+  openConfirmationDialog(): Observable<boolean | undefined> {
+    const dialogRef: MatDialogRef<DeleteConfirmationDialogComponent, boolean> = this.dialog
+      .open(DeleteConfirmationDialogComponent);
+    return dialogRef.afterClosed();
   }
 
   openSnackBar(message: string): void {

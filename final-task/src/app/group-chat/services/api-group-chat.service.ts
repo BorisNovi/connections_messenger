@@ -2,13 +2,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LocalService } from 'src/app/core/services/local.service';
+import { environment } from 'src/environments/environment.development';
 import { IGroupMessagesResponse } from '../models/group-chat-messages-response.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiGroupChatService {
-  private baseUrl = 'https://tasks.app.rs.school/';
+  private baseUrl = environment.baseUrl;
   constructor(
     private http: HttpClient,
     private localService: LocalService,
