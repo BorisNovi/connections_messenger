@@ -6,13 +6,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalService } from 'src/app/core/services/local.service';
 import { ActivatedRoute } from '@angular/router';
 import {
-  Observable, Subscription, catchError, map, of, switchMap
+  Observable, Subscription, catchError, map, of, switchMap, take
 } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { selectPeopleListItems } from 'src/app/NgRx/selectors/people-list.selector';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PeopleLoaderService } from 'src/app/core/services/people-loader.service';
-import { addGroupChatMessage, getGroupChatMessages } from 'src/app/NgRx/actions/group-chat.action';
+import { addGroupChatMessage, addGroupChatMessages, getGroupChatMessages } from 'src/app/NgRx/actions/group-chat.action';
+import { selectMessagesByGroupID } from 'src/app/NgRx/selectors/group-chat.selector';
 import { ApiGroupChatService } from '../../services/api-group-chat.service';
 import { IGroupMessageItem, IGroupMessagesResponse } from '../../models/group-chat-messages-response.model';
 
@@ -29,6 +30,7 @@ export class ChatComponent implements OnInit {
   private currentGroupId = '';
   messages$!: Observable<IGroupMessageItem[]>;
   messageForm: FormGroup;
+  lastMessageTime = 0;
 
   constructor(
     private apiGroupChatService: ApiGroupChatService,
@@ -67,9 +69,8 @@ export class ChatComponent implements OnInit {
       .subscribe();
   }
 
-  getMessages(): void {
-    // сделать храниение как хэщ-таблицу из YouTube {GroupID: [{message1 }, {message 2}]}
-    this.apiGroupChatService.getGroupMessages(this.currentGroupId)
+  updateMessages(): void {
+    this.apiGroupChatService.getGroupMessages(this.currentGroupId, this.lastMessageTime)
       .pipe(
         catchError((err) => {
           this.openSnackBar(err.error.message || 'No Internet connection!');
@@ -79,11 +80,46 @@ export class ChatComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((messages) => {
-        messages.Items.sort((a, b) => b.createdAt.S.localeCompare(a.createdAt.S));
-        this.messages$ = of(messages.Items);
+        if (!messages.Items.length) return;
+        this.store.dispatch(addGroupChatMessages({
+          payload: { groupID: this.currentGroupId, messages: messages.Items }
+        }));
+
+        const sortedMessages = messages.Items
+          .slice().sort((a, b) => b.createdAt.S.localeCompare(a.createdAt.S));
+
+        this.lastMessageTime = +sortedMessages[0].createdAt.S;
+
+        this.messages$ = of(sortedMessages);
+        this.cdr.markForCheck();
+      });
+  }
+
+  getMessages(): void { // Проверить правильность, уточнить, как сделать с since
+    this.store.select(selectMessagesByGroupID(this.currentGroupId))
+      .pipe(
+        switchMap((messages) => (messages.length
+          ? of({ Items: messages })
+          : this.apiGroupChatService.getGroupMessages(this.currentGroupId))),
+        catchError((err) => {
+          this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.isRefreshDisabled = false;
+          return of();
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((messages) => {
+        if (!messages.Items.length) return;
         this.store.dispatch(getGroupChatMessages({
           groupChats: { [this.currentGroupId]: messages.Items }
         }));
+
+        const sortedMessages = messages.Items
+          .slice().sort((a, b) => b.createdAt.S.localeCompare(a.createdAt.S));
+
+        this.lastMessageTime = +sortedMessages[0].createdAt.S;
+
+        this.messages$ = of(sortedMessages);
         this.cdr.markForCheck();
       });
   }

@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { GroupChatState, initialGroupChatState } from './group-chat.state';
-import { addGroupChatMessage, getGroupChatMessages } from '../actions/group-chat.action';
+import { addGroupChatMessage, addGroupChatMessages, getGroupChatMessages } from '../actions/group-chat.action';
 
 export const GroupChatReducer = createReducer(
   initialGroupChatState,
@@ -14,5 +14,11 @@ export const GroupChatReducer = createReducer(
     const existingMessages = state.groupChats?.[groupID] || [];
     const updatedGroup = { ...state.groupChats, [groupID]: [...existingMessages, message] };
     return { ...state, groupChats: updatedGroup };
-  })
+  }),
+  on(addGroupChatMessages, (state, { payload }): GroupChatState => {
+    const { groupID, messages } = payload;
+    const existingMessages = state.groupChats?.[groupID] || [];
+    const updatedGroup = { ...state.groupChats, [groupID]: [...existingMessages, ...messages] };
+    return { ...state, groupChats: updatedGroup };
+  }),
 );

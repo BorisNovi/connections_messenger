@@ -30,6 +30,7 @@
       .group-message {
         min-height: 100px;
         height: fit-content;
+        flex-shrink: 0;
 
         .message-content-wrapper {
           .message {

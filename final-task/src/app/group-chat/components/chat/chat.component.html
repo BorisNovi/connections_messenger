@@ -1,7 +1,7 @@
 <div class="container">
   <div class="buttons-container">
     <a class="back-link" routerLink="/">Back</a>
-    <button mat-icon-button (click)="0" color="primary" [disabled]="isRefreshDisabled">
+    <button mat-icon-button (click)="updateMessages()" color="primary" [disabled]="isRefreshDisabled">
       <mat-icon *ngIf="!isRefreshDisabled">refresh</mat-icon>
       <span *ngIf="isRefreshDisabled">Countdown-digits</span>
     </button>
@@ -11,7 +11,7 @@
     <mat-list *ngIf="1" class="group-list">
       <mat-list-item class="group-message" *ngFor="let m of messages$ | async" appIsMineMessage [uid]="m.authorID.S">
         <div class="message-content-wrapper">
-          <div class="date">{{m.createdAt.S | date: 'dd MMMM YYYY - hh:mm'}}</div>
+          <div class="date">{{m.createdAt.S | date: 'dd MMMM YYYY - HH:mm'}}</div>
           <div class="name">{{m.authorID.S | addName | async}}</div>
           <div class="message">{{m.message.S}}</div>
         </div>
