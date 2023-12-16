@@ -69,7 +69,7 @@ export class ChatComponent implements OnInit {
       .subscribe();
   }
 
-  updateMessages(): void {
+  refreshMessages(): void {
     this.apiGroupChatService.getGroupMessages(this.currentGroupId, this.lastMessageTime)
       .pipe(
         catchError((err) => {
@@ -124,7 +124,7 @@ export class ChatComponent implements OnInit {
       });
   }
 
-  sendTestm(): void {
+  sendMessage(): void {
     this.apiGroupChatService.sendGroupMessage(
       this.currentGroupId,
       this.messageForm.value.message
@@ -147,6 +147,7 @@ export class ChatComponent implements OnInit {
             }
           }
         }));
+        this.refreshMessages();
         this.messageForm.reset();
         this.openSnackBar('Message sent!');
       });
