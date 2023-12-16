@@ -1,1 +1,10 @@
-<p>chat works!</p>
+<button (click)="sendTestm()">test</button>
+<div class="messages">
+  <div class="message-item" *ngFor="let m of messages$ | async">
+    <div class="message-wrapper">
+      <div class="date">{{m.createdAt.S | date: 'dd MMMM YYYY - hh:mm'}}</div>
+      <div class="name">{{m.authorID.S | addName | async}}</div>
+      <div class="message">{{m.message.S}}</div>
+    </div>
+  </div>
+</div>

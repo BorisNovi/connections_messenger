@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ChatComponent } from './components/chat/chat.component';
+import { AddNamePipe } from './pipes/add-name.pipe';
 
 const routes: Routes = [
   { path: '', component: ChatComponent },
@@ -25,7 +26,8 @@ const MATERIAL_IMPORTS = [
 
 @NgModule({
   declarations: [
-    ChatComponent
+    ChatComponent,
+    AddNamePipe,
   ],
   imports: [
     CommonModule,

@@ -1,6 +1,6 @@
 export interface IGroupMessagesResponse {
   Count: number,
-  Items: IGroupMessageItem
+  Items: IGroupMessageItem[]
 }
 
 export interface IGroupMessageItem {
