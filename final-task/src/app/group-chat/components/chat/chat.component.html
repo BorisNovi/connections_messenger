@@ -1,5 +1,6 @@
 <div class="container">
   <div class="buttons-container">
+    <a class="back-link" routerLink="/">Back</a>
     <button mat-icon-button (click)="0" color="primary" [disabled]="isRefreshDisabled">
       <mat-icon *ngIf="!isRefreshDisabled">refresh</mat-icon>
       <span *ngIf="isRefreshDisabled">Countdown-digits</span>

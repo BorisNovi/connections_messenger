@@ -11,12 +11,17 @@
     justify-content: flex-start;
     align-items: center;
     flex-direction: row;
+
+    .back-link {
+      text-decoration: none;
+      font-size: 16px;
+    }
   }
 
   .list-container {
     .group-list {
       display: flex;
-      flex-direction: column;
+      flex-direction: column-reverse;
       overflow: scroll;
       position: absolute;
       height: 70%;
@@ -25,6 +30,12 @@
       .group-message {
         min-height: 100px;
         height: fit-content;
+
+        .message-content-wrapper {
+          .message {
+            text-wrap: wrap;
+          }
+        }
       }
 
       .mine {

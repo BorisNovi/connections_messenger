@@ -6,12 +6,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalService } from 'src/app/core/services/local.service';
 import { ActivatedRoute } from '@angular/router';
 import {
-  Observable, Subscription, map, of, switchMap
+  Observable, Subscription, catchError, map, of, switchMap
 } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { selectPeopleListItems } from 'src/app/NgRx/selectors/people-list.selector';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PeopleLoaderService } from 'src/app/core/services/people-loader.service';
+import { addGroupChatMessage, getGroupChatMessages } from 'src/app/NgRx/actions/group-chat.action';
 import { ApiGroupChatService } from '../../services/api-group-chat.service';
 import { IGroupMessageItem, IGroupMessagesResponse } from '../../models/group-chat-messages-response.model';
 
@@ -67,12 +68,22 @@ export class ChatComponent implements OnInit {
   }
 
   getMessages(): void {
+    // сделать храниение как хэщ-таблицу из YouTube {GroupID: [{message1 }, {message 2}]}
     this.apiGroupChatService.getGroupMessages(this.currentGroupId)
       .pipe(
+        catchError((err) => {
+          this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.isRefreshDisabled = false;
+          return of();
+        }),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((messages) => {
+        messages.Items.sort((a, b) => b.createdAt.S.localeCompare(a.createdAt.S));
         this.messages$ = of(messages.Items);
+        this.store.dispatch(getGroupChatMessages({
+          groupChats: { [this.currentGroupId]: messages.Items }
+        }));
         this.cdr.markForCheck();
       });
   }
@@ -83,9 +94,26 @@ export class ChatComponent implements OnInit {
       this.messageForm.value.message
     )
       .pipe(
+        catchError((err) => {
+          this.openSnackBar(err.error.message || 'No Internet connection!');
+          return of();
+        }),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe();
+      .subscribe(() => {
+        this.store.dispatch(addGroupChatMessage({
+          payload: {
+            groupID: this.currentGroupId,
+            message: {
+              message: { S: this.messageForm.value.message },
+              authorID: { S: this.myUid || '' },
+              createdAt: { S: new Date().getTime().toString() }
+            }
+          }
+        }));
+        this.messageForm.reset();
+        this.openSnackBar('Message sent!');
+      });
   }
 
   openSnackBar(message: string): void {
