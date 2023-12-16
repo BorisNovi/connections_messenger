@@ -10,6 +10,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ChatComponent } from './components/chat/chat.component';
 import { AddNamePipe } from './pipes/add-name.pipe';
+import { IsMineMessageDirective } from './directives/is-mine-message.directive';
 
 const routes: Routes = [
   { path: '', component: ChatComponent },
@@ -28,6 +29,7 @@ const MATERIAL_IMPORTS = [
   declarations: [
     ChatComponent,
     AddNamePipe,
+    IsMineMessageDirective,
   ],
   imports: [
     CommonModule,

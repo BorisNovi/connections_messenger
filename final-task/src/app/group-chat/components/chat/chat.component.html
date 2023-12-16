@@ -1,10 +1,34 @@
-<button (click)="sendTestm()">test</button>
-<div class="messages">
-  <div class="message-item" *ngFor="let m of messages$ | async">
-    <div class="message-wrapper">
-      <div class="date">{{m.createdAt.S | date: 'dd MMMM YYYY - hh:mm'}}</div>
-      <div class="name">{{m.authorID.S | addName | async}}</div>
-      <div class="message">{{m.message.S}}</div>
-    </div>
+<div class="container">
+  <div class="buttons-container">
+    <button mat-icon-button (click)="0" color="primary" [disabled]="isRefreshDisabled">
+      <mat-icon *ngIf="!isRefreshDisabled">refresh</mat-icon>
+      <span *ngIf="isRefreshDisabled">Countdown-digits</span>
+    </button>
+  </div>
+
+  <div class="list-container">
+    <mat-list *ngIf="1" class="group-list">
+      <mat-list-item class="group-message" *ngFor="let m of messages$ | async" appIsMineMessage [uid]="m.authorID.S">
+        <div class="message-content-wrapper">
+          <div class="date">{{m.createdAt.S | date: 'dd MMMM YYYY - hh:mm'}}</div>
+          <div class="name">{{m.authorID.S | addName | async}}</div>
+          <div class="message">{{m.message.S}}</div>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </div>
+
+  <div class="message-form-container">
+    <form class="message-form" [formGroup]="messageForm">
+      <mat-form-field class="message-form-field" appearance="outline">
+        <mat-label>Text</mat-label>
+        <input matInput formControlName="message" required>
+        <button class="button-send" mat-icon-button matSuffix (click)="sendTestm()" color="primary"
+          [disabled]="messageForm.invalid">
+          <mat-icon>send</mat-icon>
+        </button>
+        <mat-error *ngIf="messageForm.controls['message'].errors?.['required']">Please enter message</mat-error>
+      </mat-form-field>
+    </form>
   </div>
 </div>

@@ -1,0 +1,53 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+
+  .buttons-container {
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+  }
+
+  .list-container {
+    .group-list {
+      display: flex;
+      flex-direction: column;
+      overflow: scroll;
+      position: absolute;
+      height: 70%;
+      width: 100%;
+
+      .group-message {
+        min-height: 100px;
+        height: fit-content;
+      }
+
+      .mine {
+        align-self: flex-end;
+        text-align: end;
+      }
+    }
+  }
+
+
+  .message-form-container {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+
+    .message-form {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .message-form-field {
+        width: 90%;
+      }
+    }
+  }
+}

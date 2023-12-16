@@ -6,10 +6,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalService } from 'src/app/core/services/local.service';
 import { ActivatedRoute } from '@angular/router';
 import {
-  Observable, Subscription, map, of
+  Observable, Subscription, map, of, switchMap
 } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { selectPeopleListItems } from 'src/app/NgRx/selectors/people-list.selector';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { PeopleLoaderService } from 'src/app/core/services/people-loader.service';
 import { ApiGroupChatService } from '../../services/api-group-chat.service';
 import { IGroupMessageItem, IGroupMessagesResponse } from '../../models/group-chat-messages-response.model';
 
@@ -24,23 +26,44 @@ export class ChatComponent implements OnInit {
   isRefreshDisabled = false;
   myUid = this.localService.getData('uid');
   private currentGroupId = '';
-  private routeSubscription!: Subscription;
   messages$!: Observable<IGroupMessageItem[]>;
+  messageForm: FormGroup;
 
   constructor(
     private apiGroupChatService: ApiGroupChatService,
+    private peopleLoader: PeopleLoaderService,
     private destroyRef: DestroyRef,
     private store: Store,
     private snackBar: MatSnackBar,
     private localService: LocalService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-  ) {}
+    private formBuilder: FormBuilder
+  ) {
+    this.messageForm = this.formBuilder.group({
+      message: ['', [Validators.required]]
+    });
+  }
+
   ngOnInit(): void {
-    this.routeSubscription = this.route.params.subscribe((params) => {
+    this.route.params.subscribe((params) => {
       this.currentGroupId = params['groupID'];
     });
     this.getMessages();
+    this.checkNames();
+  }
+
+  checkNames(): void {
+    this.store.select(selectPeopleListItems)
+      .pipe(
+        map((people) => {
+          if (people.length === 0) {
+            this.peopleLoader.savePeopleList();
+          }
+          return of();
+        })
+      )
+      .subscribe();
   }
 
   getMessages(): void {
@@ -55,7 +78,14 @@ export class ChatComponent implements OnInit {
   }
 
   sendTestm(): void {
-    this.apiGroupChatService.sendGroupMessage(this.currentGroupId, 'I\'m a boss of a gay gym!').subscribe();
+    this.apiGroupChatService.sendGroupMessage(
+      this.currentGroupId,
+      this.messageForm.value.message
+    )
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe();
   }
 
   openSnackBar(message: string): void {
