@@ -11,7 +11,8 @@
       <div class="people-content-wrapper" >
         <div class="people-content" [ngClass]="{ 'highlighted': isHighlighted(item.uid.S) | async}">
           <button mat-button (click)="goToConversation(item.uid.S)" class="go-to">
-            <span>User:&nbsp;</span><span>{{item.name.S}}</span>
+            <mat-icon>person</mat-icon>
+            <span>{{item.name.S}}</span>
           </button>
         </div>
         <mat-divider></mat-divider>

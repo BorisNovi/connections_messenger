@@ -19,7 +19,7 @@ import { deleteGroupListItem } from 'src/app/NgRx/actions/group-list.action';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { IGroupMessageItem } from '../../models/group-chat-messages-response.model';
 import { ApiGroupChatService } from '../../services/api-group-chat.service';
-import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { DeleteConfirmationDialogMsgsComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { GroupChatCountdownService } from '../../services/group-chat-countdown.service';
 
 @Component({
@@ -32,7 +32,9 @@ export class ChatComponent implements OnInit {
   delay = 2000;
   isRefreshDisabled = false;
   myUid = this.localService.getData('uid');
+  createdBy = '';
   private currentGroupId = '';
+  groupName = '';
   messages$!: Observable<IGroupMessageItem[]>;
   messageForm: FormGroup;
   lastMessageTime = 0;
@@ -63,6 +65,12 @@ export class ChatComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.currentGroupId = params['groupID'];
     });
+
+    this.route.queryParams.subscribe((params) => {
+      this.createdBy = params['createdBy'];
+      this.groupName = params['groupName'];
+    });
+
     this.getMessages();
     this.checkNames();
     this.refreshIfLoaded();
@@ -200,8 +208,8 @@ export class ChatComponent implements OnInit {
   }
 
   openConfirmationDialog(): Observable<boolean | undefined> {
-    const dialogRef: MatDialogRef<DeleteConfirmationDialogComponent, boolean> = this.dialog
-      .open(DeleteConfirmationDialogComponent);
+    const dialogRef: MatDialogRef<DeleteConfirmationDialogMsgsComponent, boolean> = this.dialog
+      .open(DeleteConfirmationDialogMsgsComponent);
     return dialogRef.afterClosed();
   }
 

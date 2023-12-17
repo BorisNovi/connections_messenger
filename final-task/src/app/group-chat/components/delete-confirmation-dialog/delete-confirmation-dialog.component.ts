@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-delete-confirmation-dialog',
+  selector: 'app-delete-confirmation-dialog-msgs',
   template: `
   <h2 mat-dialog-title>Delete Confirmation</h2>
   <mat-dialog-content>
@@ -14,6 +14,6 @@ import { MatDialogRef } from '@angular/material/dialog';
   </mat-dialog-actions>
 `,
 })
-export class DeleteConfirmationDialogComponent {
-  constructor(public dialogRef: MatDialogRef<DeleteConfirmationDialogComponent>) {}
+export class DeleteConfirmationDialogMsgsComponent {
+  constructor(public dialogRef: MatDialogRef<DeleteConfirmationDialogMsgsComponent>) {}
 }

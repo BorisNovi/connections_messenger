@@ -12,10 +12,13 @@
     <mat-list-item *ngFor="let item of groupList">
       <div class="group-content-wrapper">
         <div class="group-content">
-          <button mat-button routerLink="/group/{{item.id.S}}" class="go-to">
-            <span>Chat:&nbsp;</span><span>{{item.name.S}}</span>
+          <button mat-button routerLink="/group/{{item.id.S}}"
+            [queryParams]="{ createdBy: item.createdBy.S, groupName: item.name.S }" class="go-to">
+            <mat-icon>people</mat-icon>
+            <span>{{item.name.S}}</span>
           </button>
-          <button *ngIf="myUid === item.createdBy.S" mat-icon-button (click)="deleteGroup(item.id.S)" color="warn" [disabled]="isDeleteDisabled">
+          <button *ngIf="myUid === item.createdBy.S" mat-icon-button (click)="deleteGroup(item.id.S)" color="warn"
+            [disabled]="isDeleteDisabled">
             <mat-icon>close</mat-icon>
           </button>
         </div>

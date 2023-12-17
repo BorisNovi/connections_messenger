@@ -12,7 +12,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ChatComponent } from './components/chat/chat.component';
 import { AddNamePipe } from './pipes/add-name.pipe';
 import { IsMineMessageDirective } from './directives/is-mine-message.directive';
-import { DeleteConfirmationDialogComponent } from './components/delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { DeleteConfirmationDialogMsgsComponent } from './components/delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 const routes: Routes = [
   { path: '', component: ChatComponent },
@@ -25,7 +26,8 @@ const MATERIAL_IMPORTS = [
   MatButtonModule,
   MatListModule,
   MatSnackBarModule,
-  MatDialogModule
+  MatDialogModule,
+  MatToolbarModule
 ];
 
 @NgModule({
@@ -33,7 +35,7 @@ const MATERIAL_IMPORTS = [
     ChatComponent,
     AddNamePipe,
     IsMineMessageDirective,
-    DeleteConfirmationDialogComponent,
+    DeleteConfirmationDialogMsgsComponent,
   ],
   imports: [
     CommonModule,
