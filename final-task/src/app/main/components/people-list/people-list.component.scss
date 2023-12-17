@@ -5,6 +5,7 @@
     justify-content: flex-start;
     align-items: center;
     flex-direction: row;
+    padding: 0 20px;
   }
 
   .people-list {
@@ -20,16 +21,15 @@
         justify-content: space-between;
         align-items: center;
         flex-direction: row;
+        padding: 0 5px;
 
         .go-to {
           border: none;
           background-color: transparent;
           font-size: 16px;
           cursor: pointer;
-        }
-
-        .go-to:hover {
-          color: #673ab7;
+          width: 100%;
+          justify-content: flex-start;
         }
       }
     }
@@ -37,5 +37,6 @@
 }
 
 .highlighted {
-  background-color: #673ab750;
+  background-color: #fff2;
+  border-radius: 4px;
 }

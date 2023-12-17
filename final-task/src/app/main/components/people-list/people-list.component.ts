@@ -9,7 +9,7 @@ import {
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalService } from 'src/app/core/services/local.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { CountdownService } from 'src/app/core/services/countdown.service';
+import { CountdownService } from 'src/app/core/services/abstract-countdown.service';
 import { setConversationListItems, setFullPeopleItems, setPeopleListItems } from 'src/app/NgRx/actions/people-list.actions';
 import { selectPeopleListItems } from 'src/app/NgRx/selectors/people-list.selector';
 import { selectConversationListItems } from 'src/app/NgRx/selectors/conversation-list.selector';
@@ -17,6 +17,7 @@ import { Router } from '@angular/router';
 import { CreateFormDialogComponent } from '../create-form-dialog/create-form-dialog.component';
 import { ApiPeopleListService } from '../../services/api-people-list.service';
 import { IConversationItem, IPeopleItem } from '../../models/people-list-response.model';
+import { PeopleCountdownService } from '../../services/people-countdown.service';
 
 @Component({
   selector: 'app-people-list',
@@ -39,14 +40,14 @@ export class PeopleListComponent implements OnInit {
     private snackBar: MatSnackBar,
     private localService: LocalService,
     private dialog: MatDialog,
-    public countdown: CountdownService,
+    public countdown: PeopleCountdownService,
     private cdr: ChangeDetectorRef,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     this.getUsersList();
-    this.countdown$ = this.countdown.getTimerT2();
+    this.countdown$ = this.countdown.getTimerT1();
     this.countdown$.subscribe((countdownValue) => {
       this.isRefreshDisabled = countdownValue !== 0;
       this.cdr.markForCheck();
@@ -55,8 +56,8 @@ export class PeopleListComponent implements OnInit {
   }
 
   refreshPeopleList(): void {
-    this.countdown.resetT2();
-    this.countdown.startT2();
+    this.countdown.resetT1();
+    this.countdown.startT1().subscribe();
 
     this.isRefreshDisabled = true;
     forkJoin([

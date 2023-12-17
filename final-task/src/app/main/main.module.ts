@@ -10,6 +10,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { PeopleListComponent } from './components/people-list/people-list.component';
 import { GroupListComponent } from './components/group-list/group-list.component';
 import { MainComponent } from './pages/main/main.component';
@@ -28,7 +29,8 @@ const MATERIAL_IMPORTS = [
   MatListModule,
   MatDividerModule,
   MatSnackBarModule,
-  MatDialogModule
+  MatDialogModule,
+  MatToolbarModule
 ];
 
 @NgModule({

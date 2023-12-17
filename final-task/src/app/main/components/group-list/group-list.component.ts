@@ -9,11 +9,11 @@ import {
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalService } from 'src/app/core/services/local.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { CountdownService } from 'src/app/core/services/countdown.service';
 import { ApiGroupListService } from '../../services/api-group-list.service';
 import { IGroupItem } from '../../models/group-list-response.model';
 import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { CreateFormDialogComponent } from '../create-form-dialog/create-form-dialog.component';
+import { GroupCountdownService } from '../../services/group-countdown.service';
 
 @Component({
   selector: 'app-group-list',
@@ -36,7 +36,7 @@ export class GroupListComponent implements OnInit {
     private snackBar: MatSnackBar,
     private localService: LocalService,
     private dialog: MatDialog,
-    public countdown: CountdownService
+    public countdown: GroupCountdownService
   ) {}
 
   ngOnInit(): void {
@@ -51,7 +51,7 @@ export class GroupListComponent implements OnInit {
 
   refreshGroupListTrigger(): void {
     this.countdown.resetT1();
-    this.countdown.startT1();
+    this.countdown.startT1().subscribe();
 
     this.subject.next();
   }

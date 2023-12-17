@@ -3,10 +3,12 @@
     <mat-icon>logout</mat-icon>
   </button>
   <div class="form-wrapper">
-    <div class="header">
-      <h2>Profile</h2>
-    </div>
     <mat-list *ngIf="userData" class="user-data">
+      <mat-list-item>
+        <div class="header">
+          <h2>Profile</h2>
+        </div>
+      </mat-list-item>
       <mat-list-item class="user-data-item">
         <div class="uid">
           <span>User ID:&nbsp;</span><span>{{userData.uid.S}}</span>

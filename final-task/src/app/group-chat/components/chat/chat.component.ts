@@ -77,7 +77,7 @@ export class ChatComponent implements OnInit {
       .subscribe();
   }
 
-  refreshMessages(): void {
+  refreshMessages(): void { // Добавить обновление при повторном переходе
     this.apiGroupChatService.getGroupMessages(this.currentGroupId, this.lastMessageTime)
       .pipe(
         catchError((err) => {
@@ -161,6 +161,7 @@ export class ChatComponent implements OnInit {
       });
   }
 
+  // Сделать удаление только своей. Пробрасывать id?
   deleteGroup(): void {
     this.openConfirmationDialog()
       .pipe(
