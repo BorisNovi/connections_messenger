@@ -5,9 +5,9 @@
         <mat-icon>keyboard_arrow_left</mat-icon>
       </button>
     </a>
-    <button mat-icon-button (click)="refreshMessages()" color="primary" [disabled]="isRefreshDisabled">
+    <button mat-icon-button (click)="refreshMessagesTrigger()" color="primary" [disabled]="isRefreshDisabled">
       <mat-icon *ngIf="!isRefreshDisabled">refresh</mat-icon>
-      <span *ngIf="isRefreshDisabled">Countdown-digits</span>
+      <span *ngIf="isRefreshDisabled">{{countdown$ | async}}</span>
     </button>
     <button *ngIf="myUid" mat-icon-button (click)="deleteGroup()" color="warn" [disabled]="isDeleteDisabled">
       <mat-icon>close</mat-icon>

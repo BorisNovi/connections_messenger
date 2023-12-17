@@ -6,20 +6,21 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalService } from 'src/app/core/services/local.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  Observable, Subscription, catchError, map, of, switchMap, take
+  Observable, catchError, map, of, switchMap, take, tap
 } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { selectPeopleListItems } from 'src/app/NgRx/selectors/people-list.selector';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PeopleLoaderService } from 'src/app/core/services/people-loader.service';
-import { addGroupChatMessage, addGroupChatMessages, getGroupChatMessages } from 'src/app/NgRx/actions/group-chat.action';
+import { addGroupChatMessages, getGroupChatMessages } from 'src/app/NgRx/actions/group-chat.action';
 import { selectMessagesByGroupID } from 'src/app/NgRx/selectors/group-chat.selector';
 import { ApiCommonService } from 'src/app/core/services/api-common.service';
 import { deleteGroupListItem } from 'src/app/NgRx/actions/group-list.action';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { IGroupMessageItem, IGroupMessagesResponse } from '../../models/group-chat-messages-response.model';
+import { IGroupMessageItem } from '../../models/group-chat-messages-response.model';
 import { ApiGroupChatService } from '../../services/api-group-chat.service';
 import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { GroupChatCountdownService } from '../../services/group-chat-countdown.service';
 
 @Component({
   selector: 'app-chat',
@@ -36,6 +37,7 @@ export class ChatComponent implements OnInit {
   messageForm: FormGroup;
   lastMessageTime = 0;
   isDeleteDisabled = false;
+  countdown$!: Observable<number>;
 
   constructor(
     private apiGroupChatService: ApiGroupChatService,
@@ -49,7 +51,8 @@ export class ChatComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private countdown: GroupChatCountdownService
   ) {
     this.messageForm = this.formBuilder.group({
       message: ['', [Validators.required]]
@@ -62,6 +65,30 @@ export class ChatComponent implements OnInit {
     });
     this.getMessages();
     this.checkNames();
+    this.refreshIfLoaded();
+    this.countdown$ = this.countdown.getTimer();
+    this.countdown$.subscribe((countdownValue) => {
+      this.isRefreshDisabled = countdownValue !== 0;
+      this.cdr.markForCheck();
+    });
+    this.isRefreshDisabled = false;
+  }
+
+  refreshMessagesTrigger(): void {
+    this.countdown.reset();
+    this.countdown.start().subscribe();
+
+    this.refreshMessages();
+  }
+
+  refreshIfLoaded(): void {
+    this.store.select(selectMessagesByGroupID(this.currentGroupId))
+      .pipe(
+        take(1),
+        tap((messages) => { if (messages.length) this.refreshMessages(); }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe();
   }
 
   checkNames(): void {
@@ -92,18 +119,11 @@ export class ChatComponent implements OnInit {
         this.store.dispatch(addGroupChatMessages({
           payload: { groupID: this.currentGroupId, messages: messages.Items }
         }));
-
-        const sortedMessages = messages.Items
-          .slice().sort((a, b) => b.createdAt.S.localeCompare(a.createdAt.S));
-
-        this.lastMessageTime = +sortedMessages[0].createdAt.S;
-
-        this.messages$ = of(sortedMessages);
-        this.cdr.markForCheck();
       });
   }
 
-  getMessages(): void { // Проверить правильность, уточнить, как сделать с since
+  getMessages(): void {
+    this.isRefreshDisabled = true;
     this.store.select(selectMessagesByGroupID(this.currentGroupId))
       .pipe(
         switchMap((messages) => (messages.length
@@ -145,19 +165,9 @@ export class ChatComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(() => {
-        this.store.dispatch(addGroupChatMessage({
-          payload: {
-            groupID: this.currentGroupId,
-            message: {
-              message: { S: this.messageForm.value.message },
-              authorID: { S: this.myUid || '' },
-              createdAt: { S: new Date().getTime().toString() }
-            }
-          }
-        }));
-        this.refreshMessages();
         this.messageForm.reset();
         this.openSnackBar('Message sent!');
+        this.refreshMessages();
       });
   }
 

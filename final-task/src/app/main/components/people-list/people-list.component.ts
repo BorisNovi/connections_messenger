@@ -4,12 +4,11 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import {
-  Observable, catchError, forkJoin, map, of, switchMap, take, tap, zip,
+  Observable, catchError, forkJoin, map, of, switchMap,
 } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalService } from 'src/app/core/services/local.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { CountdownService } from 'src/app/core/services/abstract-countdown.service';
 import { setConversationListItems, setFullPeopleItems, setPeopleListItems } from 'src/app/NgRx/actions/people-list.actions';
 import { selectPeopleListItems } from 'src/app/NgRx/selectors/people-list.selector';
 import { selectConversationListItems } from 'src/app/NgRx/selectors/conversation-list.selector';
@@ -47,7 +46,7 @@ export class PeopleListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUsersList();
-    this.countdown$ = this.countdown.getTimerT1();
+    this.countdown$ = this.countdown.getTimer();
     this.countdown$.subscribe((countdownValue) => {
       this.isRefreshDisabled = countdownValue !== 0;
       this.cdr.markForCheck();
@@ -56,8 +55,8 @@ export class PeopleListComponent implements OnInit {
   }
 
   refreshPeopleList(): void {
-    this.countdown.resetT1();
-    this.countdown.startT1().subscribe();
+    this.countdown.reset();
+    this.countdown.start().subscribe();
 
     this.isRefreshDisabled = true;
     forkJoin([
@@ -111,7 +110,7 @@ export class PeopleListComponent implements OnInit {
   }
 
   public isHighlighted(uid: string): Observable<boolean> {
-    // Переделать в директиву params conversation list и uid
+    if (!this.conversationsList) return of(false);
     return of(this.conversationsList).pipe(
       map((conversations) => conversations
         .some((conversation) => conversation.companionID.S === uid))

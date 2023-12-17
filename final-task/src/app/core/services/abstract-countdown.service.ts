@@ -3,26 +3,26 @@ import {
 } from 'rxjs';
 
 export abstract class CountdownService {
-  private countdownSubjectT1 = new BehaviorSubject<number>(60);
+  private countdownSubject = new BehaviorSubject<number>(60);
 
   constructor() {}
 
-  getTimerT1(): Observable<number> {
-    return this.countdownSubjectT1.asObservable();
+  getTimer(): Observable<number> {
+    return this.countdownSubject.asObservable();
   }
 
-  startT1(): Observable<number> {
-    return this.countdownSubjectT1.pipe(
+  start(): Observable<number> {
+    return this.countdownSubject.pipe(
       take(1),
       switchMap((initialValue) => timer(0, 1000).pipe(
         map((tick) => initialValue - tick),
         take(initialValue + 1)
       )),
-      tap((countdownValue) => this.countdownSubjectT1.next(countdownValue))
+      tap((countdownValue) => this.countdownSubject.next(countdownValue))
     );
   }
 
-  resetT1(): void {
-    this.countdownSubjectT1.next(60);
+  reset(): void {
+    this.countdownSubject.next(60);
   }
 }
