@@ -5,10 +5,9 @@
 @include mat.core();
 
 // Define a dark theme
-$dark-theme: mat.define-dark-theme((color: (primary: mat.define-palette(mat.$pink-palette),
-        accent: mat.define-palette(mat.$pink-palette),
+$dark-theme: mat.define-dark-theme((color: (primary: mat.define-palette(mat.$purple-palette),
+        accent: mat.define-palette(mat.$purple-palette),
       ),
-      // Only include `typography` and `density` in the default dark theme.
       typography: mat.define-typography-config(),
       density: 0,
     ));
@@ -19,20 +18,7 @@ $light-theme: mat.define-light-theme((color: (primary: mat.define-palette(mat.$d
       ),
     ));
 
-// Apply the dark theme by default
-@include mat.all-component-themes($dark-theme);
-
-
-// Apply the light theme only when the user prefers light themes.
-@media (prefers-color-scheme: light) {
-  // Use the `-color` mixins to only apply color styles without reapplying the same
-  // typography and density styles.
-  @include mat.all-component-colors($light-theme);
-
-  body {
-    background-color: #fff !important;
-  }
-}
+@include mat.all-component-themes($light-theme);
 
 html,
 body {
@@ -42,5 +28,9 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: #222;
+}
+
+.dark {
+  @include mat.all-component-colors($dark-theme);
+  background-color: #222 !important;
 }

@@ -6,6 +6,12 @@
     <button *ngIf="isAuthenticated | async" mat-icon-button color="primary" routerLink="/profile">
       <mat-icon>account_circle</mat-icon>
     </button>
+
+    <button mat-icon-button color="primary" (click)="themeService.toggleTheme()">
+      <mat-icon *ngIf="themeService.isDarkTheme">brightness_3</mat-icon>
+      <mat-icon *ngIf="!themeService.isDarkTheme">brightness_5</mat-icon>
+    </button>
+
     <button *ngIf="(isAuthenticated | async) === false" mat-icon-button color="primary" routerLink="/signup">
       <mat-icon>person_add_icon</mat-icon>
     </button>
