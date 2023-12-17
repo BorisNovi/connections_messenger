@@ -9,11 +9,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { ChatComponent } from './components/chat/chat.component';
 import { AddNamePipe } from './pipes/add-name.pipe';
 import { IsMineMessageDirective } from './directives/is-mine-message.directive';
 import { DeleteConfirmationDialogMsgsComponent } from './components/delete-confirmation-dialog/delete-confirmation-dialog.component';
-import { MatToolbarModule } from '@angular/material/toolbar';
 
 const routes: Routes = [
   { path: '', component: ChatComponent },
