@@ -14,3 +14,16 @@ export const signinGuard: CanActivateFn = () => {
   }
   return router.createUrlTree(['/signin']);
 };
+
+export const sigedninGuard: CanActivateFn = () => {
+  const router = inject(Router);
+  const localService = inject(LocalService);
+  const isAuthenticated = localService.getData('email')
+  && localService.getData('token')
+  && localService.getData('uid');
+
+  if (!isAuthenticated) {
+    return true;
+  }
+  return router.createUrlTree(['/']);
+};
