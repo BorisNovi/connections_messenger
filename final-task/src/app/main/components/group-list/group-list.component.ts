@@ -89,9 +89,9 @@ export class GroupListComponent implements OnInit {
       });
   }
 
-  createGroup(): void {
+  createGroup(value = ''): void {
     let groupNameFromDialog: string;
-    this.openCreationDialog()
+    this.openCreationDialog(value)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         switchMap((groupName) => {
@@ -102,7 +102,8 @@ export class GroupListComponent implements OnInit {
                 catchError((err) => {
                   this.isDeleteDisabled = false;
                   this.openSnackBar(err.error.message || 'No Internet connection!');
-                  this.createGroup(); // Если запрос не успешен, откроем диалоговое окно снова
+                  // Если запрос не успешен, откроем диалоговое окно снова со старым значением
+                  this.createGroup(groupNameFromDialog);
                   return of();
                 })
               );
@@ -148,9 +149,11 @@ export class GroupListComponent implements OnInit {
       });
   }
 
-  openCreationDialog(): Observable<string | undefined> {
+  openCreationDialog(value = ''): Observable<string | undefined> {
     const dialogRef: MatDialogRef<CreateFormDialogComponent, string> = this.dialog
-      .open(CreateFormDialogComponent);
+      .open(CreateFormDialogComponent, {
+        data: { value },
+      });
     return dialogRef.beforeClosed();
   }
 

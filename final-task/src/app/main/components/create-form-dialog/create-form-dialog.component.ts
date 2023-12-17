@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -28,10 +28,11 @@ export class CreateFormDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<CreateFormDialogComponent>,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) public data: { value: string }
   ) {
     this.createForm = this.formBuilder.group({
-      groupName: ['', [Validators.required, Validators.maxLength(30)]]
+      groupName: [data.value, [Validators.required, Validators.maxLength(30)]]
     });
   }
 
