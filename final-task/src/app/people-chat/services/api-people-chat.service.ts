@@ -38,10 +38,10 @@ export class ApiPeopleChatService {
     return this.http.get<IPeopleMessagesResponse>(dataUrl, { headers });
   }
 
-  sendPeopleMessage(groupID: string, message: string): Observable<void> {
+  sendPeopleMessage(conversationID: string, message: string): Observable<void> {
     const headers = this.createHeaders();
     const dataUrl = `${this.baseUrl}angular/conversations/append`;
-    const body = { groupID, message };
+    const body = { conversationID, message };
 
     return this.http.post<void>(dataUrl, body, { headers });
   }

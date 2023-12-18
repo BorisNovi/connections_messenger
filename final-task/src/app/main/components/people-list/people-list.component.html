@@ -10,7 +10,7 @@
     <mat-list-item *ngFor="let item of peopleList$ | async">
       <div class="people-content-wrapper" >
         <div class="people-content" [ngClass]="{ 'highlighted': isHighlighted(item.uid.S) | async}">
-          <button mat-button (click)="goToConversation(item.uid.S)" class="go-to">
+          <button mat-button (click)="goToConversation(item.uid.S, item.name.S)" class="go-to">
             <mat-icon>person</mat-icon>
             <span>{{item.name.S}}</span>
           </button>

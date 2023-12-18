@@ -83,16 +83,16 @@ export class PeopleListComponent implements OnInit {
       });
   }
 
-  public goToConversation(uid: string): void {
+  public goToConversation(uid: string, conversationName: string): void {
     const foundConversation = this.conversationsList
       .find((conversation) => conversation.companionID.S === uid);
 
     if (foundConversation) {
-      this.router.navigate([`/conversation/${foundConversation.id.S}`]);
+      this.router.navigate([`/conversation/${foundConversation.id.S}`], { queryParams: { conversationName } });
     } else {
       this.createConversation(uid).subscribe((conversationData) => {
         this.openSnackBar('UConversation created successfully!');
-        this.router.navigate([`/conversation/${conversationData.conversationID}`]);
+        this.router.navigate([`/conversation/${conversationData.conversationID}`], { queryParams: { conversationName } });
       });
     }
   }

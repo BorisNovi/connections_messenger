@@ -15,13 +15,16 @@ import { PeopleListState, ConversationListState } from './people-list.state';
 import { PeopleListReducer, ConversationListReducer } from './people-list.reducer';
 import { GroupChatState } from './group-chat.state';
 import { GroupChatReducer } from './group-chat.reducer';
+import { PeopleChatState } from './people-chat.state';
+import { PeopleChatReducer } from './people-chat.reducer';
 
 export interface State {
   profile: ProfileState,
   groups: GroupListState,
   people: PeopleListState,
   conversations: ConversationListState,
-  groupChats: GroupChatState
+  groupChats: GroupChatState,
+  peopleChats: PeopleChatState
 }
 
 export const reducers: ActionReducerMap<State> = {
@@ -29,7 +32,8 @@ export const reducers: ActionReducerMap<State> = {
   groups: GroupListReducer,
   people: PeopleListReducer,
   conversations: ConversationListReducer,
-  groupChats: GroupChatReducer
+  groupChats: GroupChatReducer,
+  peopleChats: PeopleChatReducer
 };
 
 export const metaReducers: MetaReducer<State>[] = isDevMode() ? [] : [];

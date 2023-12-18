@@ -1,0 +1,70 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+
+  .buttons-container {
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    background-color: transparent;
+
+    .group-name {
+      padding: 0 25px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+    }
+
+  }
+
+  .list-container {
+    .group-list {
+      display: flex;
+      flex-direction: column-reverse;
+      overflow: scroll;
+      position: absolute;
+      height: 70%;
+      width: 100%;
+
+      .group-message {
+        min-height: 100px;
+        height: fit-content;
+        flex-shrink: 0;
+
+        .message-content-wrapper {
+          .message {
+            text-wrap: wrap;
+          }
+        }
+      }
+
+      .mine {
+        align-self: flex-end;
+        text-align: end;
+      }
+    }
+  }
+
+
+  .message-form-container {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+
+    .message-form {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .message-form-field {
+        width: 90%;
+      }
+    }
+  }
+}
