@@ -11,3 +11,5 @@ export const setFullPeopleItems = createAction(
 );
 
 export const deleteConversationListItem = createAction('[CONVERSATION LIST] delete', props<{ conversationID: string }>());
+
+export const addConversationListItem = createAction('[CONVERSATION LIST] add', props<{ conversationItem: IConversationItem }>());

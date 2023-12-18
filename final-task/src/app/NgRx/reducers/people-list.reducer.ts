@@ -3,7 +3,11 @@ import {
   PeopleListState, initialPeopleListState, ConversationListState, initialConversationListState
 } from './people-list.state';
 import {
-  setPeopleListItems, setConversationListItems, setFullPeopleItems, deleteConversationListItem
+  setPeopleListItems,
+  setConversationListItems,
+  setFullPeopleItems,
+  deleteConversationListItem,
+  addConversationListItem
 } from '../actions/people-list.actions';
 
 export const PeopleListReducer = createReducer(
@@ -31,6 +35,14 @@ export const ConversationListReducer = createReducer(
   on(deleteConversationListItem, (state, { conversationID }): ConversationListState => {
     const updatedConversationListItems = state.conversationItems
       .filter((item) => item.id.S !== conversationID);
+
+    return {
+      ...state,
+      conversationItems: [...updatedConversationListItems]
+    };
+  }),
+  on(addConversationListItem, (state, { conversationItem }): ConversationListState => {
+    const updatedConversationListItems = [...state.conversationItems, conversationItem];
 
     return {
       ...state,

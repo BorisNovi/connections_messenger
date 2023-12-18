@@ -9,7 +9,7 @@ import {
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalService } from 'src/app/core/services/local.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { setConversationListItems, setFullPeopleItems, setPeopleListItems } from 'src/app/NgRx/actions/people-list.actions';
+import { addConversationListItem, setConversationListItems, setFullPeopleItems, setPeopleListItems } from 'src/app/NgRx/actions/people-list.actions';
 import { selectPeopleListItems } from 'src/app/NgRx/selectors/people-list.selector';
 import { selectConversationListItems } from 'src/app/NgRx/selectors/conversation-list.selector';
 import { Router } from '@angular/router';
@@ -91,7 +91,13 @@ export class PeopleListComponent implements OnInit {
       this.router.navigate([`/conversation/${foundConversation.id.S}`], { queryParams: { conversationName } });
     } else {
       this.createConversation(uid).subscribe((conversationData) => {
-        this.openSnackBar('UConversation created successfully!');
+        this.openSnackBar('Conversation created successfully!');
+        this.store.dispatch(addConversationListItem({
+          conversationItem: {
+            id: { S: conversationData.conversationID },
+            companionID: { S: uid }
+          }
+        }));
         this.router.navigate([`/conversation/${conversationData.conversationID}`], { queryParams: { conversationName } });
       });
     }
