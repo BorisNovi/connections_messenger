@@ -52,6 +52,8 @@ export class ProfilePageComponent implements OnInit {
           : this.apiProfileService.getProfileData())),
         catchError((err) => {
           this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.clearAll();
+          this.router.navigate(['/signin']);
           return of();
         }),
         takeUntilDestroyed(this.destroyRef)
@@ -85,6 +87,11 @@ export class ProfilePageComponent implements OnInit {
     }
   }
 
+  clearAll(): void {
+    this.localService.clearData();
+    this.cookieService.clearData();
+  }
+
   cancelUpdateName(): void {
     this.isUpdatable = false;
   }
@@ -99,13 +106,14 @@ export class ProfilePageComponent implements OnInit {
       .pipe(
         catchError((err) => {
           this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.clearAll();
+          this.router.navigate(['/signin']);
           return of();
         }),
         takeUntilDestroyed(this.destroyRef)
       ).subscribe(() => {
-        this.localService.clearData();
-        this.cookieService.clearData();
         this.openSnackBar('Sign out successful!');
+        this.clearAll();
         this.isSignoutButtonDisabled = false;
         this.router.navigate(['/signin']);
       });

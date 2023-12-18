@@ -1,5 +1,5 @@
 import { DestroyRef, Injectable } from '@angular/core';
-import { Observable, catchError, of } from 'rxjs';
+import { catchError, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { setPeopleListItems } from 'src/app/NgRx/actions/people-list.actions';
