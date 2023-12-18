@@ -118,8 +118,8 @@ export class PersonalChatComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((messages) => {
-        if (!messages.Items.length) return;
         this.notificationService.openSnackBar('Messages updated successfully!');
+        if (!messages.Items.length) return;
         this.store.dispatch(addPeopleChatMessages({
           payload: { conversationID: this.currentConversationId, messages: messages.Items }
         }));
