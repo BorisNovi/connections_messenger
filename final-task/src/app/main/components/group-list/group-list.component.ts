@@ -6,9 +6,9 @@ import { selectGroupListItems } from 'src/app/NgRx/selectors/group-list.selector
 import {
   Observable, catchError, of, switchMap,
 } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalService } from 'src/app/core/services/local.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { NotificationService } from 'src/app/core/services/notification.service';
 import { ApiGroupListService } from '../../services/api-group-list.service';
 import { IGroupItem } from '../../models/group-list-response.model';
 import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
@@ -21,7 +21,6 @@ import { GroupCountdownService } from '../../services/group-countdown.service';
   styleUrls: ['./group-list.component.scss']
 })
 export class GroupListComponent implements OnInit {
-  delay = 2000;
   isDeleteDisabled = false;
   isRefreshDisabled = false;
   groupList!: IGroupItem[];
@@ -32,7 +31,7 @@ export class GroupListComponent implements OnInit {
     private apiGroupListService: ApiGroupListService,
     private destroyRef: DestroyRef,
     private store: Store,
-    private snackBar: MatSnackBar,
+    private notificationService: NotificationService,
     private localService: LocalService,
     private dialog: MatDialog,
     public countdown: GroupCountdownService
@@ -58,14 +57,14 @@ export class GroupListComponent implements OnInit {
     this.apiGroupListService.getGroupList()
       .pipe(
         catchError((err) => {
-          this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.notificationService.openSnackBar(err.error.message || 'No Internet connection!');
           this.isRefreshDisabled = false;
           return of();
         }),
         takeUntilDestroyed(this.destroyRef)
       ).subscribe((data) => {
         this.groupList = data.Items;
-        this.openSnackBar('Groups refreshed successfully!');
+        this.notificationService.openSnackBar('Groups refreshed successfully!');
         this.store.dispatch(setGroupListItems({ groupItems: data.Items }));
       });
   }
@@ -78,7 +77,7 @@ export class GroupListComponent implements OnInit {
           ? of({ Items: groupListItems })
           : this.apiGroupListService.getGroupList())),
         catchError((err) => {
-          this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.notificationService.openSnackBar(err.error.message || 'No Internet connection!');
           this.isRefreshDisabled = false;
           return of();
         }),
@@ -101,7 +100,7 @@ export class GroupListComponent implements OnInit {
               .pipe(
                 catchError((err) => {
                   this.isDeleteDisabled = false;
-                  this.openSnackBar(err.error.message || 'No Internet connection!');
+                  this.notificationService.openSnackBar(err.error.message || 'No Internet connection!');
                   // Если запрос не успешен, откроем диалоговое окно снова со старым значением
                   this.createGroup(groupNameFromDialog);
                   return of();
@@ -118,7 +117,7 @@ export class GroupListComponent implements OnInit {
           createdBy: { S: this.localService.getData('uid') || '' },
           name: { S: groupNameFromDialog },
         };
-        this.openSnackBar('Group created successfully!');
+        this.notificationService.openSnackBar('Group created successfully!');
         this.store.dispatch(setGroupListItem({ groupItem: stateData }));
       });
   }
@@ -134,7 +133,7 @@ export class GroupListComponent implements OnInit {
               .pipe(
                 catchError((err) => {
                   this.isDeleteDisabled = false;
-                  this.openSnackBar(err.error.message || 'No Internet connection!');
+                  this.notificationService.openSnackBar(err.error.message || 'No Internet connection!');
                   return of();
                 })
               );
@@ -144,7 +143,7 @@ export class GroupListComponent implements OnInit {
       )
       .subscribe(() => {
         this.isDeleteDisabled = false;
-        this.openSnackBar('Group deleted successfully!');
+        this.notificationService.openSnackBar('Group deleted successfully!');
         this.store.dispatch(deleteGroupListItem({ groupID }));
       });
   }
@@ -161,9 +160,5 @@ export class GroupListComponent implements OnInit {
     const dialogRef: MatDialogRef<DeleteConfirmationDialogComponent, boolean> = this.dialog
       .open(DeleteConfirmationDialogComponent);
     return dialogRef.afterClosed();
-  }
-
-  openSnackBar(message: string): void {
-    this.snackBar.open(message, 'Ok', { duration: this.delay });
   }
 }

@@ -14,7 +14,7 @@
     overflow: scroll;
     position: fixed;
 
-    .group-content-wrapper{
+    .group-content-wrapper {
       .group-content {
         height: 45px;
         display: flex;
@@ -24,14 +24,14 @@
         padding: 0 5px;
 
 
-          .go-to {
-            border: none;
-            background-color: transparent;
-            font-size: 16px;
-            cursor: pointer;
-            width: 100%;
-            justify-content: flex-start;
-          }
+        .go-to {
+          border: none;
+          background-color: transparent;
+          font-size: 16px;
+          cursor: pointer;
+          width: 100%;
+          justify-content: flex-start;
+        }
       }
     }
   }

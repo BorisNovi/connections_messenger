@@ -15,5 +15,5 @@ import { MatDialogRef } from '@angular/material/dialog';
 `,
 })
 export class DeleteConfirmationDialogMsgsComponent {
-  constructor(public dialogRef: MatDialogRef<DeleteConfirmationDialogMsgsComponent>) {}
+  constructor(public dialogRef: MatDialogRef<DeleteConfirmationDialogMsgsComponent>) { }
 }

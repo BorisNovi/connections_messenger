@@ -7,7 +7,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ChatComponent } from './components/chat/chat.component';
@@ -25,7 +24,6 @@ const MATERIAL_IMPORTS = [
   MatFormFieldModule,
   MatButtonModule,
   MatListModule,
-  MatSnackBarModule,
   MatDialogModule,
   MatToolbarModule
 ];

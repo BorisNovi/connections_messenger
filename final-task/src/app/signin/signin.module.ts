@@ -7,7 +7,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SigninFormComponent } from './components/signin-form/signin-form.component';
 
 const routes: Routes = [
@@ -20,7 +19,6 @@ const MATERIAL_IMPORTS = [
   MatButtonModule,
   MatFormFieldModule,
   MatInputModule,
-  MatSnackBarModule
 ];
 
 @NgModule({

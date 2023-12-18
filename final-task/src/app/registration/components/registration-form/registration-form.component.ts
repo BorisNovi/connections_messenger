@@ -2,8 +2,8 @@ import { Component, DestroyRef, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { catchError, of, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { NotificationService } from 'src/app/core/services/notification.service';
 import { ApiRegistrationService } from '../../services/api-registration.service';
 
 @Component({
@@ -15,14 +15,13 @@ export class RegistrationFormComponent implements OnInit {
   public registerForm!: FormGroup;
   isHidden = true;
   isButtonDisabled = false;
-  delay = 2000;
   lastErrorEmail = '';
 
   constructor(
     private formBuilder: FormBuilder,
     private registrationService: ApiRegistrationService,
     private destroyRef: DestroyRef,
-    private snackBar: MatSnackBar,
+    private notificationService: NotificationService,
     private router: Router,
   ) { }
 
@@ -50,11 +49,11 @@ export class RegistrationFormComponent implements OnInit {
       this.registrationService.registerUser(this.registerForm.value)
         .pipe(
           tap(() => {
-            this.openSnackBar('Registration successful!');
+            this.notificationService.openSnackBar('Registration successful!');
             this.router.navigate(['signin']);
           }),
           catchError((err) => {
-            this.openSnackBar(err.error.message || 'No Internet connection!');
+            this.notificationService.openSnackBar(err.error.message || 'No Internet connection!');
             if (err.error.type === 'PrimaryDuplicationException') {
               this.lastErrorEmail = this.registerForm.get('email')?.value;
             }
@@ -64,9 +63,5 @@ export class RegistrationFormComponent implements OnInit {
         )
         .subscribe();
     }
-  }
-
-  openSnackBar(message: string): void {
-    this.snackBar.open(message, 'Ok', { duration: this.delay });
   }
 }

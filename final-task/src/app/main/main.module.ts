@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -28,7 +27,6 @@ const MATERIAL_IMPORTS = [
   MatButtonModule,
   MatListModule,
   MatDividerModule,
-  MatSnackBarModule,
   MatDialogModule,
   MatToolbarModule
 ];
@@ -44,7 +42,6 @@ const MATERIAL_IMPORTS = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    // FormsModule,
     ReactiveFormsModule,
     MATERIAL_IMPORTS
   ]

@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalService } from 'src/app/core/services/local.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -17,6 +16,7 @@ import { selectMessagesByGroupID } from 'src/app/NgRx/selectors/group-chat.selec
 import { ApiCommonService } from 'src/app/core/services/api-common.service';
 import { deleteGroupListItem } from 'src/app/NgRx/actions/group-list.action';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { NotificationService } from 'src/app/core/services/notification.service';
 import { IGroupMessageItem } from '../../models/group-chat-messages-response.model';
 import { ApiGroupChatService } from '../../services/api-group-chat.service';
 import { DeleteConfirmationDialogMsgsComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
@@ -29,7 +29,6 @@ import { GroupChatCountdownService } from '../../services/group-chat-countdown.s
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChatComponent implements OnInit {
-  delay = 2000;
   isRefreshDisabled = false;
   myUid = this.localService.getData('uid');
   createdBy = '';
@@ -47,7 +46,7 @@ export class ChatComponent implements OnInit {
     private peopleLoader: PeopleLoaderService,
     private destroyRef: DestroyRef,
     private store: Store,
-    private snackBar: MatSnackBar,
+    private notificationService: NotificationService,
     private localService: LocalService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
@@ -112,11 +111,11 @@ export class ChatComponent implements OnInit {
       .subscribe();
   }
 
-  refreshMessages(): void { // Добавить обновление при повторном переходе
+  refreshMessages(): void {
     this.apiGroupChatService.getGroupMessages(this.currentGroupId, this.lastMessageTime)
       .pipe(
         catchError((err) => {
-          this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.notificationService.openSnackBar(err.error.message || 'No Internet connection!');
           this.isRefreshDisabled = false;
           return of();
         }),
@@ -138,7 +137,7 @@ export class ChatComponent implements OnInit {
           ? of({ Items: messages })
           : this.apiGroupChatService.getGroupMessages(this.currentGroupId))),
         catchError((err) => {
-          this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.notificationService.openSnackBar(err.error.message || 'No Internet connection!');
           this.isRefreshDisabled = false;
           return of();
         }),
@@ -167,19 +166,18 @@ export class ChatComponent implements OnInit {
     )
       .pipe(
         catchError((err) => {
-          this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.notificationService.openSnackBar(err.error.message || 'No Internet connection!');
           return of();
         }),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(() => {
         this.messageForm.reset();
-        this.openSnackBar('Message sent!');
+        this.notificationService.openSnackBar('Message sent!');
         this.refreshMessages();
       });
   }
 
-  // Сделать удаление только своей. Пробрасывать id?
   deleteGroup(): void {
     this.openConfirmationDialog()
       .pipe(
@@ -191,7 +189,7 @@ export class ChatComponent implements OnInit {
               .pipe(
                 catchError((err) => {
                   this.isDeleteDisabled = false;
-                  this.openSnackBar(err.error.message || 'No Internet connection!');
+                  this.notificationService.openSnackBar(err.error.message || 'No Internet connection!');
                   return of();
                 })
               );
@@ -202,7 +200,7 @@ export class ChatComponent implements OnInit {
       .subscribe(() => {
         this.isDeleteDisabled = false;
         this.router.navigate(['/']);
-        this.openSnackBar('Group deleted successfully!');
+        this.notificationService.openSnackBar('Group deleted successfully!');
         this.store.dispatch(deleteGroupListItem({ groupID: this.currentGroupId }));
       });
   }
@@ -211,9 +209,5 @@ export class ChatComponent implements OnInit {
     const dialogRef: MatDialogRef<DeleteConfirmationDialogMsgsComponent, boolean> = this.dialog
       .open(DeleteConfirmationDialogMsgsComponent);
     return dialogRef.afterClosed();
-  }
-
-  openSnackBar(message: string): void {
-    this.snackBar.open(message, 'Ok', { duration: this.delay });
   }
 }

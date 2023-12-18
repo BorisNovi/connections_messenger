@@ -6,7 +6,6 @@ import { Store } from '@ngrx/store';
 import {
   Observable, catchError, forkJoin, map, of, switchMap,
 } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocalService } from 'src/app/core/services/local.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {
@@ -15,6 +14,7 @@ import {
 import { selectPeopleListItems } from 'src/app/NgRx/selectors/people-list.selector';
 import { selectConversationListItems } from 'src/app/NgRx/selectors/conversation-list.selector';
 import { Router } from '@angular/router';
+import { NotificationService } from 'src/app/core/services/notification.service';
 import { CreateFormDialogComponent } from '../create-form-dialog/create-form-dialog.component';
 import { ApiPeopleListService } from '../../services/api-people-list.service';
 import { IConversationItem, IPeopleItem } from '../../models/people-list-response.model';
@@ -27,7 +27,6 @@ import { PeopleCountdownService } from '../../services/people-countdown.service'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PeopleListComponent implements OnInit {
-  delay = 2000;
   isRefreshDisabled = false;
   peopleList$!: Observable<IPeopleItem[]>;
   conversationsList!: IConversationItem[];
@@ -38,7 +37,7 @@ export class PeopleListComponent implements OnInit {
     private apiPeopleListService: ApiPeopleListService,
     private destroyRef: DestroyRef,
     private store: Store,
-    private snackBar: MatSnackBar,
+    private notificationService: NotificationService,
     private localService: LocalService,
     private dialog: MatDialog,
     public countdown: PeopleCountdownService,
@@ -67,7 +66,7 @@ export class PeopleListComponent implements OnInit {
     ])
       .pipe(
         catchError((err) => {
-          this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.notificationService.openSnackBar(err.error.message || 'No Internet connection!');
           this.isRefreshDisabled = false;
           return of();
         }),
@@ -76,7 +75,7 @@ export class PeopleListComponent implements OnInit {
       .subscribe(([peopleData, conversationData]) => {
         this.peopleList$ = of(peopleData.Items);
         this.conversationsList = conversationData.Items;
-        this.openSnackBar('Users refreshed successfully!');
+        this.notificationService.openSnackBar('Users refreshed successfully!');
         this.store.dispatch(setFullPeopleItems({
           peopleItems: peopleData.Items,
           conversationItems: conversationData.Items
@@ -93,7 +92,7 @@ export class PeopleListComponent implements OnInit {
       this.router.navigate([`/conversation/${foundConversation.id.S}`], { queryParams: { conversationName } });
     } else {
       this.createConversation(uid).subscribe((conversationData) => {
-        this.openSnackBar('Conversation created successfully!');
+        this.notificationService.openSnackBar('Conversation created successfully!');
         this.store.dispatch(addConversationListItem({
           conversationItem: {
             id: { S: conversationData.conversationID },
@@ -109,7 +108,7 @@ export class PeopleListComponent implements OnInit {
     return this.apiPeopleListService.createConversation(companion)
       .pipe(
         catchError((err) => {
-          this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.notificationService.openSnackBar(err.error.message || 'No Internet connection!');
           this.isRefreshDisabled = false;
           return of();
         }),
@@ -132,7 +131,7 @@ export class PeopleListComponent implements OnInit {
           ? of({ Items: peopleListItems })
           : this.apiPeopleListService.getUsersList())),
         catchError((err) => {
-          this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.notificationService.openSnackBar(err.error.message || 'No Internet connection!');
           this.isRefreshDisabled = false;
           return of();
         }),
@@ -152,7 +151,7 @@ export class PeopleListComponent implements OnInit {
           ? of({ Items: conversationListItems })
           : this.apiPeopleListService.getConversationList())),
         catchError((err) => {
-          this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.notificationService.openSnackBar(err.error.message || 'No Internet connection!');
           this.isRefreshDisabled = false;
           return of();
         }),
@@ -172,9 +171,5 @@ export class PeopleListComponent implements OnInit {
     const dialogRef: MatDialogRef<CreateFormDialogComponent, string> = this.dialog
       .open(CreateFormDialogComponent);
     return dialogRef.beforeClosed();
-  }
-
-  openSnackBar(message: string): void {
-    this.snackBar.open(message, 'Ok', { duration: this.delay });
   }
 }

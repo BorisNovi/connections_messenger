@@ -7,7 +7,6 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { LocalService } from 'src/app/core/services/local.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -16,6 +15,7 @@ import { selectMessagesByConversationID } from 'src/app/NgRx/selectors/people-ch
 import { PeopleLoaderService } from 'src/app/core/services/people-loader.service';
 import { selectPeopleListItems } from 'src/app/NgRx/selectors/people-list.selector';
 import { deleteConversationListItem } from 'src/app/NgRx/actions/people-list.actions';
+import { NotificationService } from 'src/app/core/services/notification.service';
 import { PeopleChatCountdownService } from '../../services/people-chat-countdown.service';
 import { ApiPeopleChatService } from '../../services/api-people-chat.service';
 import { IPeopleMessageItem } from '../../models/people-chat-messages-response.model';
@@ -28,7 +28,6 @@ import { DeleteConfirmationDialogPeopleComponent } from '../delete-confirmation-
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PersonalChatComponent implements OnInit {
-  delay = 2000;
   isRefreshDisabled = false;
   myUid = this.localService.getData('uid');
   private currentConversationId = '';
@@ -44,7 +43,7 @@ export class PersonalChatComponent implements OnInit {
     private peopleLoader: PeopleLoaderService,
     private destroyRef: DestroyRef,
     private store: Store,
-    private snackBar: MatSnackBar,
+    private notificationService: NotificationService,
     private localService: LocalService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
@@ -112,7 +111,7 @@ export class PersonalChatComponent implements OnInit {
     this.apiPeopleChatService.getPeopleMessages(this.currentConversationId, this.lastMessageTime)
       .pipe(
         catchError((err) => {
-          this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.notificationService.openSnackBar(err.error.message || 'No Internet connection!');
           this.isRefreshDisabled = false;
           return of();
         }),
@@ -134,7 +133,7 @@ export class PersonalChatComponent implements OnInit {
           ? of({ Items: messages })
           : this.apiPeopleChatService.getPeopleMessages(this.currentConversationId))),
         catchError((err) => {
-          this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.notificationService.openSnackBar(err.error.message || 'No Internet connection!');
           this.isRefreshDisabled = false;
           return of();
         }),
@@ -163,14 +162,14 @@ export class PersonalChatComponent implements OnInit {
     )
       .pipe(
         catchError((err) => {
-          this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.notificationService.openSnackBar(err.error.message || 'No Internet connection!');
           return of();
         }),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(() => {
         this.messageForm.reset();
-        this.openSnackBar('Message sent!');
+        this.notificationService.openSnackBar('Message sent!');
         this.refreshMessages();
       });
   }
@@ -186,7 +185,7 @@ export class PersonalChatComponent implements OnInit {
               .pipe(
                 catchError((err) => {
                   this.isDeleteDisabled = false;
-                  this.openSnackBar(err.error.message || 'No Internet connection!');
+                  this.notificationService.openSnackBar(err.error.message || 'No Internet connection!');
                   return of();
                 })
               );
@@ -197,7 +196,7 @@ export class PersonalChatComponent implements OnInit {
       .subscribe(() => {
         this.isDeleteDisabled = false;
         this.router.navigate(['/']);
-        this.openSnackBar('Conversation deleted successfully!');
+        this.notificationService.openSnackBar('Conversation deleted successfully!');
         this.store.dispatch(deleteConversationListItem({
           conversationID: this.currentConversationId
         }));
@@ -208,9 +207,5 @@ export class PersonalChatComponent implements OnInit {
     const dialogRef: MatDialogRef<DeleteConfirmationDialogPeopleComponent, boolean> = this.dialog
       .open(DeleteConfirmationDialogPeopleComponent);
     return dialogRef.afterClosed();
-  }
-
-  openSnackBar(message: string): void {
-    this.snackBar.open(message, 'Ok', { duration: this.delay });
   }
 }

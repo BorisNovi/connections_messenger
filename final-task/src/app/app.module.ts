@@ -1,4 +1,4 @@
-import { NgModule, isDevMode } from '@angular/core';
+import { ErrorHandler, NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -14,6 +14,7 @@ import { RegistrationModule } from './registration/registration.module';
 import { SigninModule } from './signin/signin.module';
 import { ProfileModule } from './profile/profile.module';
 import { reducers, metaReducers } from './NgRx/reducers';
+import { GlobalErrorHandlerService } from './core/services/global-error-handler.service';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,7 @@ import { reducers, metaReducers } from './NgRx/reducers';
     StoreModule.forRoot(reducers, { metaReducers }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
   ],
-  providers: [],
+  providers: [{ provide: ErrorHandler, useClass: GlobalErrorHandlerService }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -5,10 +5,10 @@ import { Store } from '@ngrx/store';
 import { setProfileItems } from 'src/app/NgRx/actions/profile.action';
 import { selectProfileItems } from 'src/app/NgRx/selectors/profile.selector';
 import { catchError, of, switchMap } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { LocalService } from 'src/app/core/services/local.service';
 import { CookieService } from 'src/app/core/services/cookie.service';
+import { NotificationService } from 'src/app/core/services/notification.service';
 import { ApiProfileService } from '../../services/api-profile.service';
 import { IProfileResponse } from '../../models/profile-response.model';
 
@@ -19,7 +19,6 @@ import { IProfileResponse } from '../../models/profile-response.model';
 })
 export class ProfilePageComponent implements OnInit {
   public nameForm!: FormGroup;
-  delay = 2000;
   userData!: IProfileResponse;
   isUpdatable = false;
   isUpdButtonDisabled = false;
@@ -30,10 +29,10 @@ export class ProfilePageComponent implements OnInit {
     private destroyRef: DestroyRef,
     private formBuilder: FormBuilder,
     private store: Store,
-    private snackBar: MatSnackBar,
     private router: Router,
     private localService: LocalService,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -51,7 +50,7 @@ export class ProfilePageComponent implements OnInit {
           ? of(profileData)
           : this.apiProfileService.getProfileData())),
         catchError((err) => {
-          this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.notificationService.openSnackBar(err.error.message || 'No Internet connection!');
           this.clearAll();
           this.router.navigate(['/signin']);
           return of();
@@ -73,7 +72,7 @@ export class ProfilePageComponent implements OnInit {
       this.apiProfileService.changeProfileData(formData.name)
         .pipe(
           catchError((err) => {
-            this.openSnackBar(err.error.message || 'No Internet connection!');
+            this.notificationService.openSnackBar(err.error.message || 'No Internet connection!');
             return of();
           }),
           takeUntilDestroyed(this.destroyRef)
@@ -82,7 +81,7 @@ export class ProfilePageComponent implements OnInit {
           this.isUpdButtonDisabled = false;
           const updatedProfileItems = { ...this.userData, name: { S: formData.name } };
           this.store.dispatch(setProfileItems({ profileItems: updatedProfileItems }));
-          this.openSnackBar('Name updated successfully!');
+          this.notificationService.openSnackBar('Name updated successfully!');
         });
     }
   }
@@ -96,23 +95,19 @@ export class ProfilePageComponent implements OnInit {
     this.isUpdatable = false;
   }
 
-  openSnackBar(message: string): void {
-    this.snackBar.open(message, 'Ok', { duration: this.delay });
-  }
-
   signOut(): void {
     this.isSignoutButtonDisabled = true;
     this.apiProfileService.signoutUser()
       .pipe(
         catchError((err) => {
-          this.openSnackBar(err.error.message || 'No Internet connection!');
+          this.notificationService.openSnackBar(err.error.message || 'No Internet connection!');
           this.clearAll();
           this.router.navigate(['/signin']);
           return of();
         }),
         takeUntilDestroyed(this.destroyRef)
       ).subscribe(() => {
-        this.openSnackBar('Sign out successful!');
+        this.notificationService.openSnackBar('Sign out successful!');
         this.clearAll();
         this.isSignoutButtonDisabled = false;
         this.router.navigate(['/signin']);

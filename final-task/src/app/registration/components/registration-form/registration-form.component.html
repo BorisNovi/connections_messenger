@@ -25,17 +25,21 @@
     <div class="password">
       <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
-        <input matInput [type]="isHidden ? 'password' : 'text'" formControlName="password" appPasswordValidator required>
-        <button mat-icon-button matSuffix (click)="isHidden = !isHidden" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="isHidden">
+        <input matInput [type]="isHidden ? 'password' : 'text'" formControlName="password" appPasswordValidator
+          required>
+        <button mat-icon-button matSuffix (click)="isHidden = !isHidden" [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="isHidden">
           <mat-icon>{{isHidden ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
         <mat-error *ngIf="registerForm.controls['password'].errors?.['required']">Please enter a password</mat-error>
         <mat-error *ngIf="registerForm.controls['password'].errors?.['minlength']">Min length 8 chars</mat-error>
-        <mat-error *ngIf="registerForm.controls['password'].errors?.['pattern']">Use: mixed case, special chars, nums</mat-error>
+        <mat-error *ngIf="registerForm.controls['password'].errors?.['pattern']">Use: mixed case, special chars,
+          nums</mat-error>
       </mat-form-field>
     </div>
     <div class="button-register">
-      <button mat-raised-button type="submit" color="primary" (click)="onSubmit()" [disabled]="!registerForm.valid || isButtonDisabled">Register</button>
+      <button mat-raised-button type="submit" color="primary" (click)="onSubmit()"
+        [disabled]="!registerForm.valid || isButtonDisabled">Register</button>
     </div>
   </form>
 </div>
