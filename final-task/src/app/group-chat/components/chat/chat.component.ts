@@ -123,6 +123,7 @@ export class ChatComponent implements OnInit {
       )
       .subscribe((messages) => {
         if (!messages.Items.length) return;
+        this.notificationService.openSnackBar('Messages updated successfully!');
         this.store.dispatch(addGroupChatMessages({
           payload: { groupID: this.currentGroupId, messages: messages.Items }
         }));
