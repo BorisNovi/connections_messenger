@@ -2,7 +2,9 @@ import { createReducer, on } from '@ngrx/store';
 import {
   PeopleListState, initialPeopleListState, ConversationListState, initialConversationListState
 } from './people-list.state';
-import { setPeopleListItems, setConversationListItems, setFullPeopleItems } from '../actions/people-list.actions';
+import {
+  setPeopleListItems, setConversationListItems, setFullPeopleItems, deleteConversationListItem
+} from '../actions/people-list.actions';
 
 export const PeopleListReducer = createReducer(
   initialPeopleListState,
@@ -26,4 +28,13 @@ export const ConversationListReducer = createReducer(
     ...state,
     conversationItems
   })),
+  on(deleteConversationListItem, (state, { conversationID }): ConversationListState => {
+    const updatedConversationListItems = state.conversationItems
+      .filter((item) => item.id.S !== conversationID);
+
+    return {
+      ...state,
+      conversationItems: [...updatedConversationListItems]
+    };
+  })
 );

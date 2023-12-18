@@ -15,6 +15,7 @@ import { addPeopleChatMessages, getPeopleChatMessages } from 'src/app/NgRx/actio
 import { selectMessagesByConversationID } from 'src/app/NgRx/selectors/people-chat.selector';
 import { PeopleLoaderService } from 'src/app/core/services/people-loader.service';
 import { selectPeopleListItems } from 'src/app/NgRx/selectors/people-list.selector';
+import { deleteConversationListItem } from 'src/app/NgRx/actions/people-list.actions';
 import { PeopleChatCountdownService } from '../../services/people-chat-countdown.service';
 import { ApiPeopleChatService } from '../../services/api-people-chat.service';
 import { IPeopleMessageItem } from '../../models/people-chat-messages-response.model';
@@ -175,7 +176,32 @@ export class PersonalChatComponent implements OnInit {
   }
 
   deleteConversation(): void {
-
+    this.openConfirmationDialog()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        switchMap((result) => {
+          if (result) {
+            this.isDeleteDisabled = true;
+            return this.apiPeopleChatService.deleteConversation(this.currentConversationId)
+              .pipe(
+                catchError((err) => {
+                  this.isDeleteDisabled = false;
+                  this.openSnackBar(err.error.message || 'No Internet connection!');
+                  return of();
+                })
+              );
+          }
+          return of();
+        })
+      )
+      .subscribe(() => {
+        this.isDeleteDisabled = false;
+        this.router.navigate(['/']);
+        this.openSnackBar('Conversation deleted successfully!');
+        this.store.dispatch(deleteConversationListItem({
+          conversationID: this.currentConversationId
+        }));
+      });
   }
 
   openConfirmationDialog(): Observable<boolean | undefined> {
