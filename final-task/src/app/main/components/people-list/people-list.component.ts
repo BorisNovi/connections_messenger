@@ -86,7 +86,8 @@ export class PeopleListComponent implements OnInit {
 
   public goToConversation(uid: string, conversationName: string): void {
     const foundConversation = this.conversationsList
-      .find((conversation) => conversation.companionID.S === uid);
+      ? this.conversationsList.find((conversation) => conversation.companionID.S === uid)
+      : false;
 
     if (foundConversation) {
       this.router.navigate([`/conversation/${foundConversation.id.S}`], { queryParams: { conversationName } });
@@ -147,9 +148,20 @@ export class PeopleListComponent implements OnInit {
 
     this.store.select(selectConversationListItems)
       .pipe(
-        switchMap((conversationListItems) => (conversationListItems[0]
-          ? of({ Items: conversationListItems })
-          : this.apiPeopleListService.getConversationList())),
+        switchMap((conversationListItems) => {
+          if (conversationListItems.length) {
+            return of({ Items: conversationListItems });
+          }
+          return this.apiPeopleListService.getConversationList()
+            .pipe(
+              switchMap((responsedItems) => {
+                if (responsedItems.Items.length) {
+                  return of(responsedItems);
+                }
+                return of();
+              })
+            );
+        }),
         catchError((err) => {
           this.notificationService.openSnackBar(err.error.message || 'No Internet connection!');
           this.isRefreshDisabled = false;
